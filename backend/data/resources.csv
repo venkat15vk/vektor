@@ -1,0 +1,7 @@
+resource_id,resource_name,resource_type,sensitivity,owner_entity_id
+res_fin,MERIDIAN-FIN,erp,critical,ent_cfo001
+res_pay,MERIDIAN-PAY,payroll,critical,ent_cfo001
+res_proddb,MERIDIAN-PRODDB,database,critical,ent_eng001
+res_gh,MERIDIAN-GH,scm,high,ent_eng001
+res_hr,MERIDIAN-HR,hr,high,ent_hr001
+res_admin,MERIDIAN-ADMIN,iam,critical,ent_it001

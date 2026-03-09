@@ -1,0 +1,151 @@
+entity_id,entity_class,entity_status,tenure_days,job_function,department,peer_group_id,last_active_days,contract_end_date,deployed_by,parent_identity,agent_purpose,agent_type,access_review_outcome,incident_flag,offboarding_cleanup_flag
+ent_js006,human,active,891,Controller,Finance,PG-FIN,0,,,,,,APPROVE,1,0
+ent_rw003,human,active,612,AP Specialist,Finance,PG-FIN,1,,,,,,NOT_REVIEWED,0,0
+ent_kl004,human,active,580,AP Specialist,Finance,PG-FIN,0,,,,,,NOT_REVIEWED,0,0
+ent_tm005,human,active,730,Finance Manager,Finance,PG-FIN,0,,,,,,NOT_REVIEWED,0,0
+ent_ar007,external,active,547,Contractor / UX Design,External,PG-EXT,34,2023-08-15,,,,,NOT_REVIEWED,0,1
+agt_copilot_fin_01,ai_agent,active,61,AP Automation,Finance,AGT-FIN,0,,ent_cfo001,,Automate AP invoice processing and financial reporting,Microsoft Copilot,NOT_REVIEWED,0,0
+agt_rpa_ops_07,rpa_bot,active,203,Onboarding Bot,Operations,AGT-ENG,0,,ent_it_mgr_02,ent_it_mgr_02,Automate employee onboarding - provision access for new hires,UiPath RPA,NOT_REVIEWED,0,0
+agt_unknown_003,ai_agent,active,34,UNKNOWN,Unknown,AGT-UNK,0,,,,,,NOT_REVIEWED,1,0
+ent_cfo001,human,active,1200,CFO,Finance,PG-FIN,0,,,,,,APPROVE,0,0
+ent_eng001,human,active,950,VP Engineering,Engineering,PG-ENG,0,,,,,,APPROVE,0,0
+ent_hr001,human,active,800,HR Director,Operations,PG-OPS,1,,,,,,APPROVE,0,0
+ent_it001,human,active,700,IT Administrator,Operations,PG-OPS,0,,,,,,APPROVE,0,0
+ent_it_mgr_02,human,active,650,IT Manager,Operations,PG-OPS,0,,,,,,APPROVE,0,0
+ent_bg_000,human,active,507,Payroll Specialist,Finance,PG-FIN,13,,,,,,APPROVE,0,0
+ent_bg_001,human,active,975,Audit Analyst,Finance,PG-FIN,27,,,,,,APPROVE,0,0
+ent_bg_002,human,active,212,Finance Analyst,Finance,PG-FIN,11,,,,,,APPROVE,0,0
+ent_bg_003,human,active,198,Financial Controller,Finance,PG-FIN,14,,,,,,APPROVE,0,0
+ent_bg_004,human,active,949,Finance Analyst,Finance,PG-FIN,9,,,,,,APPROVE,0,0
+ent_bg_005,human,active,729,Finance Analyst,Finance,PG-FIN,20,,,,,,APPROVE,0,0
+ent_bg_006,human,active,321,Accountant,Finance,PG-FIN,18,,,,,,APPROVE,0,0
+ent_bg_007,human,active,526,Accountant,Finance,PG-FIN,24,,,,,,APPROVE,0,0
+ent_bg_008,human,active,1052,AP Specialist,Finance,PG-FIN,22,,,,,,APPROVE,0,0
+ent_bg_009,human,active,287,Finance Analyst,Finance,PG-FIN,25,,,,,,APPROVE,0,0
+ent_bg_010,human,active,978,Audit Analyst,Finance,PG-FIN,29,,,,,,APPROVE,0,0
+ent_bg_011,human,active,1050,Finance Analyst,Finance,PG-FIN,4,,,,,,APPROVE,0,0
+ent_bg_012,human,active,1078,AP Specialist,Finance,PG-FIN,4,,,,,,APPROVE,0,0
+ent_bg_013,human,active,943,Tax Analyst,Finance,PG-FIN,26,,,,,,APPROVE,0,0
+ent_bg_014,human,active,98,Tax Analyst,Finance,PG-FIN,28,,,,,,APPROVE,0,0
+ent_bg_015,human,active,692,Audit Analyst,Finance,PG-FIN,25,,,,,,APPROVE,0,0
+ent_bg_016,human,active,1191,Financial Controller,Finance,PG-FIN,9,,,,,,APPROVE,0,0
+ent_bg_017,human,active,369,Accountant,Finance,PG-FIN,22,,,,,,APPROVE,0,0
+ent_bg_018,human,active,1060,Frontend Developer,Engineering,PG-ENG,5,,,,,,APPROVE,0,0
+ent_bg_019,human,active,682,Security Engineer,Engineering,PG-ENG,9,,,,,,APPROVE,0,0
+ent_bg_020,human,active,351,Frontend Developer,Engineering,PG-ENG,5,,,,,,APPROVE,0,0
+ent_bg_021,human,active,984,QA Engineer,Engineering,PG-ENG,11,,,,,,APPROVE,0,0
+ent_bg_022,human,active,530,DevOps Engineer,Engineering,PG-ENG,21,,,,,,APPROVE,0,0
+ent_bg_023,human,active,286,Backend Developer,Engineering,PG-ENG,4,,,,,,APPROVE,0,0
+ent_bg_024,human,active,1150,Data Engineer,Engineering,PG-ENG,29,,,,,,APPROVE,0,0
+ent_bg_025,human,active,333,ML Engineer,Engineering,PG-ENG,10,,,,,,APPROVE,0,0
+ent_bg_026,human,active,946,Platform Engineer,Engineering,PG-ENG,12,,,,,,APPROVE,0,0
+ent_bg_027,human,active,860,Security Engineer,Engineering,PG-ENG,26,,,,,,APPROVE,0,0
+ent_bg_028,human,active,1095,Platform Engineer,Engineering,PG-ENG,7,,,,,,APPROVE,0,0
+ent_bg_029,human,active,526,Data Engineer,Engineering,PG-ENG,9,,,,,,APPROVE,0,0
+ent_bg_030,human,active,408,Platform Engineer,Engineering,PG-ENG,4,,,,,,APPROVE,0,0
+ent_bg_031,human,active,1160,Security Engineer,Engineering,PG-ENG,1,,,,,,APPROVE,0,0
+ent_bg_032,human,active,99,ML Engineer,Engineering,PG-ENG,28,,,,,,APPROVE,0,0
+ent_bg_033,human,active,1097,Software Engineer,Engineering,PG-ENG,30,,,,,,APPROVE,0,0
+ent_bg_034,human,active,745,ML Engineer,Engineering,PG-ENG,15,,,,,,APPROVE,0,0
+ent_bg_035,human,active,403,DevOps Engineer,Engineering,PG-ENG,6,,,,,,APPROVE,0,0
+ent_bg_036,human,active,681,ML Engineer,Engineering,PG-ENG,19,,,,,,APPROVE,0,0
+ent_bg_037,human,active,1011,QA Engineer,Engineering,PG-ENG,27,,,,,,APPROVE,0,0
+ent_bg_038,human,active,650,Platform Engineer,Engineering,PG-ENG,16,,,,,,APPROVE,0,0
+ent_bg_039,human,active,1199,Backend Developer,Engineering,PG-ENG,3,,,,,,APPROVE,0,0
+ent_bg_040,human,active,198,QA Engineer,Engineering,PG-ENG,16,,,,,,APPROVE,0,0
+ent_bg_041,human,active,247,Software Engineer,Engineering,PG-ENG,30,,,,,,APPROVE,0,0
+ent_bg_042,human,active,541,Platform Engineer,Engineering,PG-ENG,10,,,,,,APPROVE,0,0
+ent_bg_043,human,active,143,QA Engineer,Engineering,PG-ENG,29,,,,,,APPROVE,0,0
+ent_bg_044,human,active,381,Frontend Developer,Engineering,PG-ENG,19,,,,,,APPROVE,0,0
+ent_bg_045,human,active,1195,Frontend Developer,Engineering,PG-ENG,11,,,,,,APPROVE,0,0
+ent_bg_046,human,active,1123,Platform Engineer,Engineering,PG-ENG,4,,,,,,APPROVE,0,0
+ent_bg_047,human,active,488,Frontend Developer,Engineering,PG-ENG,1,,,,,,APPROVE,0,0
+ent_bg_048,human,active,697,Security Engineer,Engineering,PG-ENG,12,,,,,,APPROVE,0,0
+ent_bg_049,human,active,95,Software Engineer,Engineering,PG-ENG,12,,,,,,APPROVE,0,0
+ent_bg_050,human,active,874,Software Engineer,Engineering,PG-ENG,7,,,,,,APPROVE,0,0
+ent_bg_051,human,active,467,QA Engineer,Engineering,PG-ENG,5,,,,,,APPROVE,0,0
+ent_bg_052,human,active,461,Frontend Developer,Engineering,PG-ENG,14,,,,,,APPROVE,0,0
+ent_bg_053,human,active,884,Project Manager,Operations,PG-OPS,20,,,,,,APPROVE,0,0
+ent_bg_054,human,active,890,Operations Manager,Operations,PG-OPS,12,,,,,,APPROVE,0,0
+ent_bg_055,human,active,319,Compliance Analyst,Operations,PG-OPS,26,,,,,,APPROVE,0,0
+ent_bg_056,human,active,1041,HR Specialist,Operations,PG-OPS,30,,,,,,APPROVE,0,0
+ent_bg_057,human,active,368,People Operations,Operations,PG-OPS,27,,,,,,APPROVE,0,0
+ent_bg_058,human,active,916,HR Specialist,Operations,PG-OPS,18,,,,,,APPROVE,0,0
+ent_bg_059,human,active,963,Compliance Analyst,Operations,PG-OPS,13,,,,,,APPROVE,0,0
+ent_bg_060,human,active,661,Facilities Coordinator,Operations,PG-OPS,2,,,,,,APPROVE,0,0
+ent_bg_061,human,active,138,Facilities Coordinator,Operations,PG-OPS,0,,,,,,APPROVE,0,0
+ent_bg_062,human,active,1077,Operations Manager,Operations,PG-OPS,3,,,,,,APPROVE,0,0
+ent_bg_063,human,active,552,HR Specialist,Operations,PG-OPS,27,,,,,,APPROVE,0,0
+ent_bg_064,human,active,438,Office Manager,Operations,PG-OPS,26,,,,,,APPROVE,0,0
+ent_bg_065,human,active,192,Office Manager,Operations,PG-OPS,9,,,,,,APPROVE,0,0
+ent_bg_066,human,active,939,Operations Manager,Operations,PG-OPS,17,,,,,,APPROVE,0,0
+ent_bg_067,human,active,492,Contractor / Cloud Architecture,External,PG-EXT,20,2026-02-03,,,,,APPROVE,0,0
+ent_bg_068,human,active,133,Contractor / Security Audit,External,PG-EXT,21,2026-01-17,,,,,APPROVE,0,0
+ent_bg_069,human,active,901,Contractor / Data Migration,External,PG-EXT,12,2026-04-02,,,,,APPROVE,0,0
+ent_bg_070,human,active,745,Contractor / Data Migration,External,PG-EXT,22,2026-03-26,,,,,APPROVE,0,0
+ent_bg_071,human,active,841,Contractor / Cloud Architecture,External,PG-EXT,16,2026-02-06,,,,,APPROVE,0,0
+ent_bg_072,human,active,485,Contractor / Data Migration,External,PG-EXT,26,2026-03-21,,,,,APPROVE,0,0
+ent_bg_073,human,active,182,SRE,Engineering,PG-ENG,4,,,,,,APPROVE,0,0
+ent_bg_074,human,active,1021,Finance Analyst,Finance,PG-FIN,18,,,,,,APPROVE,0,0
+ent_bg_075,human,active,328,Operations Manager,Operations,PG-OPS,17,,,,,,APPROVE,0,0
+ent_bg_076,human,active,630,AR Specialist,Finance,PG-FIN,18,,,,,,APPROVE,0,0
+ent_bg_077,human,active,327,Tax Analyst,Finance,PG-FIN,6,,,,,,APPROVE,0,0
+ent_bg_078,human,active,641,ML Engineer,Engineering,PG-ENG,9,,,,,,APPROVE,0,0
+ent_bg_079,human,active,484,Financial Controller,Finance,PG-FIN,0,,,,,,APPROVE,0,0
+ent_bg_080,human,active,878,Backend Developer,Engineering,PG-ENG,28,,,,,,APPROVE,0,0
+ent_bg_081,human,active,125,Office Manager,Operations,PG-OPS,10,,,,,,APPROVE,0,0
+ent_bg_082,human,active,846,Audit Analyst,Finance,PG-FIN,30,,,,,,APPROVE,0,0
+ent_bg_083,human,active,318,IT Administrator,Operations,PG-OPS,4,,,,,,APPROVE,0,0
+ent_bg_084,human,active,649,Facilities Coordinator,Operations,PG-OPS,13,,,,,,APPROVE,0,0
+ent_bg_085,human,active,922,Project Manager,Operations,PG-OPS,27,,,,,,APPROVE,0,0
+ent_bg_086,human,active,484,IT Administrator,Operations,PG-OPS,14,,,,,,APPROVE,0,0
+ent_bg_087,human,active,768,Operations Manager,Operations,PG-OPS,25,,,,,,APPROVE,0,0
+ent_bg_088,human,active,709,Security Engineer,Engineering,PG-ENG,3,,,,,,APPROVE,0,0
+ent_bg_089,human,active,386,DevOps Engineer,Engineering,PG-ENG,19,,,,,,APPROVE,0,0
+ent_bg_090,human,active,538,Accountant,Finance,PG-FIN,14,,,,,,APPROVE,0,0
+ent_bg_091,human,active,685,Facilities Coordinator,Operations,PG-OPS,3,,,,,,APPROVE,0,0
+ent_bg_092,human,active,381,Platform Engineer,Engineering,PG-ENG,18,,,,,,APPROVE,0,0
+ent_bg_093,human,active,435,Operations Manager,Operations,PG-OPS,3,,,,,,APPROVE,0,0
+ent_bg_094,human,active,454,AP Specialist,Finance,PG-FIN,9,,,,,,APPROVE,0,0
+ent_bg_095,human,active,636,Software Engineer,Engineering,PG-ENG,20,,,,,,APPROVE,0,0
+ent_bg_096,human,active,299,Financial Controller,Finance,PG-FIN,29,,,,,,APPROVE,0,0
+ent_bg_097,human,active,889,SRE,Engineering,PG-ENG,14,,,,,,APPROVE,0,0
+ent_bg_098,human,active,515,Treasury Analyst,Finance,PG-FIN,0,,,,,,APPROVE,0,0
+ent_bg_099,human,active,189,Backend Developer,Engineering,PG-ENG,29,,,,,,APPROVE,0,0
+ent_bg_100,human,active,533,Compliance Analyst,Operations,PG-OPS,7,,,,,,APPROVE,0,0
+ent_bg_101,human,active,194,Tax Analyst,Finance,PG-FIN,26,,,,,,APPROVE,0,0
+ent_bg_102,human,active,800,ML Engineer,Engineering,PG-ENG,19,,,,,,APPROVE,0,0
+ent_bg_103,human,active,879,Tax Analyst,Finance,PG-FIN,109,,,,,,REVOKE,0,0
+ent_bg_104,human,active,428,Finance Analyst,Finance,PG-FIN,109,,,,,,REVOKE,0,0
+ent_bg_105,human,active,511,Office Manager,Operations,PG-OPS,37,,,,,,REVOKE,0,0
+ent_bg_106,human,active,320,Frontend Developer,Engineering,PG-ENG,57,,,,,,REVOKE,0,0
+ent_bg_107,human,active,371,Office Manager,Operations,PG-OPS,49,,,,,,REVOKE,0,0
+ent_bg_108,human,active,981,Project Manager,Operations,PG-OPS,46,,,,,,REVOKE,0,0
+ent_bg_109,human,active,468,Project Manager,Operations,PG-OPS,60,,,,,,REVOKE,0,0
+ent_bg_110,human,active,550,SRE,Engineering,PG-ENG,51,,,,,,REVOKE,0,0
+ent_bg_111,human,active,925,Payroll Specialist,Finance,PG-FIN,106,,,,,,REVOKE,0,0
+ent_bg_112,human,active,577,Software Engineer,Engineering,PG-ENG,51,,,,,,REVOKE,0,0
+ent_bg_113,human,active,833,SRE,Engineering,PG-ENG,110,,,,,,REVOKE,0,0
+ent_bg_114,human,active,964,Backend Developer,Engineering,PG-ENG,30,,,,,,REVOKE,0,0
+ent_bg_115,human,active,1098,Office Manager,Operations,PG-OPS,39,,,,,,REVOKE,0,0
+ent_bg_116,human,active,1124,Platform Engineer,Engineering,PG-ENG,119,,,,,,REVOKE,0,0
+agt_bg_117,ai_agent,active,256,Revenue Bot,Finance,AGT-FIN,3,,ent_it001,,Budget reconciliation,Custom Python Agent,APPROVE,0,0
+agt_bg_118,ai_agent,active,217,Revenue Bot,Finance,AGT-FIN,4,,ent_eng001,,Expense categorization,Custom Python Agent,APPROVE,0,0
+agt_bg_119,ai_agent,active,41,Financial Reporting,Finance,AGT-FIN,3,,ent_cfo001,,Revenue recognition,UiPath RPA,APPROVE,0,0
+agt_bg_120,ai_agent,active,290,Budget Bot,Finance,AGT-FIN,0,,ent_eng001,,Expense categorization,Custom Python Agent,APPROVE,0,0
+agt_bg_121,ai_agent,active,209,Budget Bot,Finance,AGT-FIN,5,,ent_eng001,,Budget reconciliation,Microsoft Copilot,APPROVE,0,0
+agt_bg_122,ai_agent,active,266,Alert Bot,Engineering,AGT-ENG,1,,ent_eng001,,Deploy automation,UiPath RPA,APPROVE,0,0
+agt_bg_123,service_account,active,281,CI/CD Bot,Engineering,AGT-ENG,3,,ent_eng001,,Deploy automation,ServiceNow Bot,APPROVE,0,0
+agt_bg_124,service_account,active,198,Alert Bot,Engineering,AGT-ENG,2,,ent_eng001,,Code review automation,ServiceNow Bot,APPROVE,0,0
+agt_bg_125,service_account,active,189,Test Runner,Engineering,AGT-ENG,4,,ent_cfo001,,Test automation,LangChain Agent,APPROVE,0,0
+agt_bg_126,pipeline,active,340,Code Scanner,Engineering,AGT-ENG,0,,ent_it001,,Alert triage,Custom Python Agent,APPROVE,0,0
+agt_bg_127,pipeline,active,248,Code Scanner,Engineering,AGT-ENG,4,,ent_it001,,Log analysis,Microsoft Copilot,APPROVE,0,0
+agt_bg_128,pipeline,active,321,Deploy Bot,Engineering,AGT-ENG,0,,ent_it001,,Deploy automation,LangChain Agent,APPROVE,0,0
+agt_bg_129,ai_agent,active,300,Financial Reporting,Finance,AGT-FIN,5,,ent_cfo001,,Budget reconciliation,LangChain Agent,REVOKE,0,0
+agt_bg_130,ai_agent,active,249,AP Automation,Finance,AGT-FIN,4,,ent_it001,,Budget reconciliation,ServiceNow Bot,REVOKE,0,0
+agt_bg_131,ai_agent,active,293,Financial Reporting,Finance,AGT-FIN,2,,ent_cfo001,,Budget reconciliation,ServiceNow Bot,REVOKE,0,0
+agt_bg_132,ai_agent,active,269,AP Automation,Finance,AGT-FIN,0,,ent_it001,,Financial reporting automation,Custom Python Agent,REVOKE,0,0
+agt_bg_133,rpa_bot,active,178,CI/CD Bot,Engineering,AGT-ENG,1,,ent_cfo001,,Deploy automation,Microsoft Copilot,REVOKE,0,0
+agt_bg_134,rpa_bot,active,365,Deploy Bot,Engineering,AGT-ENG,2,,ent_eng001,,CI/CD pipeline runner,LangChain Agent,REVOKE,0,0
+agt_bg_135,rpa_bot,active,45,CI/CD Bot,Engineering,AGT-ENG,0,,ent_eng001,,Code review automation,LangChain Agent,REVOKE,0,0
+agt_bg_136,rpa_bot,active,241,Deploy Bot,Engineering,AGT-ENG,2,,ent_eng001,,CI/CD pipeline runner,Microsoft Copilot,REVOKE,0,0
