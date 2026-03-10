@@ -5,3 +5,4 @@ backend/vektor.db
 node_modules/
 frontend-app/dist/
 .env
+.vercel

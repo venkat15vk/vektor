@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VEKTOR — Agent Intelligence Platform</title>
+  <meta name="description" content="VEKTOR is the intelligence layer your AI agents were missing. Monitor every human and non-human identity in your enterprise. Built by the team behind Microsoft Entra.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300;400;500&family=DM+Mono:wght@300;400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #080F1C;
+      --navy2:  #0D1520;
+      --navy3:  #111D2E;
+      --teal:   #0A7A84;
+      --mint:   #2EC4B6;
+      --gold:   #C9A84C;
+      --gold2:  #E8C46A;
+      --muted:  #4E6A7A;
+      --muted2: #7A9AAA;
+      --white:  #F4F8FA;
+      --red:    #C0392B;
+      --border: #152232;
+      --border2:#1E2F42;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── GRID LINES ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 80px 80px;
+      opacity: 0.3;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(8,15,28,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 200;
+      font-size: 20px;
+      letter-spacing: 8px;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); font-weight: 400; }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--mint); }
+
+    .nav-cta {
+      padding: 8px 22px;
+      border: 1px solid var(--teal);
+      border-radius: 2px;
+      color: var(--mint) !important;
+      font-size: 12px !important;
+      letter-spacing: 2px !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: rgba(10,122,132,0.15) !important; }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(10,122,132,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--mint);
+      text-transform: uppercase;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--mint);
+    }
+
+    .hero-headline {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 400;
+      line-height: 1.1;
+      color: var(--white);
+      margin-bottom: 12px;
+      max-width: 800px;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subline {
+      font-size: clamp(18px, 2.5vw, 24px);
+      font-weight: 300;
+      color: var(--muted2);
+      margin-bottom: 40px;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    .hero-subline strong {
+      color: var(--white);
+      font-weight: 400;
+    }
+
+    .hero-proof {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 52px;
+      max-width: 560px;
+      line-height: 1.8;
+      padding: 20px 24px;
+      border-left: 2px solid var(--gold);
+      background: rgba(201,168,76,0.05);
+      border-radius: 0 4px 4px 0;
+    }
+
+    .hero-proof .highlight {
+      color: var(--gold2);
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: var(--teal);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary:hover { background: #0D8F9A; transform: translateY(-1px); }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      border-radius: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--mint); color: var(--mint); }
+
+    /* ── STATS BAR ── */
+    #stats {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--navy2);
+      padding: 0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .stat-item {
+      padding: 36px 40px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 40px;
+      font-weight: 200;
+      color: var(--gold);
+      letter-spacing: -1px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--teal);
+    }
+
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .section-body {
+      font-size: 16px;
+      color: var(--muted2);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+
+    /* ── PROBLEM ── */
+    #problem {
+      padding: 120px 0;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      margin-top: 64px;
+    }
+
+    .finding-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .finding-card {
+      padding: 20px 24px;
+      background: var(--navy2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      border-left: 3px solid var(--red);
+      transition: border-color 0.2s, background 0.2s;
+      cursor: default;
+    }
+    .finding-card:hover {
+      background: var(--navy3);
+      border-left-color: var(--gold);
+    }
+
+    .finding-card.agent { border-left-color: var(--gold); }
+    .finding-card.agent:hover { border-left-color: var(--mint); }
+
+    .finding-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .finding-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      padding: 3px 8px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      font-weight: 400;
+    }
+    .badge-critical { background: rgba(192,57,43,0.2); color: #e74c3c; }
+    .badge-agent { background: rgba(201,168,76,0.2); color: var(--gold2); }
+    .badge-human { background: rgba(46,196,182,0.2); color: var(--mint); }
+
+    .finding-entity {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted2);
+    }
+
+    .finding-text {
+      font-size: 13px;
+      color: var(--white);
+      line-height: 1.6;
+    }
+
+    .finding-confidence {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--mint);
+      margin-top: 6px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #how {
+      padding: 120px 0;
+      background: var(--navy2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-top: 64px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .step {
+      padding: 48px 40px;
+      background: var(--navy2);
+      position: relative;
+    }
+
+    .step-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+
+    .step-icon {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 20px;
+      color: var(--mint);
+    }
+
+    .step-title {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .step-body {
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.7;
+    }
+
+    .step-arrow {
+      position: absolute;
+      right: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
+      color: var(--teal);
+      font-size: 20px;
+    }
+
+    /* ── TWO PLANES ── */
+    #planes {
+      padding: 120px 0;
+    }
+
+    .planes-table {
+      margin-top: 64px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .planes-header {
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr 1fr;
+      background: var(--navy3);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .planes-header-cell {
+      padding: 16px 24px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--teal);
+      text-transform: uppercase;
+      border-right: 1px solid var(--border);
+    }
+    .planes-header-cell:last-child { border-right: none; }
+
+    .planes-row {
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+    .planes-row:last-child { border-bottom: none; }
+    .planes-row:hover { background: var(--navy3); }
+
+    .planes-cell {
+      padding: 20px 24px;
+      font-size: 13px;
+      color: var(--muted2);
+      border-right: 1px solid var(--border);
+      line-height: 1.6;
+    }
+    .planes-cell:last-child { border-right: none; }
+    .planes-cell:first-child { color: var(--white); font-weight: 400; }
+
+    .check { color: var(--mint); }
+    .cross { color: var(--red); }
+    .unique { color: var(--gold); font-style: italic; }
+
+    /* ── FOR WHO ── */
+    #for-who {
+      padding: 120px 0;
+      background: var(--navy2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .who-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 64px;
+    }
+
+    .who-card {
+      padding: 36px 32px;
+      background: var(--navy);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.2s;
+    }
+    .who-card:hover { border-color: var(--teal); }
+
+    .who-icon {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 20px;
+      color: var(--teal);
+    }
+
+    .who-title {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+
+    .who-body {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.7;
+    }
+
+    .who-tag {
+      display: inline-block;
+      margin-top: 16px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--mint);
+      padding: 4px 10px;
+      border: 1px solid rgba(46,196,182,0.3);
+      border-radius: 2px;
+    }
+
+    /* ── DEMO ── */
+    #demo {
+      padding: 120px 0;
+    }
+
+    .demo-wrapper {
+      margin-top: 64px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      background: var(--navy2);
+    }
+
+    .demo-bar {
+      padding: 12px 20px;
+      background: var(--navy3);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .demo-url {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: 8px;
+    }
+
+    .demo-frame {
+      width: 100%;
+      height: 680px;
+      border: none;
+      display: block;
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      padding: 120px 0;
+      background: var(--navy2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 64px;
+    }
+
+    .about-identity {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .about-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 4px;
+      background: var(--navy3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .about-name {
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--white);
+    }
+
+    .about-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--teal);
+      letter-spacing: 1px;
+      line-height: 1.8;
+    }
+
+    .about-companies {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .company-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      padding: 4px 10px;
+      border: 1px solid var(--border2);
+      color: var(--muted2);
+      border-radius: 2px;
+      letter-spacing: 1px;
+    }
+
+    .about-quote {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(18px, 2.5vw, 26px);
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .about-quote::before {
+      content: '"';
+      color: var(--gold);
+      font-size: 48px;
+      line-height: 0;
+      vertical-align: -18px;
+      margin-right: 4px;
+    }
+
+    .about-body {
+      font-size: 15px;
+      color: var(--muted2);
+      line-height: 1.8;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      padding: 120px 0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+      margin-top: 64px;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .contact-detail {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .contact-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--teal);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .contact-text {
+      font-size: 14px;
+      color: var(--muted2);
+      line-height: 1.7;
+    }
+
+    .contact-text strong {
+      color: var(--white);
+      display: block;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+
+    .contact-text a {
+      color: var(--mint);
+      text-decoration: none;
+    }
+
+    .partner-note {
+      padding: 20px 24px;
+      border: 1px solid rgba(201,168,76,0.3);
+      background: rgba(201,168,76,0.05);
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.7;
+    }
+
+    .partner-note strong { color: var(--gold2); font-weight: 400; }
+
+    /* ── FORM ── */
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--teal);
+      text-transform: uppercase;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: var(--navy2);
+      border: 1px solid var(--border2);
+      border-radius: 2px;
+      padding: 12px 16px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 300;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--teal);
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--muted);
+    }
+
+    .form-select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-submit {
+      padding: 14px 32px;
+      background: var(--teal);
+      color: var(--white);
+      border: none;
+      border-radius: 2px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: #0D8F9A; }
+
+    .form-success {
+      display: none;
+      padding: 16px 20px;
+      background: rgba(46,196,182,0.1);
+      border: 1px solid rgba(46,196,182,0.3);
+      border-radius: 4px;
+      font-size: 14px;
+      color: var(--mint);
+      text-align: center;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      background: var(--navy);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--mint); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.2s; }
+    .stagger-3 { transition-delay: 0.3s; }
+    .stagger-4 { transition-delay: 0.4s; }
+
+    /* ── TERMINAL BLINK ── */
+    .blink {
+      animation: blink 1.2s step-end infinite;
+    }
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      .container { padding: 0 24px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stat-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .problem-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+      .steps-grid, .who-grid { grid-template-columns: 1fr; }
+      .planes-header, .planes-row { grid-template-columns: 1fr 1fr; }
+      .planes-header-cell:nth-child(3),
+      .planes-header-cell:nth-child(4),
+      .planes-cell:nth-child(3),
+      .planes-cell:nth-child(4) { display: none; }
+      .demo-frame { height: 480px; }
+      .footer-inner { flex-direction: column; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo"><span>V</span>EKTOR</a>
+    <ul class="nav-links">
+      <li><a href="#problem">The Problem</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-glow"></div>
+    <div class="container">
+      <div class="hero-eyebrow">Agent Intelligence Platform</div>
+      <h1 class="hero-headline fade-up">
+        Enterprise AI is moving<br>
+        faster than <em>enterprise security.</em>
+      </h1>
+      <p class="hero-subline fade-up stagger-1">
+        <strong>VEKTOR is the intelligence layer your AI agents were missing.</strong><br>
+        Monitor every human and non-human identity in your environment —
+        scored, explained, and agent-ready.
+      </p>
+      <div class="hero-proof fade-up stagger-2">
+        <span class="highlight">127,445</span> API calls &nbsp;·&nbsp;
+        One unregistered agent &nbsp;·&nbsp;
+        No owner &nbsp;·&nbsp; No purpose &nbsp;·&nbsp; Active right now.<br>
+        VEKTOR found it in <span class="highlight">4 seconds.</span>
+      </div>
+      <div class="hero-actions fade-up stagger-3">
+        <a href="#demo" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          See Live Demo
+        </a>
+        <a href="#contact" class="btn-secondary">Contact Us →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section id="stats">
+    <div class="stats-grid">
+      <div class="stat-item fade-up">
+        <div class="stat-number">43</div>
+        <div class="stat-label">Identity health score<br>vs 71 industry benchmark</div>
+      </div>
+      <div class="stat-item fade-up stagger-1">
+        <div class="stat-number">427</div>
+        <div class="stat-label">Days — oldest undetected<br>SOX violation</div>
+      </div>
+      <div class="stat-item fade-up stagger-2">
+        <div class="stat-number">847</div>
+        <div class="stat-label">Employee records in one<br>anomalous 47-second session</div>
+      </div>
+      <div class="stat-item fade-up stagger-3">
+        <div class="stat-number">6</div>
+        <div class="stat-label">Critical findings across<br>human and agent identities</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section id="problem">
+    <div class="container">
+      <div class="section-eyebrow">The Problem</div>
+      <h2 class="section-title fade-up">Your IAM tells you who has access.<br>Nobody tells you if it's safe.</h2>
+      <p class="section-body fade-up stagger-1">
+        Okta and Entra produce dashboards for humans to read.
+        They do not produce structured intelligence for AI agents to act on.
+        And they see nothing about the AI agents themselves —
+        the RPA bots, the Copilot instances, the shadow agents
+        running in your environment right now.
+      </p>
+
+      <div class="problem-grid">
+        <div class="finding-cards fade-up">
+
+          <div class="finding-card agent">
+            <div class="finding-header">
+              <span class="finding-badge badge-critical">Critical</span>
+              <span class="finding-badge badge-agent">AI Agent</span>
+              <span class="finding-entity">agt_unknown_003</span>
+            </div>
+            <div class="finding-text">Unregistered AI agent. No owner. No purpose. 127,445 API calls in 34 days. Active 11 minutes ago. Origin: unknown.</div>
+            <div class="finding-confidence">M8 · confidence 0.99 · blast_radius unknown</div>
+          </div>
+
+          <div class="finding-card">
+            <div class="finding-header">
+              <span class="finding-badge badge-critical">Critical</span>
+              <span class="finding-badge badge-human">Human</span>
+              <span class="finding-entity">ent_js006</span>
+            </div>
+            <div class="finding-text">47-second session at 2:17am Sunday. Full payroll export — 847 records. Session entropy 6x below personal baseline. Automated, not human.</div>
+            <div class="finding-confidence">M4 · confidence 1.00 · blast_radius 847</div>
+          </div>
+
+          <div class="finding-card agent">
+            <div class="finding-header">
+              <span class="finding-badge badge-critical">Critical</span>
+              <span class="finding-badge badge-agent">RPA Bot</span>
+              <span class="finding-entity">agt_rpa_ops_07</span>
+            </div>
+            <div class="finding-text">RPA bot running as Global Admin. 2,847 unexplained Azure AD write calls. Deployed for onboarding. Accessing financial systems with no justification.</div>
+            <div class="finding-confidence">M7 · confidence 0.90 · blast_radius 1,243</div>
+          </div>
+
+          <div class="finding-card">
+            <div class="finding-header">
+              <span class="finding-badge badge-critical">Critical</span>
+              <span class="finding-badge badge-human">Human</span>
+              <span class="finding-entity">ent_rw003 · ent_kl004 · ent_tm005</span>
+            </div>
+            <div class="finding-text">3 entities hold payment_create AND payment_approve simultaneously. SOX 404 violation. Exists 427 days. Audit in 6 weeks.</div>
+            <div class="finding-confidence">M3 · confidence 1.00 · audit_risk critical</div>
+          </div>
+
+        </div>
+
+        <div class="fade-up stagger-1">
+          <p style="font-size:15px; color:var(--muted2); line-height:1.9; margin-bottom:28px;">
+            These are real findings from a real demo tenant. Not hypothetical.
+            VEKTOR surfaces all four in under 4 seconds — with confidence scores,
+            blast radius calculations, and rollback payloads your agents can act on immediately.
+          </p>
+          <p style="font-size:15px; color:var(--muted2); line-height:1.9; margin-bottom:28px;">
+            Your existing IAM vendor sees none of this. They produce
+            dashboards for humans to review quarterly.
+            VEKTOR produces structured signals for AI agents to act on continuously.
+          </p>
+          <p style="font-size:15px; color:var(--muted2); line-height:1.9;">
+            <strong style="color:var(--white); font-weight:400;">The gap between human identity governance
+            and agent identity governance is the fastest-growing attack surface in enterprise security.</strong>
+            VEKTOR closes it.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="container">
+      <div class="section-eyebrow">How It Works</div>
+      <h2 class="section-title fade-up">Three steps from raw IAM data<br>to agent-ready intelligence.</h2>
+
+      <div class="steps-grid">
+        <div class="step fade-up">
+          <div class="step-number">01</div>
+          <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M4 7h16M4 12h16M4 17h10"/>
+          </svg>
+          <div class="step-title">Connect your IAM</div>
+          <div class="step-body">Point VEKTOR at your Microsoft Entra ID, Okta, or AWS IAM. Read-only. No agents, no proxies. Your data never leaves your environment.</div>
+        </div>
+        <div class="step fade-up stagger-1">
+          <div class="step-number">02</div>
+          <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+          <div class="step-title">VEKTOR scores every identity</div>
+          <div class="step-body">9 ML models run continuously across your human and agent identities. Peer deviation, session anomaly, shadow detection, delegation inheritance — all scored with confidence intervals.</div>
+        </div>
+        <div class="step fade-up stagger-2">
+          <div class="step-number">03</div>
+          <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+          <div class="step-title">Your agents act on the signals</div>
+          <div class="step-body">Every finding is delivered as a structured JSON signal package — confidence score, blast radius, recommended action, rollback payload. Your agents consume it without a human in the loop.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO PLANES -->
+  <section id="planes">
+    <div class="container">
+      <div class="section-eyebrow">The Two Identity Planes</div>
+      <h2 class="section-title fade-up">The only platform that monitors<br>humans <em style="font-style:italic; color:var(--gold)">and</em> AI agents.</h2>
+      <p class="section-body fade-up stagger-1">
+        Every other IAM vendor monitors human identities.
+        Nobody monitors the AI agents those humans deployed —
+        until now.
+      </p>
+
+      <div class="planes-table fade-up stagger-2">
+        <div class="planes-header">
+          <div class="planes-header-cell">Capability</div>
+          <div class="planes-header-cell">Okta / Entra</div>
+          <div class="planes-header-cell">CrowdStrike</div>
+          <div class="planes-header-cell" style="color:var(--mint)">VEKTOR</div>
+        </div>
+        <div class="planes-row">
+          <div class="planes-cell">Human identity risk scoring</div>
+          <div class="planes-cell"><span class="check">✓</span> Basic</div>
+          <div class="planes-cell"><span class="check">✓</span> Endpoint-based</div>
+          <div class="planes-cell"><span class="unique">✓ ML-scored, peer-calibrated</span></div>
+        </div>
+        <div class="planes-row">
+          <div class="planes-cell">AI agent peer intelligence</div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="unique">✓ AGT peer groups + deviation</span></div>
+        </div>
+        <div class="planes-row">
+          <div class="planes-cell">Shadow agent detection</div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="unique">✓ M8 — 7-rule weighted scoring</span></div>
+        </div>
+        <div class="planes-row">
+          <div class="planes-cell">Delegation inheritance audit</div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="unique">✓ M7 — RPA + service account</span></div>
+        </div>
+        <div class="planes-row">
+          <div class="planes-cell">Cross-plane amplification</div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="cross">✗</span></div>
+          <div class="planes-cell"><span class="unique">✓ M9 — human × agent risk fusion</span></div>
+        </div>
+        <div class="planes-row">
+          <div class="planes-cell">Agent-ready output contract</div>
+          <div class="planes-cell"><span class="cross">✗</span> Dashboard only</div>
+          <div class="planes-cell"><span class="cross">✗</span> Alerts only</div>
+          <div class="planes-cell"><span class="unique">✓ Structured JSON + rollback</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOR WHO -->
+  <section id="for-who">
+    <div class="container">
+      <div class="section-eyebrow">Who It's For</div>
+      <h2 class="section-title fade-up">Built for the enterprises deploying<br>AI agents faster than they can govern them.</h2>
+
+      <div class="who-grid">
+        <div class="who-card fade-up">
+          <svg class="who-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <div class="who-title">The CISO</div>
+          <div class="who-body">You are being asked by the board how you are governing your AI agents. You do not have an answer. VEKTOR gives you the answer — and the evidence.</div>
+          <span class="who-tag">NHI Governance</span>
+        </div>
+        <div class="who-card fade-up stagger-1">
+          <svg class="who-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+          </svg>
+          <div class="who-title">The CTO</div>
+          <div class="who-body">Your teams are deploying Copilot Studio, Agentforce, and custom LangChain agents. You need a governance layer before the regulators ask for one.</div>
+          <span class="who-tag">Agent Governance</span>
+        </div>
+        <div class="who-card fade-up stagger-2">
+          <svg class="who-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          <div class="who-title">The Auditor</div>
+          <div class="who-body">SOC2, PCI-DSS, SOX — your next audit will ask about AI agent access. VEKTOR surfaces every violation, every SoD conflict, every contractor who never left.</div>
+          <span class="who-tag">SOC2 · PCI-DSS · SOX</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <section id="demo">
+    <div class="container">
+      <div class="section-eyebrow">Live Demo</div>
+      <h2 class="section-title fade-up">See VEKTOR find what your<br>IAM vendor missed.</h2>
+      <p class="section-body fade-up stagger-1" style="margin-bottom:0">
+        This is a live prototype running on synthetic data for Meridian Financial —
+        a Series B fintech with 847 employees and an audit in 6 weeks.
+        Every finding below is real output from VEKTOR's ML pipeline.
+      </p>
+
+      <div class="demo-wrapper fade-up stagger-2">
+        <div class="demo-bar">
+          <div class="demo-dot" style="background:#ff5f57"></div>
+          <div class="demo-dot" style="background:#febc2e"></div>
+          <div class="demo-dot" style="background:#28c840"></div>
+          <span class="demo-url">demo.getvektor.ai — Meridian Financial · Identity Intelligence</span>
+        </div>
+        <iframe
+          class="demo-frame"
+          src="https://demo.getvektor.ai"
+          title="VEKTOR Live Demo"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="section-eyebrow">About</div>
+      <h2 class="section-title fade-up">Built by someone who spent<br>22 years inside the problem.</h2>
+
+      <div class="about-grid">
+        <div class="about-identity fade-up">
+          <div class="about-avatar">VK</div>
+          <div class="about-name">Venkat Krishnan</div>
+          <div class="about-title">
+            Principal AI Manager · Microsoft Entra<br>
+            Founder · VEKTOR
+          </div>
+          <div class="about-companies">
+            <span class="company-tag">Microsoft</span>
+            <span class="company-tag">Citadel</span>
+            <span class="company-tag">Morgan Stanley</span>
+            <span class="company-tag">Credit Suisse</span>
+            <span class="company-tag">M&T Bank</span>
+            <span class="company-tag">Oracle</span>
+          </div>
+        </div>
+
+        <div class="fade-up stagger-1">
+          <p class="about-quote">
+            I spent 22 years inside the enterprises VEKTOR is built for.
+            I watched every one of them deploy AI agents with no governance layer,
+            no peer intelligence, and no way to know if an agent they didn't build
+            was running in their environment. Nobody was solving it. So I did.
+          </p>
+          <p class="about-body">
+            At Microsoft Entra I saw firsthand how the fastest-moving enterprises
+            were outpacing their own security teams. The problem wasn't the IAM systems —
+            it was that those systems were built for a world where every identity was human.
+            That world ended. VEKTOR is built for the world we are in now.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-eyebrow">Contact Us</div>
+      <h2 class="section-title fade-up">We are onboarding 10 design partners<br>in Q2 2026.</h2>
+
+      <div class="contact-grid">
+        <div class="contact-info fade-up">
+          <p class="section-body" style="margin-bottom:8px">
+            If you are a CISO, CTO, or security leader at a Series B or C fintech
+            or healthtech — and you are deploying AI agents without a governance layer —
+            we want to talk to you.
+          </p>
+
+          <div class="partner-note">
+            <strong>Design Partner Program</strong>
+            We are working with 10 early customers to deploy VEKTOR against real tenants.
+            You get: free deployment, direct access to the founding team,
+            and the ability to shape the product roadmap.
+            We get: real-world signal data to train our models.
+          </div>
+
+          <div class="contact-detail">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <div class="contact-text">
+              <strong>Email</strong>
+              <a href="mailto:venkat@getvektor.ai">venkat@getvektor.ai</a>
+            </div>
+          </div>
+
+          <div class="contact-detail">
+            <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>
+            </svg>
+            <div class="contact-text">
+              <strong>LinkedIn</strong>
+              <a href="https://linkedin.com/in/venkat15vk" target="_blank">linkedin.com/in/venkat15vk</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="fade-up stagger-1">
+          <form class="contact-form" id="contactForm">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" class="form-input" placeholder="Jane Smith" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Company</label>
+              <input type="text" class="form-input" placeholder="Acme Financial" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Work Email</label>
+              <input type="email" class="form-input" placeholder="jane@acmefinancial.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Role</label>
+              <select class="form-select form-input" required>
+                <option value="" disabled selected>Select your role</option>
+                <option>CISO</option>
+                <option>CTO / VP Engineering</option>
+                <option>Security Engineer</option>
+                <option>Investor / VC</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Message (optional)</label>
+              <textarea class="form-textarea" placeholder="Tell us about your AI agent deployment or what you are trying to solve..."></textarea>
+            </div>
+            <button type="submit" class="form-submit">Send Message →</button>
+            <div class="form-success" id="formSuccess">
+              ✓ Message sent. Venkat will reply within 24 hours.
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-copy">© 2026 VEKTOR · getvektor.ai · venkat@getvektor.ai</div>
+        <div class="footer-links">
+          <a href="#demo">Demo</a>
+          <a href="#contact">Contact</a>
+          <a href="mailto:venkat@getvektor.ai">Email</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── SCROLL ANIMATIONS ──
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    // ── CONTACT FORM ──
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.form-submit');
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+
+      // Collect form data
+      const name    = this.querySelector('input[type="text"]').value;
+      const company = this.querySelectorAll('input[type="text"]')[1].value;
+      const email   = this.querySelector('input[type="email"]').value;
+      const role    = this.querySelector('select').value;
+      const message = this.querySelector('textarea').value;
+
+      // Send via mailto as fallback (replace with Formspree/Netlify in production)
+      const subject = encodeURIComponent(`VEKTOR Contact: ${name} from ${company}`);
+      const body    = encodeURIComponent(
+        `Name: ${name}\nCompany: ${company}\nEmail: ${email}\nRole: ${role}\n\nMessage:\n${message}`
+      );
+
+      // Show success immediately
+      setTimeout(() => {
+        this.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+        window.location.href = `mailto:venkat@getvektor.ai?subject=${subject}&body=${body}`;
+      }, 600);
+    });
+
+    // ── SMOOTH NAV HIGHLIGHT ──
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 100) current = s.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--mint)' : '';
+      });
+    });
+  </script>
+
+</body>
+</html>

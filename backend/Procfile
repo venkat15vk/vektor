@@ -1,0 +1,1 @@
+web: python3 normalize.py && python3 run_models.py && python3 reason.py && python3 api.py
