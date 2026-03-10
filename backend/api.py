@@ -245,7 +245,8 @@ class VektorHandler(BaseHTTPRequestHandler):
         print(f"[API] {args[0]}")
 
 
-def start_server(port=8000):
+def start_server(port=None):
+    port = port or int(os.environ.get("PORT", 8000))	
     server = HTTPServer(("0.0.0.0", port), VektorHandler)
     print(f"VEKTOR API running on http://localhost:{port}")
     print(f"  GET /health-score")
