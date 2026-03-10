@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.DS_Store
+backend/vektor.db
+node_modules/
+frontend-app/dist/
+.env
