@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VEKTOR — Agent Intelligence. Precisely Directed.</title>
-  <meta name="description" content="VEKTOR is the intelligence layer between your enterprise data and your AI agents. Structured signals for agents — and about them.">
+  <meta name="description" content="VEKTOR is the intelligence layer between your enterprise data and your AI agents. 2,355 signals generated from real AWS, Azure, and GCP IAM data.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -17,8 +17,6 @@
     .grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--teal-glow) 1px,transparent 1px),linear-gradient(90deg,var(--teal-glow) 1px,transparent 1px);background-size:80px 80px;opacity:.06;pointer-events:none}
     .glow-orb{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--teal) 0%,transparent 70%);opacity:.04;top:-200px;right:-200px;pointer-events:none}
     .container{max-width:1060px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
-
-    /* NAV */
     nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(10,122,132,.1)}
     .nav-brand{display:flex;align-items:center;gap:14px}
     .nav-logo svg{display:block}
@@ -28,14 +26,12 @@
     .nav-links a:hover{color:var(--white)}
     .nav-cta{background:transparent!important;border:1px solid var(--teal)!important;color:var(--mint)!important;padding:9px 22px!important;font-size:11px!important;letter-spacing:1.5px!important;text-transform:uppercase;cursor:pointer;transition:all .3s}
     .nav-cta:hover{background:var(--teal)!important;color:var(--white)!important}
-
-    /* HERO */
     .hero{padding:72px 0 40px;text-align:center;max-width:720px;margin:0 auto}
     .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid var(--gold-dim);border-left:2px solid var(--gold);background:var(--gold-dim);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;animation:fadeIn .8s ease-out}
     .hero h1{font-weight:200;font-size:clamp(30px,4.5vw,48px);line-height:1.2;letter-spacing:-.5px;margin-bottom:20px;animation:fadeInUp .8s ease-out .1s both}
     .hero h1 em{font-style:normal;color:var(--mint)}
-    .hero-sub{font-size:16px;line-height:1.75;color:var(--muted);max-width:580px;margin:0 auto 12px;font-weight:300;animation:fadeInUp .8s ease-out .2s both}
-    .hero-dual{font-size:14px;line-height:1.7;color:var(--white-dim);max-width:540px;margin:0 auto 32px;animation:fadeInUp .8s ease-out .25s both}
+    .hero-sub{font-size:16px;line-height:1.75;color:var(--muted);max-width:560px;margin:0 auto 10px;font-weight:300;animation:fadeInUp .8s ease-out .2s both}
+    .hero-dual{font-size:14px;line-height:1.6;color:var(--white-dim);max-width:500px;margin:0 auto 32px;animation:fadeInUp .8s ease-out .25s both}
     .hero-dual strong{color:var(--mint);font-weight:400}
     .hero-ctas{display:flex;justify-content:center;gap:14px;animation:fadeInUp .8s ease-out .3s both}
     .btn-primary{background:var(--teal);color:var(--white);border:1px solid var(--teal);padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .3s}
@@ -43,16 +39,24 @@
     .btn-ghost{background:transparent;color:var(--white-dim);border:1px solid var(--navy-mid);padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .3s}
     .btn-ghost:hover{border-color:var(--muted)}
 
+    /* PROOF BAR */
+    .proof{padding:32px 0 0;animation:fadeInUp .8s ease-out .35s both}
+    .proof-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--navy-mid);border:1px solid var(--navy-mid);border-radius:6px;overflow:hidden;max-width:720px;margin:0 auto}
+    .proof-cell{background:var(--navy-light);padding:20px 16px;text-align:center}
+    .proof-num{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:300;color:var(--mint);margin-bottom:2px}
+    .proof-label{font-size:10px;color:var(--muted);letter-spacing:.5px;line-height:1.4}
+    .proof-note{max-width:720px;margin:12px auto 0;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;text-align:center}
+    .proof-note em{font-style:normal;color:var(--teal)}
+
     /* SIGNAL CARD */
-    .signal-section{padding:16px 0 20px;animation:fadeInUp .8s ease-out .4s both}
+    .signal-section{padding:32px 0 20px;animation:fadeInUp .8s ease-out .4s both}
     .signal-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center}
-    .signal-note{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--gold);text-align:center;margin-bottom:12px}
     .signal-card{max-width:720px;margin:0 auto;background:var(--navy-light);border:1px solid var(--navy-mid);border-left:3px solid var(--red);overflow:hidden}
     .sig-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--navy-mid)}
     .sig-head-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .sig-badge{background:var(--red);color:#fff;font-size:9px;font-weight:600;letter-spacing:1.5px;padding:2px 7px;text-transform:uppercase}
     .sig-entity{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mint)}
-    .sig-class{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);background:#C9A84C18;padding:2px 8px;border-radius:3px;border:1px solid #C9A84C33}
+    .sig-cloud{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);background:#C9A84C18;padding:2px 8px;border-radius:3px;border:1px solid #C9A84C33}
     .sig-model{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);background:var(--navy-mid);padding:2px 8px;border-radius:3px}
     .sig-conf{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:500}
     .sig-body{padding:16px 20px}
@@ -69,7 +73,7 @@
     .section-title{font-weight:200;font-size:28px;margin-bottom:12px;letter-spacing:-.5px}
     .section-desc{font-size:14px;color:var(--muted);max-width:520px;margin:0 auto 44px;line-height:1.7}
 
-    /* BEFORE / AFTER */
+    /* BEFORE/AFTER */
     .ba-section{padding:20px 0 32px;text-align:center}
     .ba-grid{display:grid;grid-template-columns:1fr 36px 1fr;gap:0;max-width:880px;margin:0 auto;align-items:stretch}
     .ba-col{background:var(--navy-light);border:1px solid var(--navy-mid);padding:24px 22px;text-align:left;border-radius:6px}
@@ -87,7 +91,7 @@
     .ba-col.after .ba-action{background:#2EC4B610;color:var(--mint);border:1px solid #2EC4B622}
     .ba-resolution{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;margin-top:14px;text-align:center;padding:8px;border-radius:4px}
 
-    /* HOW IT WORKS */
+    /* HOW */
     .how{padding:16px 0 32px;text-align:center}
     .flow{display:flex;align-items:stretch;gap:0;max-width:880px;margin:0 auto}
     .flow-step{flex:1;padding:24px 20px;background:var(--navy-light);border:1px solid var(--navy-mid);text-align:left;position:relative}
@@ -124,13 +128,11 @@
     .prompt{color:var(--teal)}.text{color:var(--muted)}.success{color:var(--mint)}.warn{color:var(--gold)}.val{color:var(--white-dim)}
     .line:nth-child(1){animation-delay:.8s}.line:nth-child(2){animation-delay:1.4s}.line:nth-child(3){animation-delay:2s}.line:nth-child(4){animation-delay:2.6s}.line:nth-child(5){animation-delay:3.2s}.line:nth-child(6){animation-delay:3.8s}.line:nth-child(7){animation-delay:4.4s}
 
-    /* CTA */
     .cta-section{padding:40px 0 72px;text-align:center}
     .cta-section h2{font-weight:200;font-size:28px;margin-bottom:10px}
     .cta-section p{color:var(--muted);font-size:14px;margin-bottom:28px}
     .cta-who{font-size:12px;color:var(--muted);margin-top:20px}
 
-    /* FOOTER */
     footer{border-top:1px solid var(--navy-mid);padding:24px 0;display:flex;justify-content:space-between;align-items:center}
     footer .foot-left{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted)}
     footer .foot-right{font-size:10px;color:var(--muted);letter-spacing:1px}
@@ -146,6 +148,7 @@
       .int-grid{grid-template-columns:1fr}
       .ba-grid{grid-template-columns:1fr}.ba-divider{padding:12px 0;transform:rotate(90deg)}
       .int-ttv{grid-template-columns:1fr}
+      .proof-bar{grid-template-columns:repeat(2,1fr)}
       .sig-fields{grid-template-columns:repeat(2,1fr)}
       .hero-ctas{flex-direction:column;align-items:center}
     }
@@ -156,7 +159,6 @@
 <div class="glow-orb"></div>
 <div class="container">
 
-<!-- NAV -->
 <nav>
   <div class="nav-brand">
     <div class="nav-logo"><svg width="28" height="42" viewBox="0 0 240 300" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ns" x1="120" y1="20" x2="120" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#C9A84C"/><stop offset="18%" stop-color="#E8C87A"/><stop offset="35%" stop-color="#2EC4B6"/><stop offset="70%" stop-color="#0A7A84"/><stop offset="100%" stop-color="#0A7A84" stop-opacity="0.2"/></linearGradient><linearGradient id="nb" x1="120" y1="-30" x2="120" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F0D47A"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#2EC4B6"/></linearGradient></defs><ellipse cx="120" cy="220" rx="104" ry="22" stroke="#0A7A84" stroke-width="0.8" opacity="0.20"/><ellipse cx="120" cy="210" rx="90" ry="19" stroke="#0A7A84" stroke-width="0.9" opacity="0.28"/><ellipse cx="120" cy="198" rx="76" ry="16" stroke="#0A7A84" stroke-width="1.0" opacity="0.38"/><ellipse cx="120" cy="184" rx="62" ry="13" stroke="#0A7A84" stroke-width="1.1" opacity="0.50"/><ellipse cx="120" cy="168" rx="48" ry="10" stroke="#0E8C98" stroke-width="1.3" opacity="0.65"/><ellipse cx="120" cy="150" rx="34" ry="7" stroke="#1AACB8" stroke-width="1.5" opacity="0.80"/><ellipse cx="120" cy="130" rx="20" ry="4" stroke="#2EC4B6" stroke-width="2.0"/><line x1="120" y1="295" x2="120" y2="28" stroke="url(#ns)" stroke-width="1.8" stroke-linecap="round"/><path d="M120,30 C115,18 111,6 113,-10 L120,-28 L127,-10 C129,6 125,18 120,30 Z" fill="url(#nb)"/><line x1="110" y1="42" x2="130" y2="42" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/><circle cx="120" cy="42" r="2" fill="#C9A84C" opacity="0.9"/><circle cx="120" cy="130" r="3.5" fill="#2EC4B6"/><circle cx="120" cy="150" r="2.4" fill="#2EC4B6" opacity="0.80"/><circle cx="120" cy="168" r="2.0" fill="#1AACB8" opacity="0.65"/><ellipse cx="120" cy="292" rx="6" ry="2.5" fill="#0A7A84" opacity="0.35"/></svg></div>
@@ -169,82 +171,88 @@
   </div>
 </nav>
 
-<!-- ① HERO — What is this? -->
+<!-- ① HERO -->
 <section class="hero">
   <div class="hero-badge">Private Preview</div>
   <h1>The missing intelligence layer<br>between your data and <em>your agents</em></h1>
-  <p class="hero-sub">VEKTOR generates structured signal packages from your enterprise data — confidence-scored, action-ready, rollback-included — that your AI agents consume and act on in seconds.</p>
-  <p class="hero-dual">Intelligence <strong>for</strong> your agents — and <strong>about</strong> them. The same engine that makes your data agent-ready also monitors whether the agents themselves are behaving correctly, scoped properly, and operating within bounds.</p>
+  <p class="hero-sub">Structured signal packages from your enterprise data that AI agents consume and act on in seconds. Confidence-scored. Action-ready. Rollback-included.</p>
+  <p class="hero-dual">Intelligence <strong>for</strong> your agents — and <strong>about</strong> them. VEKTOR makes your data agent-ready, and monitors whether your agents are behaving correctly.</p>
   <div class="hero-ctas">
     <a href="mailto:venkat@getvektor.ai" class="btn-primary">Request Access</a>
     <a href="https://demo.getvektor.ai" class="btn-ghost">Live Demo</a>
   </div>
 </section>
 
-<!-- ② SHOW ME IT'S REAL — Live signal card -->
+<!-- PROOF BAR — real numbers -->
+<section class="proof">
+  <div class="proof-bar">
+    <div class="proof-cell"><div class="proof-num">2,355</div><div class="proof-label">Signals generated from<br>real cloud IAM data</div></div>
+    <div class="proof-cell"><div class="proof-num">949</div><div class="proof-label">Privilege escalation<br>paths detected</div></div>
+    <div class="proof-cell"><div class="proof-num">914</div><div class="proof-label">SoD violations<br>found across clouds</div></div>
+    <div class="proof-cell"><div class="proof-num">3</div><div class="proof-label">Clouds analyzed<br>AWS + Azure + GCP</div></div>
+  </div>
+  <div class="proof-note">Results from <em>real public IAM policy data</em> — not synthetic, not self-reported, fully reproducible</div>
+</section>
+
+<!-- ② REAL SIGNAL — from actual cloud IAM analysis -->
 <section class="signal-section">
-  <div class="signal-label">Live signal from the VEKTOR demo environment</div>
-  <div class="signal-note">↓ This is an AI agent being monitored — not a human</div>
+  <div class="signal-label">Real signal generated from AWS IAM policy data</div>
   <div class="signal-card">
     <div class="sig-head">
       <div class="sig-head-left">
         <span class="sig-badge">Critical</span>
-        <span class="sig-entity">agt_unknown_003</span>
-        <span class="sig-class">ai_agent</span>
-        <span class="sig-model">Shadow Detection</span>
+        <span class="sig-entity">AdministratorAccess</span>
+        <span class="sig-cloud">AWS</span>
+        <span class="sig-model">M14 · Escalation Path</span>
       </div>
       <span class="sig-conf">0.99</span>
     </div>
-    <div class="sig-body"><p>Unregistered AI agent with no documented owner, purpose, or approval record. 127,445 API calls in 34 days across production database, financial ERP, and source code. Login pattern is non-deterministic — inconsistent with any scheduled automation. Origin: unknown. This entity was not deployed by any documented process.</p></div>
+    <div class="sig-body"><p>AWS managed policy holds IAM admin + service write permissions. Can create a new IAM role, attach admin policy, and assume it — enabling full account takeover. Each permission individually appears medium-risk. Combined: account takeover. No single-permission scanner catches this.</p></div>
     <div class="sig-fields">
-      <div class="sig-field"><div class="sig-field-label">Action</div><div class="sig-field-val" style="color:var(--red)">immediate_revocation</div></div>
-      <div class="sig-field"><div class="sig-field-label">Blast Radius</div><div class="sig-field-val" style="color:var(--gold)">unknown</div></div>
+      <div class="sig-field"><div class="sig-field-label">Action</div><div class="sig-field-val" style="color:var(--red)">break_escalation_chain</div></div>
+      <div class="sig-field"><div class="sig-field-label">Blast Radius</div><div class="sig-field-val" style="color:var(--gold)">full AWS account</div></div>
       <div class="sig-field"><div class="sig-field-label">Rollback</div><div class="sig-field-val" style="color:var(--mint)">staged</div></div>
       <div class="sig-field"><div class="sig-field-label">Human Required</div><div class="sig-field-val" style="color:var(--gold)">true</div></div>
     </div>
   </div>
-  <div class="sig-annotation">↑ A <em>VEKTOR signal package</em> — structured JSON your agents consume via API</div>
+  <div class="sig-annotation">↑ Generated by running VEKTOR on <em>real AWS IAM policy data</em> — not a mock</div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ③ WHY IT MATTERS — Before/After agent monologue -->
+<!-- ③ BEFORE/AFTER -->
 <section class="ba-section">
   <div class="section-label">The Difference</div>
   <h2 class="section-title">Same data. Same agent. One has VEKTOR.</h2>
   <p class="section-desc">Here's what your agent is actually thinking.</p>
   <div class="ba-grid">
-
     <div class="ba-col before">
       <div class="ba-tag before">Without VEKTOR</div>
-      <div class="ba-thought">"I see an entity called agt_unknown_003. Is this a person, a bot, or an agent? The data doesn't say."</div>
-      <div class="ba-thought">"They have 3 permissions. Is that a lot? I have no peer group to compare against."</div>
-      <div class="ba-thought">"Last activity was 11 minutes ago. Is that unusual? I don't have a historical baseline."</div>
-      <div class="ba-thought">"The owner field is empty. Is that a data quality issue or a real problem? I can't tell."</div>
-      <div class="ba-thought">"127,445 API calls. That sounds like a lot — but what does normal look like?"</div>
-      <div class="ba-action">→ "I don't have enough context to act. Escalating to a human."</div>
-      <div class="ba-resolution" style="color:var(--red);background:#C0392B10">Resolution: 4+ hours</div>
+      <div class="ba-thought">"I see a policy called AdministratorAccess. Is that dangerous? The name sounds broad but I don't know the scope."</div>
+      <div class="ba-thought">"It has 'Permissions management' access level. Is that normal for admin policies? I have no peer baseline."</div>
+      <div class="ba-thought">"There are also Write and Read levels. Can these be combined to escalate? I can't analyze multi-step chains."</div>
+      <div class="ba-thought">"The policy exists in AWS. Is there a conflicting policy in Azure? I can only see one cloud at a time."</div>
+      <div class="ba-thought">"I don't have enough context to assess the real risk. Escalating to a human."</div>
+      <div class="ba-action">→ "Flagged for manual review. Added to backlog."</div>
+      <div class="ba-resolution" style="color:var(--red);background:#C0392B10">Resolution: days to weeks (if ever)</div>
     </div>
-
     <div class="ba-divider">→</div>
-
     <div class="ba-col after">
       <div class="ba-tag after">With VEKTOR</div>
-      <div class="ba-thought">"Signal received. Entity class: ai_agent. Shadow score: 0.99. This is an unregistered agent."</div>
-      <div class="ba-thought">"Confidence: 0.99. My threshold is 0.90. This is certain enough to act."</div>
-      <div class="ba-thought">"Recommended action: immediate_revocation. Scope: agt_unknown_003. I know exactly what to do."</div>
-      <div class="ba-thought">"Requires_human: true. I'll stage the action and notify, not execute directly."</div>
-      <div class="ba-thought">"Rollback: 3 entitlements, reversible, steps pre-computed. If I'm wrong, undo in seconds."</div>
-      <div class="ba-action">→ [✓] Ticket created. CISO notified. Rollback staged. Done.</div>
-      <div class="ba-resolution" style="color:var(--mint);background:#2EC4B610">Resolution: 5 seconds</div>
+      <div class="ba-thought">"Signal received. AdministratorAccess. VEKTOR analyzed this against 1,525 AWS policies and 3,983 cloud IAM entities across 3 clouds."</div>
+      <div class="ba-thought">"Escalation path detected: iam:CreateRole + AttachRolePolicy + AssumeRole. Individually medium-risk. Combined: full account takeover. Confidence: 0.99."</div>
+      <div class="ba-thought">"Also flagged by M10: SoD violation — IAM admin + service write on same policy. Toxic combination confirmed by cross-model correlation."</div>
+      <div class="ba-thought">"Action: break_escalation_chain. Separate IAM and service permissions into distinct roles. Rollback pre-computed."</div>
+      <div class="ba-thought">"492 similar over-provisioned roles found across AWS, Azure, and GCP. This is systemic, not isolated."</div>
+      <div class="ba-action">→ [✓] 949 escalation paths mapped. Remediation plan generated. Rollback staged.</div>
+      <div class="ba-resolution" style="color:var(--mint);background:#2EC4B610">Resolution: 5 seconds per signal</div>
     </div>
-
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ④ HOW IT CONNECTS -->
+<!-- ④ HOW IT WORKS -->
 <section class="how" id="how">
   <div class="section-label">How It Works</div>
   <h2 class="section-title">Three steps. One read-only connection.</h2>
@@ -252,32 +260,32 @@
   <div class="flow">
     <div class="flow-step">
       <div class="flow-num">01 CONNECT</div>
-      <h3>Read-only. Your data stays where it is.</h3>
-      <p>VEKTOR connects to your existing platform via API — identity provider, ERP, or any enterprise system. It reads entities, entitlements, and events. Nothing is moved, copied, or stored permanently.</p>
+      <h3>Read-only. Nothing moved or stored.</h3>
+      <p>API connection to your existing platform. Entities, entitlements, events. Your data stays where it is.</p>
       <div class="flow-arrow">→</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">02 GENERATE</div>
-      <h3>ML models generate signals continuously.</h3>
+      <h3>A growing library of models scores everything.</h3>
       <p>A growing library of models scores everything — humans, AI agents, bots, service accounts. Peer deviation, anomaly detection, delegation inheritance, cross-domain amplification, and more.</p>
       <div class="flow-arrow">→</div>
     </div>
     <div class="flow-step">
-      <div class="flow-num">03 CONSUME</div>
-      <h3>Your agents call the API and act.</h3>
-      <p>One REST API. Structured JSON signal packages. Each signal includes confidence, recommended action, rollback payload, and feature attribution. Your agent reads, decides, and acts.</p>
+      <div class="flow-num">03 CONSUME + MONITOR</div>
+      <h3>Your agents act — and VEKTOR watches them.</h3>
+      <p>One REST API. Your agent calls it, gets structured signals, decides, and acts. Meanwhile, VEKTOR continuously monitors the agents themselves — flagging over-provisioning, scope drift, anomalous behavior, and rogue deployments.</p>
     </div>
   </div>
-  <div class="flow-note">VEKTOR <strong>doesn't replace anything</strong> in your stack. It reads from the systems you already have and generates intelligence your agents can't get anywhere else. Adding a new data source means writing one adapter — zero model changes.</div>
+  <div class="flow-note">VEKTOR <strong>reads from your existing systems</strong> and doesn't replace anything. One adapter per new data source — zero model changes.</div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ⑤ INTEGRATION + TIME TO VALUE -->
+<!-- ⑤ INTEGRATION -->
 <section class="integration" id="integrate">
   <div class="section-label">Integration</div>
   <h2 class="section-title">One API call. Your agent has intelligence.</h2>
-  <p class="section-desc">REST API. No SDK. No library. No training required.</p>
+  <p class="section-desc">REST API. No SDK. No training.</p>
   <div class="int-grid">
     <div class="int-card">
       <h3>Fetch all critical signals</h3>
@@ -289,9 +297,9 @@
         <span class="sym">{</span><br>
         &nbsp;&nbsp;<span class="key">"signals"</span><span class="sym">: [{</span><br>
         &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"confidence"</span><span class="sym">:</span> <span class="str">0.99</span><span class="sym">,</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"action"</span><span class="sym">:</span> <span class="str">"immediate_revocation"</span><span class="sym">,</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"action"</span><span class="sym">:</span> <span class="str">"break_escalation_chain"</span><span class="sym">,</span><br>
         &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"rollback"</span><span class="sym">:</span> <span class="str">"staged"</span><span class="sym">,</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"entity_class"</span><span class="sym">:</span> <span class="str">"ai_agent"</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"cloud"</span><span class="sym">:</span> <span class="str">"AWS"</span><br>
         &nbsp;&nbsp;<span class="sym">}]</span><br>
         <span class="sym">}</span>
       </div>
@@ -321,21 +329,21 @@
 
 <div class="divider"></div>
 
-<!-- ⑥ END TO END PROOF -->
+<!-- ⑥ TERMINAL -->
 <section class="terminal-section">
   <div class="section-label">End to End</div>
   <h2 class="section-title">Signal → Agent → Action</h2>
-  <p class="section-desc">VEKTOR detects a rogue AI agent. Your agent fetches the signal, triages, and responds — autonomously.</p>
+  <p class="section-desc">VEKTOR generates. Your agent acts. Automatically.</p>
   <div class="terminal">
     <div class="terminal-bar"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div><span class="terminal-title">your-agent consuming vektor signal</span></div>
     <div class="terminal-body">
-      <div class="line"><span class="prompt">&gt;</span> <span class="text">fetch("/signals?priority=critical&entity_class=ai_agent")</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="val">signal: agt_unknown_003 → class: ai_agent → confidence: 0.99</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="text">confidence 0.99 &gt; threshold 0.90...</span> <span class="success">PASSED</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="text">requires_human: true →</span> <span class="warn">staging action, notifying team</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Ticket INC0047823 created → P1 → CISO assigned</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] #security-ops notified</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Rollback staged → 3 entitlements → revoke on approval</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="text">fetch("/signals?priority=critical&model_id=M14")</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="val">949 escalation paths across AWS + Azure + GCP</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="text">top signal: AdministratorAccess → confidence 0.99</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="text">action: break_escalation_chain →</span> <span class="warn">requires_human: true</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Remediation plan generated for 949 paths</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Rollback payloads staged for all 949</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Cross-cloud report: AWS 936 | Azure 6 | GCP 7</span></div>
     </div>
   </div>
 </section>
@@ -345,12 +353,11 @@
 <!-- ⑦ CTA -->
 <section class="cta-section">
   <h2>Make your enterprise data agent-ready</h2>
-  <p>Connect your existing platform. Get structured signals in under an hour. Your agents do the rest.</p>
+  <p>Connect your platform. Signals in under an hour. Your agents do the rest.</p>
   <a href="mailto:venkat@getvektor.ai" class="btn-primary">Request Access</a>
   <div class="cta-who">Built for platform teams, identity teams, and security teams deploying AI agents on enterprise data.</div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="foot-left">
     <svg width="16" height="24" viewBox="0 0 240 300" fill="none"><ellipse cx="120" cy="210" rx="90" ry="19" stroke="#0A7A84" stroke-width="1.2" opacity="0.3"/><ellipse cx="120" cy="168" rx="48" ry="10" stroke="#0E8C98" stroke-width="1.8" opacity="0.5"/><ellipse cx="120" cy="130" rx="20" ry="4" stroke="#2EC4B6" stroke-width="2.5"/><line x1="120" y1="295" x2="120" y2="28" stroke="#2EC4B6" stroke-width="2.5" stroke-linecap="round"/><path d="M120,30 C115,18 111,6 113,-10 L120,-28 L127,-10 C129,6 125,18 120,30 Z" fill="#C9A84C"/><circle cx="120" cy="130" r="4" fill="#2EC4B6"/></svg>
