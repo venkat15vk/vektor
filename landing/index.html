@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VEKTOR — Agent Intelligence. Precisely Directed.</title>
-  <meta name="description" content="VEKTOR generates structured, confidence-scored signal packages from enterprise data that AI agents consume and act on autonomously.">
+  <meta name="description" content="VEKTOR is the intelligence layer between your enterprise data and your AI agents. Structured signals for agents — and about them.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@200;300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
@@ -16,8 +16,9 @@
     body::before{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
     .grid-bg{position:fixed;inset:0;background-image:linear-gradient(var(--teal-glow) 1px,transparent 1px),linear-gradient(90deg,var(--teal-glow) 1px,transparent 1px);background-size:80px 80px;opacity:.06;pointer-events:none}
     .glow-orb{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,var(--teal) 0%,transparent 70%);opacity:.04;top:-200px;right:-200px;pointer-events:none}
-    .container{max-width:1120px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+    .container{max-width:1060px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
 
+    /* NAV */
     nav{padding:24px 0;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(10,122,132,.1)}
     .nav-brand{display:flex;align-items:center;gap:14px}
     .nav-logo svg{display:block}
@@ -28,24 +29,30 @@
     .nav-cta{background:transparent!important;border:1px solid var(--teal)!important;color:var(--mint)!important;padding:9px 22px!important;font-size:11px!important;letter-spacing:1.5px!important;text-transform:uppercase;cursor:pointer;transition:all .3s}
     .nav-cta:hover{background:var(--teal)!important;color:var(--white)!important}
 
-    .hero{padding:80px 0 48px;text-align:center}
+    /* HERO */
+    .hero{padding:72px 0 40px;text-align:center;max-width:720px;margin:0 auto}
     .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid var(--gold-dim);border-left:2px solid var(--gold);background:var(--gold-dim);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:28px;animation:fadeIn .8s ease-out}
-    .hero h1{font-weight:200;font-size:clamp(32px,5vw,52px);line-height:1.2;letter-spacing:-.5px;margin-bottom:20px;animation:fadeInUp .8s ease-out .1s both}
+    .hero h1{font-weight:200;font-size:clamp(30px,4.5vw,48px);line-height:1.2;letter-spacing:-.5px;margin-bottom:20px;animation:fadeInUp .8s ease-out .1s both}
     .hero h1 em{font-style:normal;color:var(--mint)}
-    .hero-sub{font-size:17px;line-height:1.7;color:var(--muted);max-width:620px;margin:0 auto 36px;font-weight:300;animation:fadeInUp .8s ease-out .2s both}
+    .hero-sub{font-size:16px;line-height:1.75;color:var(--muted);max-width:580px;margin:0 auto 12px;font-weight:300;animation:fadeInUp .8s ease-out .2s both}
+    .hero-dual{font-size:14px;line-height:1.7;color:var(--white-dim);max-width:540px;margin:0 auto 32px;animation:fadeInUp .8s ease-out .25s both}
+    .hero-dual strong{color:var(--mint);font-weight:400}
     .hero-ctas{display:flex;justify-content:center;gap:14px;animation:fadeInUp .8s ease-out .3s both}
     .btn-primary{background:var(--teal);color:var(--white);border:1px solid var(--teal);padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .3s}
     .btn-primary:hover{background:#0C8E9A;box-shadow:0 0 30px var(--teal-glow)}
     .btn-ghost{background:transparent;color:var(--white-dim);border:1px solid var(--navy-mid);padding:13px 32px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:all .3s}
     .btn-ghost:hover{border-color:var(--muted)}
 
-    .signal-section{padding:0 0 20px;animation:fadeInUp .8s ease-out .4s both}
-    .signal-section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center}
-    .signal-card{max-width:760px;margin:0 auto;background:var(--navy-light);border:1px solid var(--navy-mid);border-left:3px solid var(--red);overflow:hidden}
+    /* SIGNAL CARD */
+    .signal-section{padding:16px 0 20px;animation:fadeInUp .8s ease-out .4s both}
+    .signal-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;text-align:center}
+    .signal-note{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--gold);text-align:center;margin-bottom:12px}
+    .signal-card{max-width:720px;margin:0 auto;background:var(--navy-light);border:1px solid var(--navy-mid);border-left:3px solid var(--red);overflow:hidden}
     .sig-head{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--navy-mid)}
-    .sig-head-left{display:flex;align-items:center;gap:10px}
+    .sig-head-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
     .sig-badge{background:var(--red);color:#fff;font-size:9px;font-weight:600;letter-spacing:1.5px;padding:2px 7px;text-transform:uppercase}
     .sig-entity{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--mint)}
+    .sig-class{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);background:#C9A84C18;padding:2px 8px;border-radius:3px;border:1px solid #C9A84C33}
     .sig-model{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);background:var(--navy-mid);padding:2px 8px;border-radius:3px}
     .sig-conf{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);font-weight:500}
     .sig-body{padding:16px 20px}
@@ -54,110 +61,76 @@
     .sig-field{background:var(--navy-light);padding:10px 16px}
     .sig-field-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
     .sig-field-val{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500}
-    .sig-annotation{max-width:760px;margin:14px auto 0;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);text-align:right}
+    .sig-annotation{max-width:720px;margin:14px auto 0;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);text-align:right}
     .sig-annotation em{font-style:normal;color:var(--teal)}
 
-    .divider{width:48px;height:1px;background:var(--teal);margin:64px auto;opacity:.4}
+    .divider{width:48px;height:1px;background:var(--teal);margin:56px auto;opacity:.4}
     .section-label{font-size:10px;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--teal);margin-bottom:14px}
-    .section-title{font-weight:200;font-size:30px;margin-bottom:12px;letter-spacing:-.5px}
-    .section-desc{font-size:15px;color:var(--muted);max-width:540px;margin:0 auto 48px;line-height:1.7}
+    .section-title{font-weight:200;font-size:28px;margin-bottom:12px;letter-spacing:-.5px}
+    .section-desc{font-size:14px;color:var(--muted);max-width:520px;margin:0 auto 44px;line-height:1.7}
 
-    /* BEFORE/AFTER MONOLOGUE */
-    .ba-section{padding:20px 0 40px;text-align:center}
-    .ba-grid{display:grid;grid-template-columns:1fr 40px 1fr;gap:0;max-width:940px;margin:0 auto;align-items:stretch}
-    .ba-col{background:var(--navy-light);border:1px solid var(--navy-mid);padding:28px 24px;text-align:left;border-radius:6px}
+    /* BEFORE / AFTER */
+    .ba-section{padding:20px 0 32px;text-align:center}
+    .ba-grid{display:grid;grid-template-columns:1fr 36px 1fr;gap:0;max-width:880px;margin:0 auto;align-items:stretch}
+    .ba-col{background:var(--navy-light);border:1px solid var(--navy-mid);padding:24px 22px;text-align:left;border-radius:6px}
     .ba-col.before{border-color:#C0392B33}
     .ba-col.after{border-color:#2EC4B633}
-    .ba-divider{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:18px;color:var(--teal)}
-    .ba-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;padding:3px 10px;display:inline-block;border-radius:3px}
+    .ba-divider{display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:16px;color:var(--teal)}
+    .ba-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:18px;padding:3px 10px;display:inline-block;border-radius:3px}
     .ba-tag.before{color:var(--red);background:#C0392B15;border:1px solid #C0392B33}
     .ba-tag.after{color:var(--mint);background:#2EC4B615;border:1px solid #2EC4B633}
-    .ba-thought{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;color:var(--white-dim);margin-bottom:10px;padding-left:14px;border-left:2px solid var(--navy-mid);font-style:italic}
+    .ba-thought{font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.7;color:var(--white-dim);margin-bottom:8px;padding:6px 12px;border-left:2px solid var(--navy-mid);font-style:italic}
     .ba-col.before .ba-thought{border-left-color:#C0392B33}
     .ba-col.after .ba-thought{border-left-color:#2EC4B633}
-    .ba-action{font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:16px;padding:10px 14px;border-radius:4px}
+    .ba-action{font-family:'JetBrains Mono',monospace;font-size:11px;margin-top:14px;padding:10px 12px;border-radius:4px}
     .ba-col.before .ba-action{background:#C0392B10;color:var(--red);border:1px solid #C0392B22}
     .ba-col.after .ba-action{background:#2EC4B610;color:var(--mint);border:1px solid #2EC4B622}
-    .ba-resolution{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;margin-top:16px;text-align:center;padding:8px;border-radius:4px}
+    .ba-resolution{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;margin-top:14px;text-align:center;padding:8px;border-radius:4px}
 
-    /* FINDINGS */
-    .findings{padding:20px 0 40px;text-align:center}
-    .findings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-    .finding{background:var(--navy-light);border:1px solid var(--navy-mid);padding:24px 20px;text-align:left;border-radius:6px;transition:border-color .3s}
-    .finding:hover{border-color:var(--teal)}
-    .finding-type{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);margin-bottom:8px}
-    .finding-title{font-size:14px;font-weight:400;margin-bottom:6px;line-height:1.4}
-    .finding-desc{font-size:11px;color:var(--muted);line-height:1.6}
-    .finding-stat{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--gold);margin-top:8px}
-
-    /* CROSS-VERTICAL */
-    .cross-section{padding:20px 0 40px;text-align:center}
-    .cross-container{max-width:900px;margin:0 auto}
-    .cross-sources{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0}
-    .cross-source{background:var(--navy-light);padding:22px 20px;text-align:left;border-radius:6px 6px 0 0}
-    .cross-source.identity{border:1px solid var(--teal);border-bottom:none}
-    .cross-source.finance{border:1px solid var(--gold);border-bottom:none}
-    .cross-source-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px}
-    .cross-source.identity .cross-source-tag{color:var(--teal)}
-    .cross-source.finance .cross-source-tag{color:var(--gold)}
-    .cross-source h4{font-size:13px;font-weight:400;margin-bottom:6px;line-height:1.4}
-    .cross-source p{font-size:11px;color:var(--muted);line-height:1.5}
-    .cross-source-stat{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:8px}
-    .cross-source.identity .cross-source-stat{color:var(--teal)}
-    .cross-source.finance .cross-source-stat{color:var(--gold)}
-    .cross-arrow{text-align:center;padding:12px 0;font-family:'JetBrains Mono',monospace;font-size:20px;color:var(--teal)}
-    .cross-compound{background:var(--navy-light);border:2px solid var(--red);border-radius:0 0 6px 6px;padding:24px;text-align:left}
-    .cross-compound-tag{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);margin-bottom:10px}
-    .cross-compound h3{font-size:16px;font-weight:400;margin-bottom:10px;line-height:1.4}
-    .cross-compound p{font-size:12px;color:var(--white-dim);line-height:1.7;margin-bottom:12px}
-    .cross-compound-fields{display:flex;gap:16px;flex-wrap:wrap}
-    .cross-compound-field{font-family:'JetBrains Mono',monospace;font-size:10px}
-    .cross-compound-field .label{color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-    .cross-compound-field .val{color:var(--gold);font-weight:500}
-    .cross-note{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:20px;text-align:center}
-    .cross-note em{font-style:normal;color:var(--teal)}
-
-    /* HOW / FLOW */
-    .how{padding:20px 0 40px;text-align:center}
-    .flow{display:flex;align-items:stretch;gap:0;max-width:900px;margin:0 auto}
-    .flow-step{flex:1;padding:28px 22px;background:var(--navy-light);border:1px solid var(--navy-mid);text-align:left;position:relative}
+    /* HOW IT WORKS */
+    .how{padding:16px 0 32px;text-align:center}
+    .flow{display:flex;align-items:stretch;gap:0;max-width:880px;margin:0 auto}
+    .flow-step{flex:1;padding:24px 20px;background:var(--navy-light);border:1px solid var(--navy-mid);text-align:left;position:relative}
     .flow-step:first-child{border-radius:6px 0 0 6px}
     .flow-step:last-child{border-radius:0 6px 6px 0}
     .flow-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--teal);letter-spacing:2px;margin-bottom:10px}
-    .flow-step h3{font-size:15px;font-weight:500;margin-bottom:8px}
+    .flow-step h3{font-size:14px;font-weight:500;margin-bottom:6px}
     .flow-step p{font-size:12px;color:var(--muted);line-height:1.6}
-    .flow-arrow{position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:24px;height:24px;background:var(--navy);border:1px solid var(--navy-mid);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;font-size:12px;color:var(--teal)}
+    .flow-arrow{position:absolute;right:-12px;top:50%;transform:translateY(-50%);width:22px;height:22px;background:var(--navy);border:1px solid var(--navy-mid);border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:2;font-size:11px;color:var(--teal)}
+    .flow-note{max-width:880px;margin:16px auto 0;text-align:center;font-size:13px;color:var(--muted);line-height:1.6}
+    .flow-note strong{color:var(--white-dim);font-weight:400}
 
     /* INTEGRATION */
-    .integration{padding:20px 0 40px;text-align:center}
-    .int-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:900px;margin:0 auto;text-align:left}
-    .int-card{background:var(--navy-light);border:1px solid var(--navy-mid);border-radius:6px;padding:28px 24px}
-    .int-card h3{font-size:16px;font-weight:400;margin-bottom:10px}
-    .int-card p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px}
+    .integration{padding:16px 0 32px;text-align:center}
+    .int-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:880px;margin:0 auto;text-align:left}
+    .int-card{background:var(--navy-light);border:1px solid var(--navy-mid);border-radius:6px;padding:24px 22px}
+    .int-card h3{font-size:15px;font-weight:400;margin-bottom:8px}
+    .int-card p{font-size:12px;color:var(--muted);line-height:1.7;margin-bottom:12px}
     .int-code{background:var(--navy);border:1px solid var(--navy-mid);border-radius:4px;padding:14px 16px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.8;overflow-x:auto}
     .int-code .key{color:var(--mint)}.int-code .str{color:var(--gold)}.int-code .com{color:var(--muted)}.int-code .sym{color:#556}
+    .int-ttv{max-width:880px;margin:20px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--navy-mid);border:1px solid var(--navy-mid);border-radius:6px;overflow:hidden}
+    .int-ttv-cell{background:var(--navy);padding:16px 20px;text-align:center}
+    .int-ttv-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:300;color:var(--mint);margin-bottom:4px}
+    .int-ttv-label{font-size:11px;color:var(--muted)}
 
     /* TERMINAL */
-    .terminal-section{padding:20px 0 40px;text-align:center}
-    .terminal{max-width:600px;margin:36px auto 0;background:#04080E;border:1px solid var(--navy-mid);border-radius:6px;overflow:hidden;text-align:left}
+    .terminal-section{padding:16px 0 32px;text-align:center}
+    .terminal{max-width:580px;margin:32px auto 0;background:#04080E;border:1px solid var(--navy-mid);border-radius:6px;overflow:hidden;text-align:left}
     .terminal-bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--navy-light);border-bottom:1px solid var(--navy-mid)}
     .terminal-dot{width:9px;height:9px;border-radius:50%;background:var(--navy-mid)}
     .terminal-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-left:8px}
-    .terminal-body{padding:18px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:2}
+    .terminal-body{padding:16px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:2}
     .terminal-body .line{opacity:0;animation:typeLine .3s ease-out forwards}
     .prompt{color:var(--teal)}.text{color:var(--muted)}.success{color:var(--mint)}.warn{color:var(--gold)}.val{color:var(--white-dim)}
     .line:nth-child(1){animation-delay:.8s}.line:nth-child(2){animation-delay:1.4s}.line:nth-child(3){animation-delay:2s}.line:nth-child(4){animation-delay:2.6s}.line:nth-child(5){animation-delay:3.2s}.line:nth-child(6){animation-delay:3.8s}.line:nth-child(7){animation-delay:4.4s}
 
-    .stats{padding:20px 0}
-    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--navy-mid);border:1px solid var(--navy-mid)}
-    .stat-cell{background:var(--navy);padding:32px 20px;text-align:center}
-    .stat-num{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:300;color:var(--mint);margin-bottom:4px}
-    .stat-label{font-size:11px;color:var(--muted);line-height:1.5}
+    /* CTA */
+    .cta-section{padding:40px 0 72px;text-align:center}
+    .cta-section h2{font-weight:200;font-size:28px;margin-bottom:10px}
+    .cta-section p{color:var(--muted);font-size:14px;margin-bottom:28px}
+    .cta-who{font-size:12px;color:var(--muted);margin-top:20px}
 
-    .cta-section{padding:48px 0 80px;text-align:center}
-    .cta-section h2{font-weight:200;font-size:30px;margin-bottom:12px}
-    .cta-section p{color:var(--muted);font-size:14px;margin-bottom:32px}
-
+    /* FOOTER */
     footer{border-top:1px solid var(--navy-mid);padding:24px 0;display:flex;justify-content:space-between;align-items:center}
     footer .foot-left{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--muted)}
     footer .foot-right{font-size:10px;color:var(--muted);letter-spacing:1px}
@@ -169,13 +142,10 @@
     @keyframes typeLine{from{opacity:0;transform:translateX(-4px)}to{opacity:1;transform:translateX(0)}}
     @media(max-width:768px){
       .nav-links a:not(.nav-cta){display:none}
-      .findings-grid{grid-template-columns:1fr}
       .flow{flex-direction:column}.flow-step{border-radius:0!important}.flow-arrow{display:none}
       .int-grid{grid-template-columns:1fr}
-      .ba-grid{grid-template-columns:1fr}
-      .ba-divider{padding:12px 0;transform:rotate(90deg)}
-      .cross-sources{grid-template-columns:1fr}
-      .stats-grid{grid-template-columns:repeat(2,1fr)}
+      .ba-grid{grid-template-columns:1fr}.ba-divider{padding:12px 0;transform:rotate(90deg)}
+      .int-ttv{grid-template-columns:1fr}
       .sig-fields{grid-template-columns:repeat(2,1fr)}
       .hero-ctas{flex-direction:column;align-items:center}
     }
@@ -186,39 +156,46 @@
 <div class="glow-orb"></div>
 <div class="container">
 
+<!-- NAV -->
 <nav>
   <div class="nav-brand">
     <div class="nav-logo"><svg width="28" height="42" viewBox="0 0 240 300" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ns" x1="120" y1="20" x2="120" y2="300" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#C9A84C"/><stop offset="18%" stop-color="#E8C87A"/><stop offset="35%" stop-color="#2EC4B6"/><stop offset="70%" stop-color="#0A7A84"/><stop offset="100%" stop-color="#0A7A84" stop-opacity="0.2"/></linearGradient><linearGradient id="nb" x1="120" y1="-30" x2="120" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F0D47A"/><stop offset="50%" stop-color="#C9A84C"/><stop offset="100%" stop-color="#2EC4B6"/></linearGradient></defs><ellipse cx="120" cy="220" rx="104" ry="22" stroke="#0A7A84" stroke-width="0.8" opacity="0.20"/><ellipse cx="120" cy="210" rx="90" ry="19" stroke="#0A7A84" stroke-width="0.9" opacity="0.28"/><ellipse cx="120" cy="198" rx="76" ry="16" stroke="#0A7A84" stroke-width="1.0" opacity="0.38"/><ellipse cx="120" cy="184" rx="62" ry="13" stroke="#0A7A84" stroke-width="1.1" opacity="0.50"/><ellipse cx="120" cy="168" rx="48" ry="10" stroke="#0E8C98" stroke-width="1.3" opacity="0.65"/><ellipse cx="120" cy="150" rx="34" ry="7" stroke="#1AACB8" stroke-width="1.5" opacity="0.80"/><ellipse cx="120" cy="130" rx="20" ry="4" stroke="#2EC4B6" stroke-width="2.0"/><line x1="120" y1="295" x2="120" y2="28" stroke="url(#ns)" stroke-width="1.8" stroke-linecap="round"/><path d="M120,30 C115,18 111,6 113,-10 L120,-28 L127,-10 C129,6 125,18 120,30 Z" fill="url(#nb)"/><line x1="110" y1="42" x2="130" y2="42" stroke="#C9A84C" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/><circle cx="120" cy="42" r="2" fill="#C9A84C" opacity="0.9"/><circle cx="120" cy="130" r="3.5" fill="#2EC4B6"/><circle cx="120" cy="150" r="2.4" fill="#2EC4B6" opacity="0.80"/><circle cx="120" cy="168" r="2.0" fill="#1AACB8" opacity="0.65"/><ellipse cx="120" cy="292" rx="6" ry="2.5" fill="#0A7A84" opacity="0.35"/></svg></div>
     <span class="wordmark">vektor</span>
   </div>
   <div class="nav-links">
-    <a href="#examples">Signals</a>
+    <a href="#how">How It Works</a>
     <a href="#integrate">Integrate</a>
-    <a href="#demo">Demo</a>
     <a href="mailto:venkat@getvektor.ai" class="nav-cta">Request Access</a>
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- ① HERO — What is this? -->
 <section class="hero">
   <div class="hero-badge">Private Preview</div>
-  <h1>Enterprise data in.<br><em>Agent-ready signals out.</em></h1>
-  <p class="hero-sub">VEKTOR is the missing intelligence layer between your enterprise data and your AI agents. It generates structured signal packages — confidence-scored, action-ready, rollback-included — that agents consume and act on in seconds.</p>
+  <h1>The missing intelligence layer<br>between your data and <em>your agents</em></h1>
+  <p class="hero-sub">VEKTOR generates structured signal packages from your enterprise data — confidence-scored, action-ready, rollback-included — that your AI agents consume and act on in seconds.</p>
+  <p class="hero-dual">Intelligence <strong>for</strong> your agents — and <strong>about</strong> them. The same engine that makes your data agent-ready also monitors whether the agents themselves are behaving correctly, scoped properly, and operating within bounds.</p>
   <div class="hero-ctas">
     <a href="mailto:venkat@getvektor.ai" class="btn-primary">Request Access</a>
     <a href="https://demo.getvektor.ai" class="btn-ghost">Live Demo</a>
   </div>
 </section>
 
-<!-- LIVE SIGNAL -->
+<!-- ② SHOW ME IT'S REAL — Live signal card -->
 <section class="signal-section">
-  <div class="signal-section-label">Live signal from the VEKTOR demo environment</div>
+  <div class="signal-label">Live signal from the VEKTOR demo environment</div>
+  <div class="signal-note">↓ This is an AI agent being monitored — not a human</div>
   <div class="signal-card">
     <div class="sig-head">
-      <div class="sig-head-left"><span class="sig-badge">Critical</span><span class="sig-entity">agt_unknown_003</span><span class="sig-model">M8 · Shadow Detection</span></div>
+      <div class="sig-head-left">
+        <span class="sig-badge">Critical</span>
+        <span class="sig-entity">agt_unknown_003</span>
+        <span class="sig-class">ai_agent</span>
+        <span class="sig-model">Shadow Detection</span>
+      </div>
       <span class="sig-conf">0.99</span>
     </div>
-    <div class="sig-body"><p>Unregistered AI agent with no documented owner, purpose, or approval record. 127,445 API calls in 34 days across production database, financial ERP, and source code. Login pattern is non-deterministic — inconsistent with any scheduled automation. Origin: unknown.</p></div>
+    <div class="sig-body"><p>Unregistered AI agent with no documented owner, purpose, or approval record. 127,445 API calls in 34 days across production database, financial ERP, and source code. Login pattern is non-deterministic — inconsistent with any scheduled automation. Origin: unknown. This entity was not deployed by any documented process.</p></div>
     <div class="sig-fields">
       <div class="sig-field"><div class="sig-field-label">Action</div><div class="sig-field-val" style="color:var(--red)">immediate_revocation</div></div>
       <div class="sig-field"><div class="sig-field-label">Blast Radius</div><div class="sig-field-val" style="color:var(--gold)">unknown</div></div>
@@ -231,7 +208,7 @@
 
 <div class="divider"></div>
 
-<!-- BEFORE / AFTER — AGENT MONOLOGUE -->
+<!-- ③ WHY IT MATTERS — Before/After agent monologue -->
 <section class="ba-section">
   <div class="section-label">The Difference</div>
   <h2 class="section-title">Same data. Same agent. One has VEKTOR.</h2>
@@ -244,7 +221,7 @@
       <div class="ba-thought">"They have 3 permissions. Is that a lot? I have no peer group to compare against."</div>
       <div class="ba-thought">"Last activity was 11 minutes ago. Is that unusual? I don't have a historical baseline."</div>
       <div class="ba-thought">"The owner field is empty. Is that a data quality issue or a real problem? I can't tell."</div>
-      <div class="ba-thought">"127,445 API calls. That sounds like a lot — but what does normal look like? I don't know."</div>
+      <div class="ba-thought">"127,445 API calls. That sounds like a lot — but what does normal look like?"</div>
       <div class="ba-action">→ "I don't have enough context to act. Escalating to a human."</div>
       <div class="ba-resolution" style="color:var(--red);background:#C0392B10">Resolution: 4+ hours</div>
     </div>
@@ -253,11 +230,11 @@
 
     <div class="ba-col after">
       <div class="ba-tag after">With VEKTOR</div>
-      <div class="ba-thought">"Signal received. Entity: agt_unknown_003. Class: ai_agent. Shadow score: 0.99."</div>
+      <div class="ba-thought">"Signal received. Entity class: ai_agent. Shadow score: 0.99. This is an unregistered agent."</div>
       <div class="ba-thought">"Confidence: 0.99. My threshold is 0.90. This is certain enough to act."</div>
       <div class="ba-thought">"Recommended action: immediate_revocation. Scope: agt_unknown_003. I know exactly what to do."</div>
-      <div class="ba-thought">"Requires_human: true. I won't execute the revocation — I'll stage it and notify."</div>
-      <div class="ba-thought">"Rollback payload: 3 entitlements, reversible, steps pre-computed. If I'm wrong, undo in seconds."</div>
+      <div class="ba-thought">"Requires_human: true. I'll stage the action and notify, not execute directly."</div>
+      <div class="ba-thought">"Rollback: 3 entitlements, reversible, steps pre-computed. If I'm wrong, undo in seconds."</div>
       <div class="ba-action">→ [✓] Ticket created. CISO notified. Rollback staged. Done.</div>
       <div class="ba-resolution" style="color:var(--mint);background:#2EC4B610">Resolution: 5 seconds</div>
     </div>
@@ -267,155 +244,36 @@
 
 <div class="divider"></div>
 
-<!-- SIGNAL DOMAINS -->
-<section class="findings" id="examples">
-  <div class="section-label">Signal Domains</div>
-  <h2 class="section-title">One architecture. Multiple data domains. Growing continuously.</h2>
-  <p class="section-desc">VEKTOR's canonical schema means adding a new data source requires one adapter. Zero model changes. Same output contract.</p>
-
-  <!-- Identity -->
-  <div style="max-width:900px;margin:0 auto 40px;text-align:left">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:16px">Identity Signals · Live in Demo</div>
-    <div class="findings-grid">
-      <div class="finding">
-        <div class="finding-type">Shadow Agent</div>
-        <div class="finding-title">Unregistered AI agent — no owner, 127K API calls</div>
-        <div class="finding-desc">Non-deterministic activity. No approval record. Three origin hypotheses, none confirmed.</div>
-        <div class="finding-stat">0.99 · M8</div>
-      </div>
-      <div class="finding">
-        <div class="finding-type">Session Anomaly</div>
-        <div class="finding-title">47-sec session exported 847 payroll records at 2am</div>
-        <div class="finding-desc">Zero prior exports in 180 days. Entropy 6x below baseline. Automated, not human.</div>
-        <div class="finding-stat">0.97 · M4</div>
-      </div>
-      <div class="finding">
-        <div class="finding-type">Separation of Duties</div>
-        <div class="finding-title">3 entities can create AND approve their own payments</div>
-        <div class="finding-desc">SOX 404 violation. 427 days old. Audit in 6 weeks. Never reviewed.</div>
-        <div class="finding-stat">1.00 · M3</div>
-      </div>
-      <div class="finding">
-        <div class="finding-type">Over-Privileged Agent</div>
-        <div class="finding-title">Finance Copilot: 19 entitlements, 3.2x peer median</div>
-        <div class="finding-desc">3 admin permissions unused in 891K API calls. Prompt injection = full ERP admin.</div>
-        <div class="finding-stat">0.96 · M2B</div>
-      </div>
-      <div class="finding">
-        <div class="finding-type">Delegation Inheritance</div>
-        <div class="finding-title">RPA bot as Global Admin — 2,800 unexplained calls</div>
-        <div class="finding-desc">Onboarding bot inherited Global Admin. 14 finance accesses with no justification.</div>
-        <div class="finding-stat">0.93 · M7</div>
-      </div>
-      <div class="finding">
-        <div class="finding-type">Contractor Expiry</div>
-        <div class="finding-title">Contractor active 547 days after contract ended</div>
-        <div class="finding-desc">Last login from unrecognized country. Prod DB read + source code write still active.</div>
-        <div class="finding-stat">0.99 · M5</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Finance -->
-  <div style="max-width:900px;margin:0 auto;text-align:left">
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Finance Signals · Coming Q3 2026</div>
-    <div class="findings-grid">
-      <div class="finding" style="border-color:#C9A84C22">
-        <div class="finding-type" style="color:var(--gold)">Duplicate Invoice</div>
-        <div class="finding-title">$47,200 invoice submitted twice by same vendor in 14 days</div>
-        <div class="finding-desc">Amounts match within 0.3%. Different PO numbers routed to different approvers. Consistent with vendor fraud or AP process failure.</div>
-        <div class="finding-stat">0.94 · F1</div>
-      </div>
-      <div class="finding" style="border-color:#C9A84C22">
-        <div class="finding-type" style="color:var(--gold)">Anomalous Vendor Payment</div>
-        <div class="finding-title">New vendor received $312K in 30 days — 4x peer median</div>
-        <div class="finding-desc">Onboarded 45 days ago. No prior relationship. Single approver for all 7 payments. Payment velocity exceeds 98th percentile.</div>
-        <div class="finding-stat">0.91 · F2</div>
-      </div>
-      <div class="finding" style="border-color:#C9A84C22">
-        <div class="finding-type" style="color:var(--gold)">Expense Anomaly</div>
-        <div class="finding-title">T&amp;E spend 3.7x department baseline after role change</div>
-        <div class="finding-desc">Promoted to VP 60 days ago. T&amp;E jumped from $1,200/mo to $4,440/mo. No policy exception. Peer VPs average $2,100/mo.</div>
-        <div class="finding-stat">0.87 · F3</div>
-      </div>
-    </div>
-    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:16px;text-align:center">Same canonical schema. Same output contract. Same API. <em style="font-style:normal;color:var(--teal)">One adapter added — zero model changes.</em></div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- CROSS-VERTICAL COMPOUND SIGNAL -->
-<section class="cross-section">
-  <div class="section-label">Cross-Domain Intelligence</div>
-  <h2 class="section-title">The compound signal no single-domain tool can generate</h2>
-  <p class="section-desc">When VEKTOR sees across data domains simultaneously, it surfaces findings that are invisible to any tool watching one domain alone.</p>
-
-  <div class="cross-container">
-    <div class="cross-sources">
-      <div class="cross-source identity">
-        <div class="cross-source-tag">Source · Identity Signal</div>
-        <h4>agt_copilot_fin_01 holds 19 entitlements — 3.2x peer median</h4>
-        <p>3 admin permissions never used in 891,204 API calls. Over-provisioned finance agent deployed by the CFO.</p>
-        <div class="cross-source-stat">confidence: 0.96 · M2B</div>
-      </div>
-      <div class="cross-source finance">
-        <div class="cross-source-tag">Source · Finance Signal</div>
-        <h4>New vendor received $312K across 7 payments in 30 days</h4>
-        <p>Vendor onboarded 45 days ago. No prior relationship. Single approver for all 7 payments. No second review.</p>
-        <div class="cross-source-stat">confidence: 0.91 · F2</div>
-      </div>
-    </div>
-
-    <div class="cross-arrow">↓ VEKTOR connects them ↓</div>
-
-    <div class="cross-compound">
-      <div class="cross-compound-tag">Compound Signal · Cross-Domain · X1</div>
-      <h3>Over-privileged finance agent approved $312K to unvetted vendor — no human review</h3>
-      <p>The single approver for all 7 payments is agt_copilot_fin_01 — the same entity flagged for over-provisioning. An AI agent with 3 unused admin permissions is autonomously approving anomalous payments to an unvetted vendor. No human reviewed any transaction. A prompt injection compromise of this agent grants an attacker both payment approval authority and full financial ERP admin simultaneously.</p>
-      <div class="cross-compound-fields">
-        <div class="cross-compound-field"><span class="label">Confidence: </span><span class="val">0.98</span></div>
-        <div class="cross-compound-field"><span class="label">Action: </span><span class="val">suspend_agent_and_freeze_payments</span></div>
-        <div class="cross-compound-field"><span class="label">Blast radius: </span><span class="val">$312K confirmed + unknown</span></div>
-        <div class="cross-compound-field"><span class="label">Rollback: </span><span class="val">staged</span></div>
-      </div>
-    </div>
-
-    <div class="cross-note">This finding is <em>invisible to any single-domain tool.</em> It exists because VEKTOR sees across identity and finance simultaneously.</div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- HOW IT WORKS -->
-<section class="how">
+<!-- ④ HOW IT CONNECTS -->
+<section class="how" id="how">
   <div class="section-label">How It Works</div>
-  <h2 class="section-title">Three steps. One read-only connection. Signals in minutes.</h2>
-  <div style="height:24px"></div>
+  <h2 class="section-title">Three steps. One read-only connection.</h2>
+  <div style="height:20px"></div>
   <div class="flow">
     <div class="flow-step">
       <div class="flow-num">01 CONNECT</div>
-      <h3>Your data stays where it is</h3>
-      <p>One read-only connection to your data source. VEKTOR normalizes everything into a canonical schema. Adding a new source = one adapter, zero model changes.</p>
+      <h3>Read-only. Your data stays where it is.</h3>
+      <p>VEKTOR connects to your existing platform via API — identity provider, ERP, or any enterprise system. It reads entities, entitlements, and events. Nothing is moved, copied, or stored permanently.</p>
       <div class="flow-arrow">→</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">02 GENERATE</div>
-      <h3>ML models score everything</h3>
-      <p>A growing library of models runs continuously — shadow detection, session anomaly, peer deviation, separation of duties, delegation inheritance, cross-domain amplification, and more.</p>
+      <h3>ML models generate signals continuously.</h3>
+      <p>A growing library of models scores everything — humans, AI agents, bots, service accounts. Peer deviation, anomaly detection, delegation inheritance, cross-domain amplification, and more.</p>
       <div class="flow-arrow">→</div>
     </div>
     <div class="flow-step">
       <div class="flow-num">03 CONSUME</div>
-      <h3>Your agents act on the output</h3>
-      <p>Structured JSON signal packages via REST API. Confidence score, recommended action, rollback payload. Your agent reads, decides, and acts.</p>
+      <h3>Your agents call the API and act.</h3>
+      <p>One REST API. Structured JSON signal packages. Each signal includes confidence, recommended action, rollback payload, and feature attribution. Your agent reads, decides, and acts.</p>
     </div>
   </div>
+  <div class="flow-note">VEKTOR <strong>doesn't replace anything</strong> in your stack. It reads from the systems you already have and generates intelligence your agents can't get anywhere else. Adding a new data source means writing one adapter — zero model changes.</div>
 </section>
 
 <div class="divider"></div>
 
-<!-- INTEGRATION -->
+<!-- ⑤ INTEGRATION + TIME TO VALUE -->
 <section class="integration" id="integrate">
   <div class="section-label">Integration</div>
   <h2 class="section-title">One API call. Your agent has intelligence.</h2>
@@ -423,80 +281,76 @@
   <div class="int-grid">
     <div class="int-card">
       <h3>Fetch all critical signals</h3>
-      <p>Get every signal above your agent's confidence threshold in one call.</p>
+      <p>Get every signal above your confidence threshold.</p>
       <div class="int-code">
         <span class="com"># Your agent calls VEKTOR</span><br>
         <span class="key">GET</span> <span class="str">/signals?priority=critical</span><br><br>
-        <span class="com"># Response: array of signal packages</span><br>
+        <span class="com"># Response</span><br>
         <span class="sym">{</span><br>
-        &nbsp;&nbsp;<span class="key">"signals"</span><span class="sym">: [</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sym">{</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"confidence"</span><span class="sym">:</span> <span class="str">0.99</span><span class="sym">,</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"action"</span><span class="sym">:</span> <span class="str">"immediate_revocation"</span><span class="sym">,</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"rollback"</span><span class="sym">:</span> <span class="str">"staged"</span><span class="sym">,</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"entity_id"</span><span class="sym">:</span> <span class="str">"agt_unknown_003"</span><br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="sym">}</span><br>
-        &nbsp;&nbsp;<span class="sym">]</span><br>
+        &nbsp;&nbsp;<span class="key">"signals"</span><span class="sym">: [{</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"confidence"</span><span class="sym">:</span> <span class="str">0.99</span><span class="sym">,</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"action"</span><span class="sym">:</span> <span class="str">"immediate_revocation"</span><span class="sym">,</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"rollback"</span><span class="sym">:</span> <span class="str">"staged"</span><span class="sym">,</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="key">"entity_class"</span><span class="sym">:</span> <span class="str">"ai_agent"</span><br>
+        &nbsp;&nbsp;<span class="sym">}]</span><br>
         <span class="sym">}</span>
       </div>
     </div>
     <div class="int-card">
-      <h3>Get a single signal package</h3>
-      <p>Full detail for one signal — everything your agent needs to decide and act.</p>
+      <h3>Full signal package</h3>
+      <p>Everything your agent needs to decide and act.</p>
       <div class="int-code">
-        <span class="com"># Fetch full signal detail</span><br>
+        <span class="com"># Single signal detail</span><br>
         <span class="key">GET</span> <span class="str">/signals/{signal_id}</span><br><br>
         <span class="com"># Every signal includes:</span><br>
         &nbsp;&nbsp;<span class="key">confidence</span> <span class="com">→ 0.00–1.00</span><br>
-        &nbsp;&nbsp;<span class="key">recommended_action</span> <span class="com">→ typed verb + scope</span><br>
+        &nbsp;&nbsp;<span class="key">recommended_action</span> <span class="com">→ typed verb</span><br>
         &nbsp;&nbsp;<span class="key">rollback_payload</span> <span class="com">→ undo steps</span><br>
-        &nbsp;&nbsp;<span class="key">intelligence_sources</span> <span class="com">→ feature attribution</span><br>
-        &nbsp;&nbsp;<span class="key">blast_radius</span> <span class="com">→ downstream impact</span><br>
-        &nbsp;&nbsp;<span class="key">requires_human</span> <span class="com">→ true/false</span>
+        &nbsp;&nbsp;<span class="key">blast_radius</span> <span class="com">→ impact scope</span><br>
+        &nbsp;&nbsp;<span class="key">requires_human</span> <span class="com">→ true / false</span><br>
+        &nbsp;&nbsp;<span class="key">intelligence_sources</span> <span class="com">→ attribution</span>
       </div>
     </div>
   </div>
+  <div class="int-ttv">
+    <div class="int-ttv-cell"><div class="int-ttv-val">Minutes</div><div class="int-ttv-label">to connect your data source</div></div>
+    <div class="int-ttv-cell"><div class="int-ttv-val">&lt;1 hour</div><div class="int-ttv-label">to first signals generated</div></div>
+    <div class="int-ttv-cell"><div class="int-ttv-val">1 call</div><div class="int-ttv-label">for your agent to integrate</div></div>
+  </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- TERMINAL -->
-<section class="terminal-section" id="demo">
+<!-- ⑥ END TO END PROOF -->
+<section class="terminal-section">
   <div class="section-label">End to End</div>
-  <h2 class="section-title">Signal → Agent → Action — in seconds</h2>
-  <p class="section-desc">VEKTOR generates a signal. Your agent fetches it via API. Triage, ticketing, and rollback happen automatically.</p>
+  <h2 class="section-title">Signal → Agent → Action</h2>
+  <p class="section-desc">VEKTOR detects a rogue AI agent. Your agent fetches the signal, triages, and responds — autonomously.</p>
   <div class="terminal">
     <div class="terminal-bar"><div class="terminal-dot"></div><div class="terminal-dot"></div><div class="terminal-dot"></div><span class="terminal-title">your-agent consuming vektor signal</span></div>
     <div class="terminal-body">
-      <div class="line"><span class="prompt">&gt;</span> <span class="text">fetch("https://api.vektor/signals?priority=critical")</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="val">signal received → confidence: 0.99 → action: immediate_revocation</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="text">evaluating confidence against threshold (0.90)...</span> <span class="success">PASSED</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="text">checking requires_human...</span> <span class="warn">TRUE → staging rollback first</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Ticket created → INC0047823 → P1 → assigned CISO</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Notification dispatched → #ops channel</span></div>
-      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Rollback staged → 3 entitlements ready to revoke on approval</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="text">fetch("/signals?priority=critical&entity_class=ai_agent")</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="val">signal: agt_unknown_003 → class: ai_agent → confidence: 0.99</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="text">confidence 0.99 &gt; threshold 0.90...</span> <span class="success">PASSED</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="text">requires_human: true →</span> <span class="warn">staging action, notifying team</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Ticket INC0047823 created → P1 → CISO assigned</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] #security-ops notified</span></div>
+      <div class="line"><span class="prompt">&gt;</span> <span class="success">[✓] Rollback staged → 3 entitlements → revoke on approval</span></div>
     </div>
   </div>
 </section>
 
-<!-- STATS -->
-<section class="stats">
-  <div class="stats-grid">
-    <div class="stat-cell"><div class="stat-num">∞</div><div class="stat-label">Growing model library<br>across domains</div></div>
-    <div class="stat-cell"><div class="stat-num">58+</div><div class="stat-label">Signal dimensions per<br>entity and expanding</div></div>
-    <div class="stat-cell"><div class="stat-num">&lt;5s</div><div class="stat-label">Signal to agent<br>action</div></div>
-    <div class="stat-cell"><div class="stat-num">1</div><div class="stat-label">API call for your<br>agent to integrate</div></div>
-  </div>
-</section>
-
 <div class="divider"></div>
 
+<!-- ⑦ CTA -->
 <section class="cta-section">
   <h2>Make your enterprise data agent-ready</h2>
-  <p>Private preview for companies deploying AI agents at scale.</p>
+  <p>Connect your existing platform. Get structured signals in under an hour. Your agents do the rest.</p>
   <a href="mailto:venkat@getvektor.ai" class="btn-primary">Request Access</a>
+  <div class="cta-who">Built for platform teams, identity teams, and security teams deploying AI agents on enterprise data.</div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="foot-left">
     <svg width="16" height="24" viewBox="0 0 240 300" fill="none"><ellipse cx="120" cy="210" rx="90" ry="19" stroke="#0A7A84" stroke-width="1.2" opacity="0.3"/><ellipse cx="120" cy="168" rx="48" ry="10" stroke="#0E8C98" stroke-width="1.8" opacity="0.5"/><ellipse cx="120" cy="130" rx="20" ry="4" stroke="#2EC4B6" stroke-width="2.5"/><line x1="120" y1="295" x2="120" y2="28" stroke="#2EC4B6" stroke-width="2.5" stroke-linecap="round"/><path d="M120,30 C115,18 111,6 113,-10 L120,-28 L127,-10 C129,6 125,18 120,30 Z" fill="#C9A84C"/><circle cx="120" cy="130" r="4" fill="#2EC4B6"/></svg>
