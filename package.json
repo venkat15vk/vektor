@@ -1,0 +1,7 @@
+{
+  "name": "vektor",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "dev": "cd frontend && npm run dev"
+  }
+}
