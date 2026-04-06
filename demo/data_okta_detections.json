@@ -1,0 +1,797 @@
+{
+  "source": "okta/customer-detections",
+  "description": "Official Okta detection rules for identity threats",
+  "total_rules": 31,
+  "rules": [
+    {
+      "id": "e6e88bfdbc27a65cddf1225c9ff0fb12",
+      "title": "Access to Admin Console Denied",
+      "description": "Detects when an attempt was made to access the Okta Admin Console but failed.\nAdversaries may try to access the Okta Admin Console after compromising an Okta admin but get denied due to policy constraints.",
+      "threat_tactic": [
+        "Initial Access"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"user.session.access_admin_app\" AND outcome.result eq \"FAILURE\"",
+      "false_positives": [
+        "Legitimate administrative users causing a failure due to user-error. Enhance this detection looking for multiple instances of this occurring from the same source."
+      ],
+      "filename": "access_to_admin_console_denied.yml"
+    },
+    {
+      "id": "65ca8dcc6f50976012b74700e6067ba6",
+      "title": "Access to Admin Console with Weak MFA Factor",
+      "description": "Detects when a user accesses the Okta Admin Console with a weak MFA factor such as password, email, sms, or security question.\nAdversaries may try to access the Okta Admin Console after compromising an Okta admin but get denied due to policy constraints.",
+      "threat_tactic": [
+        "Initial Access"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Configure an Admin App Policy to enable MFA for the Okta Admin Console.",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn."
+      ],
+      "oie_query": "eventType eq \"user.authentication.verify\" and outcome.result eq \"SUCCESS\" and (target.displayName co \"Okta Admin Console\" or target.displayName co \"Okta Administration\") and (target.detailEntry.MethodTypeUsed eq \"password\" or target.detailEntry.MethodTypeUsed eq \"email\" or target.detailEntry.MethodTypeUsed eq \"sms\" or target.detailEntry.MethodTypeUsed eq \"security_question\") and not (target.detailEntry.MethodTypeUsed eq \"signed_nonce\" or target.detailEntry.MethodTypeUsed eq \"otp\" or target.detailEntry.MethodTypeUsed eq \"webauthn\" or target.detailEntry.MethodTypeUsed eq \"idp\" or target.detailEntry.MethodTypeUsed eq \"push\" or target.detailEntry.MethodTypeUsed eq \"totp\" or target.detailEntry.MethodTypeUsed eq \"duo\")",
+      "false_positives": [
+        "Legitimate administrative users require a break glass solution to access the Okta Admin Console."
+      ],
+      "filename": "admin_console_login_weak_mfa.yml"
+    },
+    {
+      "id": "c490537fcdae239605717ee314bd61c9",
+      "title": "API Token Excessive Network Access",
+      "description": "Detects when an Okta API token is created or updated to allow access from any IP address.\nFor example, network restrictions are set to 'ANYWHERE' or are excluded.\nOkta API tokens are highly sensitive credentials and should always be restricted by network zones.\nAn unrestricted token, even read-only, poses a significant security risk.\nUnrestricted tokens could be used for data exfiltration or to execute administrative actions from anywhere globally if compromised.",
+      "threat_tactic": [
+        "Defense Evasion",
+        "Persistence",
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1134": "Access Token Manipulation"
+        }
+      ],
+      "prevention": [
+        "Always enforce Network Zones and Trusted Origins on all API tokens.",
+        "Implement the principle of least privilege; API tokens should only have the permissions necessary to perform their required tasks.",
+        "Apply the principle of \"zero standing privileges\" and use Access Requests to provision API token creation/management permissions on a just-in-time (JIT) basis.",
+        "Rotate API tokens regularly."
+      ],
+      "oie_query": "eventType in [\"system.api_token.create\", \"system.api_token.update\"] AND debugContext.debugData.networkConnection eq \"ANYWHERE\"",
+      "false_positives": [
+        "Legitimate administrative misconfiguration where an administrator did not realize the security implications of setting the network restriction to \"ANYWHERE.\""
+      ],
+      "filename": "api_token_excessive_network_access.yml"
+    },
+    {
+      "id": "0c2634a68f9ac593c58349e0de80bb67",
+      "title": "Authentication Policy MFA Downgrade",
+      "description": "Detects when an Okta Administrator changes an authentication policy from requiring 2FA to only requiring 1FA.\nAn adversary with access to a compromised Okta Admin account may try to downgrade MFA for certain applications such as password managers to bypass MFA.",
+      "threat_tactic": [
+        "Credential Access",
+        "Defense Evasion",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1556.006": "Modify Authentication Process - Multi-Factor Authentication"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm).",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Approved changes to authentication policies where downgrading MFA is expected"
+      ],
+      "filename": "authentication_policy_mfa_downgrade.yml"
+    },
+    {
+      "id": "d317ba7832d50618ad769b2ea22a4473",
+      "title": "Okta AiTM Phishing Detection with FastPass",
+      "description": "Detects when a user enrolled in FastPass fails to authenticate via a real-time AiTM phishing proxy.\nAn adversary may attempt to compromise a user via AiTM phishing infrastructure, Okta Fastpass logs an event when it suspects an authentication is ocurring through a phishing proxy.",
+      "threat_tactic": [
+        "Initial Access",
+        "Credential Access",
+        "Collection"
+      ],
+      "threat_technique": [
+        {
+          "T1557": "Adversary-in-the-Middle"
+        },
+        {
+          "T1566": "Phishing"
+        },
+        {
+          "T1539": "Steal Web Session Cookie"
+        }
+      ],
+      "prevention": [
+        "Configure authentication policies to ensure Okta Fastpass is used in all authentication flows.",
+        "Perform proactive domain monitoring to detect new phishing domains impersonating your brand."
+      ],
+      "oie_query": "eventType eq \"user.authentication.auth_via_mfa\" AND result eq \"FAILURE\" AND outcome.reason eq \"FastPass declined phishing attempt\"",
+      "false_positives": [
+        "Planned and approved offensive security engagements"
+      ],
+      "filename": "detect_aitm_phishing_using_okta_fastpass.yml"
+    },
+    {
+      "id": "4f6161a02dbd790f1b1c2c9f5287ab45",
+      "title": "Device Enrolled with Non-Standard Hostname",
+      "description": "Detects when a new device is enrolled by a user that doesn't follow standard hostname nomenclature used in the organization.\nAn adversary with access to a compromised account may enroll their own device to leverage as MFA. This device does not often follow standard hostname nomenclature used in the organization.",
+      "threat_tactic": [
+        "Credential Access",
+        "Defense Evasion",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1556.006": "Modify Authentication Process - Multi-Factor Authentication"
+        },
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Configure authentication policies to only allow managed devices to authenticate.",
+        "If unmanaged devices are required, configure device assurance policies to ensure all devices meet a secure baseline.",
+        "Configure strong policy-based enrolments. Using a combination of Event Hooks, Okta Workflows and Okta Account Management policy, create a policy where after initial enrollment, all subsequent enrollments require phishing resistant MFA."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Mobile phone hostnames that aren't expected to follow any sort of hostname standard. Tune this rule to exclude mobile devices.",
+        "Legitimate BYOD or personal devices that a user enrolls."
+      ],
+      "filename": "device_enrolled_with_nonstandard_hostname.yml"
+    },
+    {
+      "id": "f2ae616490db4cc6515b5f8ff7785262",
+      "title": "Device Registered to Multiple Users",
+      "description": "Detects when the same device is registered for MFA to multiple users.\nAn adversary may register their own MFA devices, often leveraging the same device for multiple compromised accounts.",
+      "threat_tactic": [
+        "Credential Access",
+        "Defense Evasion",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1556.006": "Modify Authentication Process.Multi-Factor Authentication"
+        }
+      ],
+      "prevention": [
+        "Configure authentication policies to only allow managed devices to authenticate.",
+        "If unmanaged devices are required, configure device assurance policies to ensure all devices meet a secure baseline.",
+        "Configure strong policy-based enrolments. Using a combination of Event Hooks, Okta Workflows and Okta Account Management policy, create a policy where after initial enrollment, all subsequent enrollments require phishing resistant MFA."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Customer identity accounts that leverage a shared phone.",
+        "Service accounts leveraging a shared device."
+      ],
+      "filename": "device_registered_to_multiple_users.yml"
+    },
+    {
+      "id": "d26f5a1d2c82b0e099f45a0ffe2c8da6",
+      "title": "FastPass Auth via Suspicious Binary",
+      "description": "Detects suspicious binaries authenticating successfully via Okta Fastpass.\nAn adversary with access to a compromised device may proxy fastpass auths through the compromised device to gain access to Okta.\n\nNote: This detection relies on the use of Okta Fastpass in your environment.",
+      "threat_tactic": [
+        "Defense Evasion"
+      ],
+      "threat_technique": [
+        {
+          "T1604": "Proxy Through Victim"
+        }
+      ],
+      "prevention": [
+        "Configure trusted app filters within auth policies as defined in the reference URL."
+      ],
+      "oie_query": "debugContext.debugData.factor eq \"SIGNED_NONCE\" and outcome.result eq \"SUCCESS\" and authenticationContext.authenticatorContext.bindingMethod eq \"LOOPBACK\" and (authenticationContext.authenticatorContext.validationStatus eq \"NO_SIGNATURE\" or not (authenticationContext.authenticatorContext.binaryIdentifier co \"Edge\" or authenticationContext.authenticatorContext.binaryIdentifier co \"Chrome\" or authenticationContext.authenticatorContext.binaryIdentifier co \"firefox\" or authenticationContext.authenticatorContext.binaryIdentifier co \"Safari\" or authenticationContext.authenticatorContext.binaryIdentifier co \"Brave\" or authenticationContext.authenticatorContext.binaryIdentifier co \"Microsoft\"))",
+      "false_positives": [
+        "Corporate approved binaries. Consider baselining the authenticationContext.authenticatorContext.binaryIdentifier used in your environment, and alert on everything else."
+      ],
+      "filename": "fastpass_auth_via_suspicious_binary.yml"
+    },
+    {
+      "id": "8a26f484504f6444804ec0095ee389cb",
+      "title": "ITP Push Bombing",
+      "description": "Identity Threat Protection (ITP) has detected a push bomb or MFA fatigue attack and logged the event with\nevent type user.risk.detect.",
+      "threat_tactic": [
+        "Credential Access",
+        "Defense Evasion"
+      ],
+      "threat_technique": [
+        {
+          "T1556.006": "Modify Authentication Process.Multi-Factor Authentication"
+        },
+        {
+          "T1562.008": "Impair Defenses - Disable or Modify Tools"
+        }
+      ],
+      "prevention": [
+        "Consider migrating to a higher assurance factor like Okta FastPass, WebAuthn, or enabling the Okta Verify Number Challenge to reduce efficacy of MFA fatigue attacks.",
+        "An ITP Action can be configured to notify SecOps team members in Slack or other notification system instead of a SIEM based detection."
+      ],
+      "oie_query": "eventType eq \"user.risk.detect\" and debugContext.debugData.risk co \"detectionName=Brute Force Attack, reasons=MFA brute force\"",
+      "false_positives": [
+        "A user rejects the push notificaiton multiple times for various reasons."
+      ],
+      "filename": "itp_brute_force.yml"
+    },
+    {
+      "id": "6595e64287a21e6e7f63f0ab037a4401",
+      "title": "Log Stream Tampering",
+      "description": "Detects Okta log stream configuration changes such as deactivation, creation or deletion.\nAn adversary with access to an Okta Administrator may attempt to disable log streams to a SIEM in order to prevent detection of their activities.",
+      "threat_tactic": [
+        "Defense Evasion"
+      ],
+      "threat_technique": [
+        {
+          "T1562.008": "Impair Defenses - Disable or Modify Cloud Logs"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType sw \"system.log_stream.lifecycle\"",
+      "false_positives": [
+        "Approved changes to log streams where changing a log stream is expected.",
+        "This query can be further filtered to only look at disable, deletion or update events."
+      ],
+      "filename": "log_stream_tampering.yml"
+    },
+    {
+      "id": "6d16360eb451ac60db533258c0c5b48e",
+      "title": "Mismatch Between Source and Response for Verify Push Request",
+      "description": "Detects when an adversary has stolen a user password attempts to trick a user into accepting a Okta Verify Push request.\nThe following detection identified variations in client-based values for source and response events to identify suspicious request behavior.\nThe detection is enhanced if the org is evaluating behavior conditions in the authentication policies using Okta Behavior Detection.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1621": "Multi-Factor Authentication Request Generation"
+        }
+      ],
+      "prevention": [
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Leverage Okta Number Challenge MFA over standard push verification.",
+        "Block traffic from anonymizers and proxies via network zones that are often used in account takeover.",
+        "Educate users on how to identify and report suspicious MFA push notifications."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Depends on how aggressive the ratio is, tune to fit your environment after establishing baselines."
+      ],
+      "filename": "mismatch_between_source_and_response_okta_verify_push.yml"
+    },
+    {
+      "id": "17dbb021f4a1bb58274136c6441a38ba",
+      "title": "Multiple Failed Requests to Access Okta Applications",
+      "description": "Detects an adversary attempting to reuse a stolen web session cookie in an org with well-configured authentication policies triggering failed policy evaluation events.\nLooks for multiple attempts to open app chiclets with no successful response to an authentication challenge.\nThis detection assumes authentication policies are setup to require re-authentication on every access, especially for high impact applications.",
+      "threat_tactic": [
+        "Discovery",
+        "Defense Evasion",
+        "Lateral Movement"
+      ],
+      "threat_technique": [
+        {
+          "T1550.004": "Use Alternate Authentication Material.Web Session Cookie"
+        },
+        {
+          "T1538": "Cloud Service Dashboard"
+        }
+      ],
+      "prevention": [
+        "Setup strict authentication policies based on risk of the application being accesssed if compromised. Require strong MFA factors such as Okta FastPass, FIDO2 WebauthN or Okta Number Challenge if phishing-resistance factors are not applicable.",
+        "For high risk applications, ensure re-authentication is configured to every time the app is accessed. This ensures that if a session cookie is stolen, the threat actor will be prompted again for an MFA factor when accessing these apps."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Depends on how aggressive the ratio is, tune to fit your environment after establishing baselines."
+      ],
+      "filename": "multiple_failed_requests_to_access_okta_applications.yml"
+    },
+    {
+      "id": "ca0a00420e4f4c2bb078ee6491484994",
+      "title": "New AD Agent Created",
+      "description": "Detects when a new Active Directory (AD) agent is created in Okta.\nThis may indicate an adversary has compromised an Okta admin account and is attempting to create a new AD agent to facilitate further access or persistence within an environment.\nThe eventType \"system.ad_agent.created\" is logged when a new AD agent is created. This detection is particularly relevant for environments where AD integration is NOT generally used for delegated user management and authentication.",
+      "threat_tactic": [
+        "Credential Access",
+        "Persistence",
+        "Defense Evasion"
+      ],
+      "threat_technique": [
+        {
+          "T1556.007": "Modify Authentication Process: Hybrid Identity"
+        }
+      ],
+      "prevention": [
+        "Apply the principle of least privilege. Create Custom Admin Roles that exclude this permission (okta.agents.manage) for all but a minimal number of essential administrators.",
+        "For the few administrators who require agent management permissions, eliminate standing privileges. Use Okta Access Requests to grant these permissions on a just-in-time (JIT) basis, requiring a time-bound session and an explicit approval workflow (dual authorization) from another administrator.",
+        "Mandate the use of high-assurance authenticators like FIDO2 WebAuthn or Okta FastPass for all administrative roles.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"system.agent.ad.create\"",
+      "false_positives": [
+        "Legitimate administrative activity by an authorized user creating a new AD agent for legitimate purposes."
+      ],
+      "filename": "new_ad_agent_created.yml"
+    },
+    {
+      "id": "f0d9c641e55c89527c263090ed2ea0c8",
+      "title": "New Okta API Token Created",
+      "description": "Detects a new Okta API token being created by an Okta Administrator.\nAn adversary with access to an Okta Adminsitrative account may create an API token to maintain persistence in the environment.",
+      "threat_tactic": [
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"system.api_token.create\"",
+      "false_positives": [
+        "Legitimate new Okta API tokens being created for approved integrations"
+      ],
+      "filename": "new_api_token_created.yml"
+    },
+    {
+      "id": "5081584907f1037ac2e423866b55c433",
+      "title": "Creation of a new Okta Identity Provider",
+      "description": "Detects creation of an external identity provider.\nThreat actors may configure a second Identity Provider to act as an \"impersonation app\" to access applications within the compromised Org on behalf of other users.\nThis second Identity Provider, also controlled by the attacker, would act as a \u201csource\u201d IdP in an inbound federation relationship (sometimes called \u201cOrg2Org\u201d) with the target.",
+      "threat_tactic": [
+        "Persistence",
+        "Lateral Movement"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        },
+        {
+          "T1550": "Use Alternate Authentication Material"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"system.idp.lifecycle.create\"",
+      "false_positives": [
+        "Legitimate new IDPs being created, should be very rare",
+        "To alert on all events relating to an IDP leverage this query - eventType sw \"system.idp.lifecycle\""
+      ],
+      "filename": "new_idp_created.yml"
+    },
+    {
+      "id": "4abe0d6ecb2b2af6a186b5c8b12d4850",
+      "title": "New Okta Super or Organization Admin Created or Removed",
+      "description": "Detects when an Okta Super or Organization Administrator is either created or removed\nAn adversary with access to an Okta Administrator my attempt to either:\n  1 - Create a new super administrator account for themselves to maintain persistence.\n  2 - Revoke all other super administrator privileges to prevent response actions from being taken.\n  3 - Use the super or organization administrator account to create API tokens to maintain persistence.\n  4 - Use the super or organization administrator account to alter global session or app sign-in policies for defense evasion.",
+      "threat_tactic": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        },
+        {
+          "T1090": "Account Manipulation"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType sw \"user.account.privilege\" and ((debugContext.debugData.privilegeRevoked co \"Super administrator\" or debugContext.debugData.privilegeRevoked co \"Organization administrator\") or (debugContext.debugData.privilegeGranted co \"Super administrator\" or debugContext.debugData.privilegeGranted co \"Organization administrator\"))",
+      "false_positives": [
+        "Onboarding or offboarding legitimate Okta administrators or service accounts.",
+        "To focus on creation events filter on eventType user.account.privilege.grant, for revocation user.account.privilege.revoke."
+      ],
+      "filename": "new_super_admin_added_or_removed.yml"
+    },
+    {
+      "id": "b1a96930c12ac5f3189269680bcc55ac",
+      "title": "OAuth Client Secret Read",
+      "description": "Detects an application's oauth client secret being read.\nAn adversary with access to an Okta Administrator may attempt to read an application's client secret to perform impersonation, token theft or replay attacks.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1528": "Steal Application Access Token"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"app.oauth2.client.read_client_secret\"",
+      "false_positives": [
+        "Approved changes where a client secret is expected to be copied/viewed for example when setting up the Okta connector in Okta Workflows."
+      ],
+      "filename": "oauth_client_secret_read.yml"
+    },
+    {
+      "id": "24b40c3835be13b6b1828e38c0c248b5",
+      "title": "Oauth Mismatched Redirect URI",
+      "description": "Detects an unexpected redirect when granting oauth tokens.\nAn adversary leveraging phishing infrastructure to compromise users may issue redirects to the phishing domain during the oauth flow.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1528": "Steal Application Access Token"
+        }
+      ],
+      "prevention": [
+        "Configure authentication policies to ensure Okta Fastpass is used in all authentication flows.",
+        "Perform proactive domain monitoring to detect new phishing domains impersonating your brand."
+      ],
+      "oie_query": "eventType eq \"app.oauth2.token.grant\" and outcome.reason eq \"mismatched_redirect_uri\" and outcome.result eq \"FAILURE\"",
+      "false_positives": [
+        "Expected redirect URIs should be excluded.",
+        "Approved phishing engagements."
+      ],
+      "filename": "oauth_mismatched_redirect_uri.yml"
+    },
+    {
+      "id": "81e3eb86e6494eeffbcc642f10b591b5",
+      "title": "OPA Server Account Password Changed Out of Band",
+      "description": "Detects when a server account password is altered via a method other than OPA scheduled rotation.\nAdversaries may attempt to bypass OPA based server access such as MFA.",
+      "threat_tactic": [
+        "Credential Access",
+        "Defense Evasion",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1556.006": "Modify Authentication Process.Multi-Factor Authentication"
+        },
+        {
+          "T1562.008": "Impair Defenses - Disable or Modify Tools"
+        }
+      ],
+      "prevention": [
+        "Security education for admins to leverage OPA for server access opposed to using local server access.",
+        "Periodic auditing of server access to ensure MFA is required through OPA."
+      ],
+      "oie_query": "eventType eq \"pam.server_account.password_change.out_of_band\"",
+      "false_positives": [
+        "An admin may manually change the server account password in the event that the OPA scheduled password rotation had failed."
+      ],
+      "filename": "opa_password_changed_oob.yml"
+    },
+    {
+      "id": "d1e09d985740ae32f8267b0800e3b012",
+      "title": "Phone Number Registered to Multiple Users",
+      "description": "Detects when a phone number is registered to multiple users.\nAn adversary may register the same SMS phone number as MFA to multiple accounts they have compromised in order to maintain persistence.\nThis detections requires the Okta org to allow SMS as an MFA factor.",
+      "threat_tactic": [
+        "Credential Access",
+        "Defense Evasion",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1556.006": "Modify Authentication Process.Multi-Factor Authentication"
+        }
+      ],
+      "prevention": [
+        "Require strong MFA factors and do not allow factors such as email or SMS.",
+        "Configure strong Okta account management policies to lock down or place strict restrictions on MFA enrollment"
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Customer identity accounts that leverage a shared phone",
+        "Service accounts leveraging a shared device"
+      ],
+      "filename": "phone_number_registered_to_multiple_users.yml"
+    },
+    {
+      "id": "49b9fc1fb5072b21bcb6ecc423128c3e",
+      "title": "Protected Action Settings Update",
+      "description": "Detects any Okta protected action settings update.\nThis activity could indicate an adversary has elevated their access and is taking actions on objectives.\nProtected actions settings updates are typically rare, and often require an approved change request.",
+      "threat_tactic": [
+        "Privilege Escalation",
+        "Defense Evasion"
+      ],
+      "threat_technique": [
+        {
+          "T1548.003": "Abuse Windows Management Instrumentation"
+        },
+        {
+          "T1562.003": "Impair Defenses - Service Stop"
+        }
+      ],
+      "prevention": [
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Apply the principle of least privilege for administrators. Create Custom Admin Roles with only necessary permissions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn."
+      ],
+      "oie_query": "eventType eq \"security.protected_action.settings.update\"",
+      "false_positives": [
+        "An approved change request by an authorized administrator."
+      ],
+      "filename": "protected_action_settings_update.yml"
+    },
+    {
+      "id": "1bc212c89cd08fb3d265a1f908047448",
+      "title": "Protected Action Super Admin Password Reset",
+      "description": "Detects when a password reset is performed on an Okta Super Administrator account as a protected action.\nThis activity is extremely rare and could indicate an adversary attempting to gain unauthorized access to a highly privileged account.",
+      "threat_tactic": [
+        "Credential Access",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions like a Super Admin password reset.",
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles for Super Administrators.",
+        "Mandate the use of high-assurance authenticators like FIDO2 WebAuthn or Okta FastPass for all Super Administrator roles.",
+        "Enforce dedicated admin policies - Restrict access to Super Admin roles from trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"security.protected_action.attempt\" AND target.0.displayName eq \"Reset passwords for super admins\"",
+      "false_positives": [
+        "An approved and documented password reset by an authorized administrator."
+      ],
+      "filename": "protected_action_super_admin_password_reset.yml"
+    },
+    {
+      "id": "2c6f8d09fd3f5bc3eb735e293497ca63",
+      "title": "Rapid Okta Application Access",
+      "description": "Detects a single user accessing more than 10 distinct applications within 1 minute.\nAn adversary after gaining initial access may immediately try and open as many applications as possible from the Okta Dashboard before sessions expire.",
+      "threat_tactic": [
+        "Discovery"
+      ],
+      "threat_technique": [
+        {
+          "T1538": "Cloud Service Dashboard"
+        }
+      ],
+      "prevention": [
+        "Configure a Re-authentication Frequency of \u201cEvery Sign-In Attempt\u201d to all high impact applications. This greatly diminishes access to applications using a stolen user session without persistent access to MFA.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Potential automation setups where a service account is expected to be rapidly accessing applications.",
+        "Legitimate end users rapid accessing applications - you can further enrich this by only looking at applications accessed from an anonymizer."
+      ],
+      "filename": "rapid_application_access.yml"
+    },
+    {
+      "id": "832e92ebf3bbf6a6fcb094aefa7e792c",
+      "title": "Request to access Admin Console from new device or IP",
+      "description": "Detects when a user accesses the Okta Admin Console from a new device or IP.\nAn adversary may compromise an administrative account and attempt to access the admin console from a new IP or device.",
+      "threat_tactic": [
+        "Initial Access",
+        "Privilege Escalation"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"policy.evaluate_sign_on\" and target.displayName eq \"Okta Admin Console\" and ((debugContext.debugData.behaviors co \"New Device=POSITIVE\" and debugContext.debugData.behaviors co \"New IP=POSITIVE\") OR (debugContext.debugData.logOnlySecurityData co \"\\\"New Device\\\":\\\"POSITIVE\\\"\" or debugContext.debugData.logOnlySecurityData co \"\\\"New IP\\\":\\\"POSITIVE\\\"\"))",
+      "false_positives": [
+        "Okta Admins leveraging a new legitimate corporate device.",
+        "Okta Admins logging into the admin console from a new legitimate IP."
+      ],
+      "filename": "request_to_access_admin_console_from_new_device_or_ip.yml"
+    },
+    {
+      "id": "1796b1dff54ce33f748ed43266fc71c6",
+      "title": "User Authenticates from a New Device through a Proxy",
+      "description": "Detects successful user authentication events, using a new device, from IPs that Okta identifies as proxies in locations not associated with the user's typical behavior.\nAn adversary may attempt to login with compromised credentials from a known anonymizer with an unrecognized device.",
+      "threat_tactic": [
+        "Initial Access"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        },
+        {
+          "T1566": "Phishing"
+        }
+      ],
+      "prevention": [
+        "Configure a dynamic network zone blocklist to pro-actively block these proxies.",
+        "Configure authentication policies to only allow authentications from certain approved network ranges.",
+        "Require phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn) for login attempts from new devices or IPs."
+      ],
+      "oie_query": "eventType co \"user.authentication\" and outcome.result eq \"SUCCESS\" and securityContext.isProxy eq \"true\" and actor.alternateId ne \"system@okta.com\" and (debugContext.debugData.behaviors co \"New Device=POSITIVE\" and debugContext.debugData.behaviors co \"New Geo-Location=POSITIVE\")",
+      "false_positives": [
+        "Corporate environments may leverage common VPN providers.",
+        "Potential false positives in IP reputation from our service provider.",
+        "Review abnormal authentication patterns from the same source IP."
+      ],
+      "filename": "successful_authentication_via_new_device_and_proxy.yml"
+    },
+    {
+      "id": "b62937f1267543f143786725e5787b0b",
+      "title": "Suspicious MFA Abandonment",
+      "description": "Detects suspicious patterns associated with MFA abandonment.\nAn adversary with access to compromised passwords may try to push bomb the victim hoping they accept an MFA prompt.\nNote: This is currently early access (as of April 10th, 2025) and must be enabled under \"Settings > Features\" in the admin console.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1621": "Multi-Factor Authentication Request Generation"
+        }
+      ],
+      "prevention": [
+        "Protect sign-in flows by enforcing strong MFA authenticators such as phishing-resistance with Okta FastPass or FIDO2 WebAuthn.",
+        "Implement passwordless authentication within your Okta tenant (https://help.okta.com/oie/en-us/content/topics/identity-engine/password-optional/password-optional-disabled.htm)",
+        "Require devices authenticating through your Okta tenant to be managed via authentication policies."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Users not responding to legitimate MFA prompts from a corporate VPN IP.",
+        "Company approved IPs being flagged as proxies."
+      ],
+      "filename": "suspicious_mfa_abandonment.yml"
+    },
+    {
+      "id": "5532601c33db3f51f8db046fe5f9c4c2",
+      "title": "Suspicious Use of an Okta Session Cookie",
+      "description": "Detects when an IP and browser or OS changes mid-session.\nAn adversary that has stolen an Okta cookie may attempt to import it into their own device & browser in order to access the account.\nThis detection looks for one or more policy evaluation events in which multiple client values (IP, UA, etc.) change associated to the same Device Token for a specific user.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1539": "Steal Web Session Cookie"
+        }
+      ],
+      "prevention": [
+        "Setup strict authentication policies based on risk of the application being accesssed if compromised.",
+        "For high risk applications, ensure re-authentication is configured to every time the app is accessed. This ensures that if a session cookie is stolen, the threat actor will be prompted again for an MFA factor when accessing these apps."
+      ],
+      "oie_query": null,
+      "false_positives": [
+        "Environment specific use cases or automations."
+      ],
+      "filename": "suspicious_use_of_an_Okta_Session_Cookie.yml"
+    },
+    {
+      "id": "c404d050ea87cfa3f950d43d866c043a",
+      "title": "Threat Insight Alert - Login Failure with High Unknown Users",
+      "description": "Detects multiple login failures with high unknown user counts from the same IP accross one or more Okta orgs.\nAn adversary may leverage known breached credentials to try and spray Okta tenants.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1110.004": "Credential Stuffing"
+        }
+      ],
+      "prevention": [
+        "Configure ThreatInsight to block mode to automatically block these attacks.",
+        "Protect sign-in flows by enforcing strong MFA authenticators such as phishing-resistant with Okta FastPass and FIDO2 WebAuthn.",
+        "Implement passwordless authentication within your Okta tenant (https://help.okta.com/oie/en-us/content/topics/identity-engine/password-optional/password-optional-disabled.htm)"
+      ],
+      "oie_query": "eventType eq \"security.threat.detected\" AND outcome.reason co \"Login failures with high unknown users count\"",
+      "false_positives": [
+        "Should be rare, certain automation setups might trigger this detection."
+      ],
+      "filename": "threat_insight_high_unknown_users.yml"
+    },
+    {
+      "id": "7ad9ac0f4e8979a273263a72c9bd1256",
+      "title": "ThreatInsight - Password Spray",
+      "description": "Detects failed password events across multiple user accounts.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1110.003": "Password Spraying"
+        }
+      ],
+      "prevention": [
+        "Configure ThreatInsight to block mode to automatically block these attacks.",
+        "Protect sign-in flows by enforcing strong MFA authenticators such as phishing-resistant with Okta FastPass and FIDO2 WebAuthn.",
+        "Implement passwordless authentication within your Okta tenant (https://help.okta.com/oie/en-us/content/topics/identity-engine/password-optional/password-optional-disabled.htm)"
+      ],
+      "oie_query": "eventType eq \"security.threat.detected\" AND outcome.reason co \"Password Spray\"",
+      "false_positives": [
+        "Should be rare, certain automation setups might trigger this detection."
+      ],
+      "filename": "threat_insight_password_spray.yml"
+    },
+    {
+      "id": "1fae6f177a9b8ab64d8d31781ae5926f",
+      "title": "User Denied Access due to Session Binding",
+      "description": "Detects violations of Okta's built-in ASN binding feature for administrative sessions.\nThis feature is enabled by default and fires an event when it detects an ASN change mid-session for administrators.\nAn adversary may steal okta session cookies for an administrative session and import them onto their own device connected to a separate ASN.",
+      "threat_tactic": [
+        "Credential Access"
+      ],
+      "threat_technique": [
+        {
+          "T1539": "Steal Web Session Cookie"
+        }
+      ],
+      "prevention": [
+        "Implement Zero Standing Privileges via Okta Govern Admin Roles (https://help.okta.com/en-us/content/topics/security/governance-admin-roles/govern-admin-roles.htm)",
+        "Assign administrators Custom Admin Roles with the least permissions required for daily tasks, and require dual authorization for JIT (just-in-time) access to more privileged roles.",
+        "Enable Protected Actions to force re-authentication whenever an administrative user attempts to perform sensitive actions.",
+        "Protect sign-in flows by enforcing phishing-resistant authentication with Okta FastPass and FIDO2 WebAuthn.",
+        "Enforce dedicated admin policies - Assign all administrators to groups. Require users in these groups to sign-in from managed devices and via phishing resistant MFA (Okta FastPass, FIDO2 WebAuthn). Restrict this access to trusted Network Zones and deny access from anonymizing proxies."
+      ],
+      "oie_query": "eventType eq \"security.session.detect_client_roaming\"",
+      "false_positives": [
+        "If connected to a VPN and have a Proxy agent installed on the machine (Netspoke, Zscaler), initially ASN assigned by VPN provider, and the proxy agent also tries to assign an ASN."
+      ],
+      "filename": "user_denied_access_due_to_session_binding.yml"
+    },
+    {
+      "id": "71ad731ed751b3c134aac81d830e0aa3",
+      "title": "User Reported Suspicious Activity",
+      "description": "Detects when an end user clicks \"Report Suspicious Activity\" on an Okta notification or in the recent activity dashboard.\nAlerting on this event will help streamline end user suspicious activity alerts directly to security teams for investigation and incident response.",
+      "threat_tactic": [
+        "Initial Access",
+        "Persistence"
+      ],
+      "threat_technique": [
+        {
+          "T1078": "Valid Accounts"
+        }
+      ],
+      "prevention": [
+        "Enable all end-user notifications are enabled within the Okta Admin Console, empowering end-users to report suspicious activity against their own accounts.",
+        "Make employees aware of the reporting process and their ability to terminate their own session in the settings page."
+      ],
+      "oie_query": "eventType eq \"user.account.report_suspicious_activity_by_enduser\"",
+      "false_positives": [
+        "End users reporting suspicious activity that is legitimate."
+      ],
+      "filename": "user_reported_suspicious_activity.yml"
+    }
+  ]
+}

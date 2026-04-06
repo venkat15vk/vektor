@@ -1,0 +1,1000 @@
+{
+  "source": "coltonwaynelawson/netsuite-segregation-of-duties-analysis",
+  "description": "NetSuite SoD violations from obfuscated real-world data",
+  "total_violating_employees": 29,
+  "total_roles_involved": 41,
+  "employees": [
+    "Aaron Cooper",
+    "Amber Gray",
+    "Andrea Villarreal",
+    "Antonio Cervantes",
+    "Brandon Martinez",
+    "Carla Walton MD",
+    "Charles Young",
+    "Christopher Lynch",
+    "Crystal Jones",
+    "Dylan Berry",
+    "Felicia Francis",
+    "Gary Nolan",
+    "Gary Wong",
+    "Jessica Chase",
+    "Jordan Martinez",
+    "Joseph Harding",
+    "Karina Espinoza",
+    "Kathleen Williams",
+    "Latoya Gates",
+    "Laura Higgins",
+    "Lauren Lin",
+    "Margaret Sanders",
+    "Maria Young",
+    "Mary Wilson",
+    "Morgan Moore",
+    "Mr. James Harding",
+    "Natasha Moon",
+    "Sean Collins",
+    "Thomas Reeves"
+  ],
+  "roles": [
+    "Company Accounting - AP & Cash App - Europe",
+    "Company Accounting - Assistant Controller",
+    "Company Accounting - Celigo",
+    "Company Accounting - Controller",
+    "Company Accounting - Controller - ODBC",
+    "Company Accounting - Credit & Collections Manager",
+    "Company Accounting - Credit & Collections Manager",
+    "Company Accounting - Dir of Shared Services - Global",
+    "Company Accounting - Director of Shared Services",
+    "Company Accounting - Maint and Invoicing - Europe",
+    "Company Accounting - Maintenance and Invoicing",
+    "Company Accounting - Revenue Accountant",
+    "Company Accounting - Shared Services Manager",
+    "Company Credit Card Integration",
+    "Company Custom EFT Role",
+    "Company Employee Center",
+    "Company Fixed Assets Management",
+    "Company Human Resources",
+    "Company Messenger Integration Role",
+    "Company Production View - MIST",
+    "Company REST API Role",
+    "Company Shipping & Receiving Clerk - Europe",
+    "Company VP of Operations - Europe",
+    "Custom EFT Role",
+    "Divvy Integration",
+    "Entity Accounting - AP & Cash App",
+    "Entity Accounting - Maintenance and Invoicing",
+    "Entity Accounting Director Approval",
+    "Entity Buyer/Planner",
+    "Entity China Accountant",
+    "Entity Customer Service Rep",
+    "Entity Director of Shared Services",
+    "Entity Employee Center",
+    "Entity Fixed Assets Management",
+    "Entity Warehouse Operations",
+    "Fixed Assets Management",
+    "NetSuite Implementation Team"
+  ],
+  "sod_rules": {
+    "JE_create_approve": {
+      "rule_name": "Make Journal Entry + Journal Approval",
+      "risk": "Can create and self-approve journal entries \u2014 GL manipulation risk",
+      "violating_users": [
+        "Charles Young",
+        "Brandon Martinez",
+        "Felicia Francis",
+        "Crystal Jones",
+        "Jessica Chase",
+        "Lauren Lin",
+        "Thomas Reeves",
+        "Amber Gray",
+        "Christopher Lynch",
+        "Kathleen Williams",
+        "Morgan Moore",
+        "Margaret Sanders",
+        "Laura Higgins"
+      ],
+      "user_count": 13,
+      "user_roles": [
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Dir of Shared Services - Global"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Brandon Martinez",
+          "role": "Company Accounting - Dir of Shared Services - Global"
+        },
+        {
+          "name": "Brandon Martinez",
+          "role": "Company VP of Operations - Europe"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Accounting - Celigo"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Accounting - Controller"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Fixed Assets Management"
+        },
+        {
+          "name": "Crystal Jones",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Felicia Francis",
+          "role": "Company Accounting - Dir of Shared Services - Global"
+        },
+        {
+          "name": "Jessica Chase",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Jessica Chase",
+          "role": "Company Accounting - Celigo"
+        },
+        {
+          "name": "Jessica Chase",
+          "role": "Company Fixed Assets Management"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Production View - MIST"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Accounting - Credit & Collections Manager"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Accounting - Director of Shared Services"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Accounting - Shared Services Manager"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Accounting - Controller - ODBC"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Accounting - Celigo"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Fixed Assets Management"
+        },
+        {
+          "name": "Lauren Lin",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Lauren Lin",
+          "role": "Company Accounting - Credit & Collections Manager"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Company Employee Center"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Company Accounting - Shared Services Manager"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Company Custom EFT Role"
+        },
+        {
+          "name": "Morgan Moore",
+          "role": "Company Employee Center"
+        },
+        {
+          "name": "Morgan Moore",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Morgan Moore",
+          "role": "NetSuite Implementation Team"
+        },
+        {
+          "name": "Morgan Moore",
+          "role": "Company Accounting - Director of Shared Services"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity China Accountant"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting Director Approval"
+        }
+      ]
+    },
+    "invoice_payment": {
+      "rule_name": "Invoice + Customer Deposit/Payment",
+      "risk": "Can create invoices and receive/record payments \u2014 revenue fraud risk",
+      "violating_users": [
+        "Charles Young",
+        "Sean Collins",
+        "Latoya Gates",
+        "Andrea Villarreal"
+      ],
+      "user_count": 4,
+      "user_roles": [
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - AP & Cash App - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Human Resources"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Fixed Assets Management"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Latoya Gates",
+          "role": "Company Credit Card Integration"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity China Accountant"
+        }
+      ]
+    },
+    "vendor_pay": {
+      "rule_name": "Vendors + Pay Bills",
+      "risk": "Can create vendors and pay them \u2014 accounts payable fraud risk",
+      "violating_users": [
+        "Natasha Moon",
+        "Antonio Cervantes",
+        "Mary Wilson",
+        "Charles Young",
+        "Maria Young",
+        "Dylan Berry",
+        "Andrea Villarreal",
+        "Gary Nolan",
+        "Thomas Reeves",
+        "Amber Gray",
+        "Mr. James Harding",
+        "Jordan Martinez",
+        "Gary Wong",
+        "Karina Espinoza",
+        "Lauren Lin",
+        "Carla Walton MD",
+        "Sean Collins"
+      ],
+      "user_count": 17,
+      "user_roles": [
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Dir of Shared Services - Global"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - AP & Cash App - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Human Resources"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Fixed Assets Management"
+        },
+        {
+          "name": "Antonio Cervantes",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Carla Walton MD",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Dylan Berry",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Gary Nolan",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Gary Wong",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Employee Center"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Customer Service Rep"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Warehouse Operations"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Buyer/Planner"
+        },
+        {
+          "name": "Karina Espinoza",
+          "role": "Divvy Integration"
+        },
+        {
+          "name": "Lauren Lin",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Lauren Lin",
+          "role": "Company Accounting - Credit & Collections Manager"
+        },
+        {
+          "name": "Maria Young",
+          "role": "Company Shipping & Receiving Clerk - Europe"
+        },
+        {
+          "name": "Maria Young",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Mary Wilson",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Mr. James Harding",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Mr. James Harding",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Employee Center"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Customer Service Rep"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Warehouse Operations"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity China Accountant"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity China Accountant"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting Director Approval"
+        }
+      ]
+    },
+    "creditmemo_payment": {
+      "rule_name": "Credit Memo + Customer Deposit/Payment",
+      "risk": "Can issue credit memos and process payments \u2014 unauthorized refund risk",
+      "violating_users": [
+        "Charles Young",
+        "Sean Collins",
+        "Andrea Villarreal"
+      ],
+      "user_count": 3,
+      "user_roles": [
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - AP & Cash App - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Human Resources"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Fixed Assets Management"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity China Accountant"
+        }
+      ]
+    },
+    "customer_refund": {
+      "rule_name": "Customers + Customer Refund",
+      "risk": "Can create customers and issue refunds \u2014 fictitious refund risk",
+      "violating_users": [
+        "Charles Young",
+        "Thomas Reeves",
+        "Amber Gray",
+        "Kathleen Williams",
+        "Margaret Sanders"
+      ],
+      "user_count": 5,
+      "user_roles": [
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Dir of Shared Services - Global"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Production View - MIST"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Accounting - Credit & Collections Manager"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Accounting - Director of Shared Services"
+        },
+        {
+          "name": "Kathleen Williams",
+          "role": "Company Accounting - Shared Services Manager"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Company Employee Center"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Company Accounting - Shared Services Manager"
+        },
+        {
+          "name": "Margaret Sanders",
+          "role": "Company Custom EFT Role"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity China Accountant"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting Director Approval"
+        }
+      ]
+    },
+    "customer_creditmemo": {
+      "rule_name": "Customers + Credit Memo",
+      "risk": "Can create customers and issue credit memos \u2014 revenue manipulation risk",
+      "violating_users": [
+        "Joseph Harding",
+        "Jessica Chase",
+        "Natasha Moon",
+        "Aaron Cooper",
+        "Laura Higgins",
+        "Antonio Cervantes",
+        "Mary Wilson",
+        "Charles Young",
+        "Maria Young",
+        "Dylan Berry",
+        "Andrea Villarreal",
+        "Gary Nolan",
+        "Thomas Reeves",
+        "Amber Gray",
+        "Mr. James Harding",
+        "Jordan Martinez",
+        "Gary Wong",
+        "Crystal Jones",
+        "Lauren Lin",
+        "Christopher Lynch",
+        "Carla Walton MD",
+        "Sean Collins"
+      ],
+      "user_count": 22,
+      "user_roles": [
+        {
+          "name": "Aaron Cooper",
+          "role": "Company Accounting - Controller - ODBC"
+        },
+        {
+          "name": "Aaron Cooper",
+          "role": "Company Accounting - Revenue Accountant"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Dir of Shared Services - Global"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Amber Gray",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Accounting - AP & Cash App - Europe"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Company Human Resources"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Andrea Villarreal",
+          "role": "Fixed Assets Management"
+        },
+        {
+          "name": "Antonio Cervantes",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Carla Walton MD",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Charles Young",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Accounting - Celigo"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Accounting - Controller"
+        },
+        {
+          "name": "Christopher Lynch",
+          "role": "Company Fixed Assets Management"
+        },
+        {
+          "name": "Crystal Jones",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Dylan Berry",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Gary Nolan",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Gary Wong",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Jessica Chase",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Jessica Chase",
+          "role": "Company Accounting - Celigo"
+        },
+        {
+          "name": "Jessica Chase",
+          "role": "Company Fixed Assets Management"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Employee Center"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Customer Service Rep"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Warehouse Operations"
+        },
+        {
+          "name": "Jordan Martinez",
+          "role": "Entity Buyer/Planner"
+        },
+        {
+          "name": "Joseph Harding",
+          "role": "Company Messenger Integration Role"
+        },
+        {
+          "name": "Joseph Harding",
+          "role": "Company REST API Role"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Accounting - Controller - ODBC"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Accounting - Assistant Controller"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Accounting - Celigo"
+        },
+        {
+          "name": "Laura Higgins",
+          "role": "Company Fixed Assets Management"
+        },
+        {
+          "name": "Lauren Lin",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Lauren Lin",
+          "role": "Company Accounting - Credit & Collections Manager"
+        },
+        {
+          "name": "Maria Young",
+          "role": "Company Shipping & Receiving Clerk - Europe"
+        },
+        {
+          "name": "Maria Young",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Mary Wilson",
+          "role": "Company Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Mr. James Harding",
+          "role": "Company Accounting - Maint and Invoicing - Europe"
+        },
+        {
+          "name": "Mr. James Harding",
+          "role": "Custom EFT Role"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Employee Center"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Customer Service Rep"
+        },
+        {
+          "name": "Natasha Moon",
+          "role": "Entity Warehouse Operations"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Accounting - AP & Cash App"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Sean Collins",
+          "role": "Entity China Accountant"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting - Maintenance and Invoicing"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Director of Shared Services"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Fixed Assets Management"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity China Accountant"
+        },
+        {
+          "name": "Thomas Reeves",
+          "role": "Entity Accounting Director Approval"
+        }
+      ]
+    }
+  }
+}

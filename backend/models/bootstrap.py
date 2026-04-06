@@ -181,6 +181,11 @@ class BootstrapLabeler:
         for subj in self._graph.get_all_subjects():
             paths = self._graph.find_escalation_paths(subj.id)
             for path in paths:
+                # NetSuite and Okta escalation paths are SoD violations and
+                # misconfigurations respectively — classified by run.py's
+                # adapter-detected signal step, not as generic priv esc.
+                if path.source in ("netsuite", "okta"):
+                    continue
                 labels.append(BootstrapLabel(
                     subject_id=subj.id,
                     violation_class=2,
@@ -648,6 +653,10 @@ class BootstrapLabeler:
 
         for subj in self._graph.get_all_subjects():
             if subj.type == SubjectType.GROUP:
+                continue
+            # Justification tracking applies to AWS IAM — NetSuite and Okta
+            # have their own access governance models (SoD, admin roles).
+            if subj.source in ("netsuite", "okta"):
                 continue
 
             assigns = self._graph.get_assignments_for_subject(subj.id)

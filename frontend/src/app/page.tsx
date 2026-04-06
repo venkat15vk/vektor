@@ -68,7 +68,6 @@ function Navbar() {
     { label: "Platform", href: "#platform" },
     { label: "Intelligence", href: "#intelligence" },
     { label: "Connectors", href: "#connectors" },
-    { label: "Pricing", href: "#pricing" },
   ];
 
   return (
@@ -103,12 +102,6 @@ function Navbar() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-4">
-          <a
-            href="#"
-            className="text-sm text-vektor-text-secondary hover:text-white transition-colors"
-          >
-            Log in
-          </a>
           <a
             href="/demo"
             className="text-sm px-4 py-2 rounded-lg bg-vektor-accent hover:bg-vektor-accent-hover text-white font-medium transition-colors"

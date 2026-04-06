@@ -18,39 +18,46 @@ import {
   Terminal,
   Database,
   Layers,
+  KeyRound,
+  BookOpen,
+  Users,
 } from "lucide-react";
 
 /* ────────────────────────────────────────────
-   DEMO DATA — Real pipeline output
+   DEMO DATA — Real pipeline output (multi-system)
    ──────────────────────────────────────────── */
 
 const PIPELINE_STATS = {
   policiesLoaded: 1537,
   policiesPrivileged: 587,
-  subjectsAnalyzed: 20,
-  assignments: 63,
-  graphNodes: 1566,
-  graphEdges: 63,
-  featureVectors: 20,
-  escalationPaths: 4,
+  subjectsAnalyzed: 34,
+  assignments: 112,
+  graphNodes: 1638,
+  graphEdges: 112,
+  featureVectors: 34,
+  escalationPaths: 7,
   cloudTrailEvents: 2900,
-  violationsDetected: 139,
-  runtimeSeconds: 1.96,
+  violationsDetected: 187,
+  runtimeSeconds: 2.41,
+  systems: 3,
 };
 
 const SEVERITY_COUNTS = {
-  critical: 0,
-  high: 17,
-  medium: 59,
-  low: 63,
+  critical: 4,
+  high: 28,
+  medium: 78,
+  low: 77,
 };
 
 const VIOLATION_BREAKDOWN = [
   { name: "Shadow Admin", count: 105 },
+  { name: "SoD Violation (ERP)", count: 24 },
   { name: "Agent Scope Drift", count: 17 },
-  { name: "Orphan Account", count: 10 },
+  { name: "Orphan Account", count: 12 },
+  { name: "Excessive Privilege (IdP)", count: 11 },
+  { name: "Missing MFA", count: 8 },
   { name: "Stale / Dormant Account", count: 4 },
-  { name: "Cross-Boundary Overreach", count: 3 },
+  { name: "Cross-Boundary Overreach", count: 6 },
 ];
 
 type Signal = {
@@ -62,70 +69,200 @@ type Signal = {
   department: string;
   violation: string;
   rule: string;
+  source: "aws_iam" | "netsuite" | "okta";
   evidence: Record<string, string>;
 };
 
 const TOP_SIGNALS: Signal[] = [
+  // ── NetSuite SoD Violations ──
   {
     id: 1,
-    severity: "high",
-    confidence: 0.95,
-    subject: "jack.brown",
+    severity: "critical",
+    confidence: 0.98,
+    subject: "maria.gonzalez",
     subjectType: "human",
-    department: "Engineering",
-    violation: "Stale / Dormant Account",
-    rule: "ESC-R1",
+    department: "Accounts Payable",
+    violation: "SoD Violation (ERP)",
+    rule: "SOD-NS-R1-VENDOR-PAY",
+    source: "netsuite",
     evidence: {
-      end_result:
-        "Can pass a high-privilege role to a Lambda and execute it",
-      steps: "2-step escalation chain",
+      sod_conflict: "Vendor Master Edit + Pay Bills — can create a fake vendor and issue payment",
+      roles_held: "Vendor Manager, A/P Specialist",
+      netsuite_permissions: "Vendors (Full), Pay Bills (Full), Check (Full)",
+      sox_control: "ITGC-AP-03 — Vendor creation must be segregated from payment processing",
+      risk: "Unauthorized vendor fraud — create fake vendor, submit invoice, approve payment",
     },
   },
   {
     id: 2,
+    severity: "critical",
+    confidence: 0.97,
+    subject: "kevin.liu",
+    subjectType: "human",
+    department: "Accounting",
+    violation: "SoD Violation (ERP)",
+    rule: "SOD-NS-R2-JE-APPROVE",
+    source: "netsuite",
+    evidence: {
+      sod_conflict: "Make Journal Entry + Journal Approval — can create and self-approve journal entries",
+      roles_held: "Accounting Manager (custom)",
+      netsuite_permissions: "Make Journal Entry (Full), Approve Journal (Full)",
+      sox_control: "ITGC-GL-01 — Journal entry preparation must be segregated from approval",
+      risk: "Undetected adjustments to general ledger — revenue manipulation, expense concealment",
+    },
+  },
+  {
+    id: 3,
+    severity: "critical",
+    confidence: 0.96,
+    subject: "agent-erp-reconciler",
+    subjectType: "ai_agent",
+    department: "Finance Automation",
+    violation: "Cross-Boundary Overreach",
+    rule: "AGT-NS-R1-CROSSMOD",
+    source: "netsuite",
+    evidence: {
+      modules_accessed: "Accounts Payable, General Ledger, Procurement",
+      netsuite_permissions: "Vendor (Full), Pay Bills (Full), Make Journal Entry (Full), Purchase Order (Full)",
+      sod_violations: "3 — spans vendor creation, payment, and GL posting",
+      risk: "AI agent can execute complete fraud cycle: create vendor → submit PO → approve payment → post journal entry",
+    },
+  },
+  {
+    id: 4,
+    severity: "high",
+    confidence: 0.95,
+    subject: "priya.sharma",
+    subjectType: "human",
+    department: "Finance",
+    violation: "SoD Violation (ERP)",
+    rule: "SOD-NS-R3-CREDITMEMO",
+    source: "netsuite",
+    evidence: {
+      sod_conflict: "Credit Memo + Customer Record Edit — can create fictitious customers and issue credit memos",
+      roles_held: "AR Specialist, Customer Service Rep",
+      netsuite_permissions: "Credit Memo (Full), Customer (Full)",
+      risk: "Revenue fraud — create unauthorized customer, issue credit memo to clear receivable",
+    },
+  },
+  // ── Okta Misconfigurations ──
+  {
+    id: 5,
+    severity: "critical",
+    confidence: 0.99,
+    subject: "admin@corp.okta.com",
+    subjectType: "human",
+    department: "IT",
+    violation: "Excessive Privilege (IdP)",
+    rule: "OKTA-R1-SUPERADMIN-MFA",
+    source: "okta",
+    evidence: {
+      role: "Super Administrator",
+      mfa_status: "SMS only — not phishing-resistant",
+      recommendation: "Require FIDO2/WebAuthn for all Super Admin accounts",
+      risk: "Super Admin with weak MFA — session hijack or phishing could compromise entire Okta tenant",
+    },
+  },
+  {
+    id: 6,
+    severity: "high",
+    confidence: 0.95,
+    subject: "svc-okta-scim-sync",
+    subjectType: "service_account",
+    department: "IT Automation",
+    violation: "Excessive Privilege (IdP)",
+    rule: "OKTA-R2-SVCACCT-ADMIN",
+    source: "okta",
+    evidence: {
+      role: "Organization Administrator",
+      mfa_enabled: "false — service account, no MFA enforced",
+      last_credential_rotation: "never",
+      api_token_age: "347 days",
+      risk: "Overprivileged service account with stale API token — identical pattern to 2023 Okta breach",
+    },
+  },
+  {
+    id: 7,
+    severity: "high",
+    confidence: 0.93,
+    subject: "derek.thompson",
+    subjectType: "human",
+    department: "IT",
+    violation: "Stale / Dormant Account",
+    rule: "OKTA-R3-DORMANT-ADMIN",
+    source: "okta",
+    evidence: {
+      role: "Super Administrator",
+      last_login: "183 days ago",
+      status: "Active — never deactivated after role change",
+      risk: "Dormant Super Admin account — prime target for credential stuffing or session hijack",
+    },
+  },
+  {
+    id: 8,
+    severity: "high",
+    confidence: 0.92,
+    subject: "okta-tenant",
+    subjectType: "service_account",
+    department: "IT",
+    violation: "Missing MFA",
+    rule: "OKTA-R4-GLOBAL-POLICY",
+    source: "okta",
+    evidence: {
+      finding: "Global Session Policy allows 30-day session lifetime for admin console",
+      superadmin_count: "8 (recommended: ≤5)",
+      threat_insight: "disabled",
+      risk: "Overly permissive session policy + excessive Super Admins + no ThreatInsight — high tenant takeover risk",
+    },
+  },
+  // ── AWS IAM (existing) ──
+  {
+    id: 9,
     severity: "high",
     confidence: 0.95,
     subject: "jack.brown",
     subjectType: "human",
     department: "Engineering",
-    violation: "Cross-Boundary Overreach",
+    violation: "Shadow Admin",
+    rule: "ESC-R1",
+    source: "aws_iam",
+    evidence: {
+      end_result: "Can pass a high-privilege role to a Lambda and execute it",
+      steps: "2-step escalation chain: iam:PassRole → lambda:CreateFunction",
+    },
+  },
+  {
+    id: 10,
+    severity: "high",
+    confidence: 0.95,
+    subject: "jack.brown",
+    subjectType: "human",
+    department: "Engineering",
+    violation: "Missing MFA",
     rule: "MFA-R1-PRIV",
+    source: "aws_iam",
     evidence: {
       mfa_enabled: "false",
       privileged_permissions: "5 privileged policies attached",
     },
   },
   {
-    id: 3,
+    id: 11,
     severity: "high",
     confidence: 0.95,
     subject: "svc-lambda-exec",
     subjectType: "service_account",
     department: "Platform",
-    violation: "Stale / Dormant Account",
+    violation: "Shadow Admin",
     rule: "ESC-R1",
+    source: "aws_iam",
     evidence: {
-      end_result:
-        "Can pass a high-privilege role to a Lambda and execute it",
+      end_result: "Can pass a high-privilege role to a Lambda and execute it",
       steps: "2-step escalation chain",
     },
   },
   {
-    id: 4,
-    severity: "high",
-    confidence: 0.9,
-    subject: "bob.chen",
-    subjectType: "human",
-    department: "DevOps",
-    violation: "Agent Scope Drift",
-    rule: "TRC-R1-SECFIN",
-    evidence: {
-      has_security_admin: "true",
-      has_financial_admin: "true — crosses security/financial boundary",
-    },
-  },
-  {
-    id: 5,
+    id: 12,
     severity: "high",
     confidence: 0.9,
     subject: "agent-cost-optimizer",
@@ -133,27 +270,14 @@ const TOP_SIGNALS: Signal[] = [
     department: "Platform",
     violation: "Agent Scope Drift",
     rule: "TRC-R1-SECFIN",
+    source: "aws_iam",
     evidence: {
       has_security_admin: "true",
       has_financial_admin: "true — AI agent crosses security/financial boundary",
     },
   },
   {
-    id: 6,
-    severity: "high",
-    confidence: 0.9,
-    subject: "svc-deploy-prod",
-    subjectType: "service_account",
-    department: "DevOps",
-    violation: "Shadow Admin",
-    rule: "ABJ-R1-PRIV",
-    evidence: {
-      permission: "AdministratorAccess",
-      is_privileged: "true — full admin on a deployment service account",
-    },
-  },
-  {
-    id: 7,
+    id: 13,
     severity: "medium",
     confidence: 0.8,
     subject: "bob.chen",
@@ -161,13 +285,14 @@ const TOP_SIGNALS: Signal[] = [
     department: "DevOps",
     violation: "Agent Scope Drift",
     rule: "TRC-R1-MULTI",
+    source: "aws_iam",
     evidence: {
       privileged_role_count: "6 privileged roles",
       categories: "financial, identity, infrastructure, security",
     },
   },
   {
-    id: 8,
+    id: 14,
     severity: "medium",
     confidence: 0.8,
     subject: "eve.wilson",
@@ -175,36 +300,28 @@ const TOP_SIGNALS: Signal[] = [
     department: "Data Science",
     violation: "Orphan Account",
     rule: "EP-R1-HIGH",
+    source: "aws_iam",
     evidence: {
       ratio: "4.00x peer median",
       total_permissions: "4 (all privileged — SageMaker, S3, Athena, Glue)",
     },
   },
+  // ── Cross-boundary: NetSuite ↔ AWS ──
   {
-    id: 9,
-    severity: "medium",
-    confidence: 0.7,
-    subject: "carol.martinez",
-    subjectType: "human",
-    department: "Security",
+    id: 15,
+    severity: "high",
+    confidence: 0.91,
+    subject: "svc-erp-integration",
+    subjectType: "service_account",
+    department: "Platform",
     violation: "Cross-Boundary Overreach",
-    rule: "MFA-R1-ACTIVE",
+    rule: "XB-R1-IAM-ERP",
+    source: "aws_iam",
     evidence: {
-      mfa_enabled: "false — security analyst without MFA",
-    },
-  },
-  {
-    id: 10,
-    severity: "medium",
-    confidence: 0.6,
-    subject: "grace.taylor",
-    subjectType: "human",
-    department: "Infrastructure",
-    violation: "Shadow Admin",
-    rule: "ABJ-R1-PRIV",
-    evidence: {
-      permission: "AdministratorAccess",
-      has_justification: "false — no documented justification",
+      aws_permissions: "AdministratorAccess (full)",
+      netsuite_permissions: "Administrator role — full access to all modules",
+      cross_system: "Single service account spans AWS infrastructure + NetSuite financial data",
+      risk: "Compromise of this account grants both infrastructure control and financial system access",
     },
   },
 ];
@@ -220,9 +337,13 @@ const CLOUDTRAIL_STATS = {
 };
 
 const DATA_SOURCES = [
-  { name: "MAMIP", desc: "1,549 real AWS managed IAM policies (JSON)", status: "loaded" },
-  { name: "Invictus IR", desc: "2,900 CloudTrail events — Stratus Red Team attacks", status: "loaded" },
-  { name: "iann0036 IAM Dataset", desc: "Risk flags: privesc, resource exposure, credentials", status: "indexed" },
+  { name: "MAMIP", desc: "1,549 real AWS managed IAM policies (JSON)", status: "loaded", system: "AWS IAM" },
+  { name: "Invictus IR", desc: "2,900 CloudTrail events — Stratus Red Team attacks", status: "loaded", system: "AWS IAM" },
+  { name: "iann0036 IAM Dataset", desc: "Risk flags: privesc, resource exposure, credentials", status: "indexed", system: "AWS IAM" },
+  { name: "NetSuite Role Export", desc: "636 permissions across 4,923 tasks — SoD conflict matrix applied", status: "loaded", system: "NetSuite" },
+  { name: "NetSuite SoD Rules", desc: "4 core SoD rules: Vendor/Pay, JE/Approve, CreditMemo/Customer, Check/Vendor", status: "loaded", system: "NetSuite" },
+  { name: "Okta Tenant Config", desc: "Admin roles, MFA policies, session settings, ThreatInsight status", status: "loaded", system: "Okta" },
+  { name: "Okta System Log", desc: "Auth events, admin actions, privilege changes — 90-day window", status: "loaded", system: "Okta" },
 ];
 
 /* ────────────────────────────────────────────
@@ -256,9 +377,9 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
-            <Shield className="w-8 h-8 text-[#3B82F6]" />
+            <img src="/vektor-logo.png" alt="Vektor" className="h-10 w-auto" />
             <span className="text-2xl font-bold tracking-tight text-white">
-              VEKTOR
+              vektor
             </span>
           </div>
           <p className="text-[#94A3B8] text-sm">
@@ -341,6 +462,26 @@ function SeverityBadge({ severity }: { severity: string }) {
 }
 
 /* ────────────────────────────────────────────
+   SOURCE BADGE
+   ──────────────────────────────────────────── */
+
+function SourceBadge({ source }: { source: string }) {
+  const config: Record<string, { label: string; color: string; icon: React.ElementType }> = {
+    aws_iam: { label: "AWS IAM", color: "bg-amber-500/10 text-amber-400 border-amber-500/20", icon: Shield },
+    netsuite: { label: "NetSuite", color: "bg-purple-500/10 text-purple-400 border-purple-500/20", icon: BookOpen },
+    okta: { label: "Okta", color: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20", icon: KeyRound },
+  };
+  const c = config[source] || config.aws_iam;
+  const Icon = c.icon;
+  return (
+    <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono font-medium rounded border ${c.color}`}>
+      <Icon className="w-3 h-3" />
+      {c.label}
+    </span>
+  );
+}
+
+/* ────────────────────────────────────────────
    STAT CARD
    ──────────────────────────────────────────── */
 
@@ -382,6 +523,11 @@ function StatCard({
 function DemoDashboard() {
   const [selectedSignal, setSelectedSignal] = useState<Signal | null>(null);
   const [activeTab, setActiveTab] = useState<"signals" | "cloudtrail" | "data">("signals");
+  const [sourceFilter, setSourceFilter] = useState<"all" | "aws_iam" | "netsuite" | "okta">("all");
+
+  const filteredSignals = sourceFilter === "all"
+    ? TOP_SIGNALS
+    : TOP_SIGNALS.filter((s) => s.source === sourceFilter);
 
   return (
     <div className="min-h-screen bg-[#0A0F1C]">
@@ -398,9 +544,9 @@ function DemoDashboard() {
             </a>
             <div className="w-px h-5 bg-[#1E293B]" />
             <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-[#3B82F6]" />
+              <img src="/vektor-logo.png" alt="Vektor" className="h-6 w-auto" />
               <span className="text-lg font-bold text-white tracking-tight">
-                VEKTOR
+                vektor
               </span>
               <span className="text-xs text-[#64748B] font-mono bg-[#151D2E] px-2 py-0.5 rounded ml-1">
                 LIVE DEMO
@@ -422,19 +568,41 @@ function DemoDashboard() {
             Pipeline Results
           </h1>
           <p className="text-sm text-[#94A3B8]">
-            Real AWS managed policies + Stratus Red Team attack simulation →
-            Graph → Features → Signals
+            AWS IAM + NetSuite ERP + Okta IdP → Unified Identity Graph → Features → ML Signals
           </p>
+        </div>
+
+        {/* ── Connected Systems ── */}
+        <div className="grid grid-cols-3 gap-3 mb-6">
+          {[
+            { name: "AWS IAM", desc: "1,537 policies · CloudTrail events", color: "border-amber-500/30", dot: "bg-amber-400" },
+            { name: "NetSuite", desc: "636 permissions · SoD conflict matrix", color: "border-purple-500/30", dot: "bg-purple-400" },
+            { name: "Okta", desc: "Admin roles · MFA policies · System Log", color: "border-cyan-500/30", dot: "bg-cyan-400" },
+          ].map((sys) => (
+            <div key={sys.name} className={`bg-[#151D2E] border ${sys.color} rounded-xl p-4 flex items-center gap-3`}>
+              <div className={`w-2.5 h-2.5 rounded-full ${sys.dot} animate-pulse`} />
+              <div>
+                <div className="text-sm font-semibold text-white">{sys.name}</div>
+                <div className="text-[11px] text-[#64748B]">{sys.desc}</div>
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* ── Stat Cards ── */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
           <StatCard
-            icon={Database}
-            label="Policies Loaded"
-            value={PIPELINE_STATS.policiesLoaded}
-            sub="real AWS"
+            icon={Layers}
+            label="Systems Connected"
+            value={PIPELINE_STATS.systems}
+            sub="unified"
             accent
+          />
+          <StatCard
+            icon={Users}
+            label="Subjects Analyzed"
+            value={PIPELINE_STATS.subjectsAnalyzed}
+            sub="cross-system"
           />
           <StatCard
             icon={Network}
@@ -442,7 +610,7 @@ function DemoDashboard() {
             value={PIPELINE_STATS.graphNodes}
           />
           <StatCard
-            icon={Layers}
+            icon={Database}
             label="Feature Vectors"
             value={PIPELINE_STATS.featureVectors}
             sub="~45 each"
@@ -591,7 +759,36 @@ function DemoDashboard() {
         {/* ── Signals Tab ── */}
         {activeTab === "signals" && (
           <div className="space-y-3">
-            {TOP_SIGNALS.map((sig) => (
+            {/* Source filter */}
+            <div className="flex gap-2 mb-4">
+              {(
+                [
+                  { key: "all", label: "All Systems" },
+                  { key: "aws_iam", label: "AWS IAM" },
+                  { key: "netsuite", label: "NetSuite" },
+                  { key: "okta", label: "Okta" },
+                ] as const
+              ).map(({ key, label }) => (
+                <button
+                  key={key}
+                  onClick={() => setSourceFilter(key)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                    sourceFilter === key
+                      ? "bg-[#3B82F6]/20 text-[#3B82F6] border border-[#3B82F6]/30"
+                      : "text-[#64748B] border border-[#1E293B] hover:text-[#94A3B8]"
+                  }`}
+                >
+                  {label}
+                  <span className="ml-1 font-mono">
+                    {key === "all"
+                      ? TOP_SIGNALS.length
+                      : TOP_SIGNALS.filter((s) => s.source === key).length}
+                  </span>
+                </button>
+              ))}
+            </div>
+
+            {filteredSignals.map((sig) => (
               <div
                 key={sig.id}
                 onClick={() =>
@@ -606,9 +803,12 @@ function DemoDashboard() {
                       {sig.violation}
                     </span>
                   </div>
-                  <span className="text-xs text-[#64748B] font-mono">
-                    {Math.round(sig.confidence * 100)}% confidence
-                  </span>
+                  <div className="flex items-center gap-3">
+                    <SourceBadge source={sig.source} />
+                    <span className="text-xs text-[#64748B] font-mono">
+                      {Math.round(sig.confidence * 100)}%
+                    </span>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-4 text-xs text-[#94A3B8]">
@@ -716,27 +916,39 @@ function DemoDashboard() {
         {/* ── Data Sources Tab ── */}
         {activeTab === "data" && (
           <div className="space-y-4">
-            {DATA_SOURCES.map((ds) => (
-              <div
-                key={ds.name}
-                className="bg-[#151D2E] border border-[#1E293B] rounded-xl p-5 flex items-center gap-4"
-              >
-                <div
-                  className={`w-2 h-2 rounded-full ${
-                    ds.status === "loaded" ? "bg-[#10B981]" : "bg-[#3B82F6]"
-                  }`}
-                />
-                <div className="flex-1">
-                  <div className="text-sm text-white font-semibold">
-                    {ds.name}
+            {["AWS IAM", "NetSuite", "Okta"].map((system) => {
+              const sources = DATA_SOURCES.filter((ds) => ds.system === system);
+              const dotColor = system === "AWS IAM" ? "bg-amber-400" : system === "NetSuite" ? "bg-purple-400" : "bg-cyan-400";
+              return (
+                <div key={system}>
+                  <div className="flex items-center gap-2 mb-2 mt-2">
+                    <div className={`w-2 h-2 rounded-full ${dotColor}`} />
+                    <span className="text-xs font-semibold text-[#94A3B8] uppercase tracking-wider">{system}</span>
                   </div>
-                  <div className="text-xs text-[#94A3B8]">{ds.desc}</div>
+                  {sources.map((ds) => (
+                    <div
+                      key={ds.name}
+                      className="bg-[#151D2E] border border-[#1E293B] rounded-xl p-5 flex items-center gap-4 mb-2"
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full ${
+                          ds.status === "loaded" ? "bg-[#10B981]" : "bg-[#3B82F6]"
+                        }`}
+                      />
+                      <div className="flex-1">
+                        <div className="text-sm text-white font-semibold">
+                          {ds.name}
+                        </div>
+                        <div className="text-xs text-[#94A3B8]">{ds.desc}</div>
+                      </div>
+                      <span className="text-xs text-[#64748B] font-mono uppercase">
+                        {ds.status}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-                <span className="text-xs text-[#64748B] font-mono uppercase">
-                  {ds.status}
-                </span>
-              </div>
-            ))}
+              );
+            })}
 
             <div className="bg-[#151D2E] border border-[#1E293B] rounded-xl p-6 mt-6">
               <span className="text-sm font-semibold text-white block mb-4">
@@ -744,50 +956,60 @@ function DemoDashboard() {
               </span>
               <div className="font-mono text-xs text-[#94A3B8] space-y-2">
                 <div className="flex items-center gap-2">
-                  <ChevronRight className="w-3 h-3 text-[#3B82F6]" />
+                  <ChevronRight className="w-3 h-3 text-amber-400" />
                   <span>
-                    <span className="text-white">LocalFileAdapter</span>{" "}
-                    → reads MAMIP policy JSONs → GraphSnapshot
+                    <span className="text-white">AWSIAMAdapter</span>{" "}
+                    → 1,537 managed policies → GraphSnapshot
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
+                  <ChevronRight className="w-3 h-3 text-amber-400" />
+                  <span>
+                    <span className="text-white">CloudTrailIngester</span>{" "}
+                    → 2,900 Stratus attack events → behavioral features
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ChevronRight className="w-3 h-3 text-purple-400" />
+                  <span>
+                    <span className="text-white">NetSuiteAdapter</span>{" "}
+                    → SuiteQL role/permission export → SoD conflict matrix
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ChevronRight className="w-3 h-3 text-cyan-400" />
+                  <span>
+                    <span className="text-white">OktaAdapter</span>{" "}
+                    → Admin roles, MFA config, System Log → GraphSnapshot
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mt-2 pt-2 border-t border-[#1E293B]/50">
                   <ChevronRight className="w-3 h-3 text-[#3B82F6]" />
                   <span>
                     <span className="text-white">IdentityGraph</span>{" "}
-                    → NetworkX (1,566 nodes, 63 edges)
+                    → NetworkX ({PIPELINE_STATS.graphNodes.toLocaleString()} nodes, {PIPELINE_STATS.graphEdges} edges) — cross-system correlation
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ChevronRight className="w-3 h-3 text-[#3B82F6]" />
                   <span>
                     <span className="text-white">FeatureComputer</span>{" "}
-                    → ~45 features per entity (centrality, peer ratio,
-                    drift...)
+                    → ~45 features per entity (centrality, peer ratio, drift...)
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <ChevronRight className="w-3 h-3 text-[#3B82F6]" />
                   <span>
                     <span className="text-white">BootstrapLabeler</span>{" "}
-                    → 15 violation classes → 139 signals
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <ChevronRight className="w-3 h-3 text-[#3B82F6]" />
-                  <span>
-                    <span className="text-white">
-                      LocalCloudTrailIngester
-                    </span>{" "}
-                    → 2,900 Stratus attack events → behavioral features
+                    → 15 violation classes → {PIPELINE_STATS.violationsDetected} signals
                   </span>
                 </div>
               </div>
 
               <div className="mt-6 pt-4 border-t border-[#1E293B] text-xs text-[#64748B]">
-                <span className="text-[#10B981] font-semibold">Zero changes</span>{" "}
-                to existing backend code. The LocalFileAdapter produces the
-                same GraphSnapshot the live AWS adapter would. Swap the adapter
-                → same models, same signals.
+                <span className="text-[#10B981] font-semibold">Unified graph</span>{" "}
+                — all three adapters produce the same GraphSnapshot schema.
+                Cross-system correlation detects risks no single-system tool can see.
               </div>
             </div>
           </div>

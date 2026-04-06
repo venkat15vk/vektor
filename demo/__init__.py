@@ -1,1 +1,0 @@
-# Vektor AI — Demo package
