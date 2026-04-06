@@ -10,3 +10,5 @@ dist/
 build/
 .vercel/
 demo/data/
+venv/
+__pycache__/
