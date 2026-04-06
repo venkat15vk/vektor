@@ -3,5 +3,8 @@
   "scripts": {
     "build": "cd frontend && npm install && npm run build",
     "dev": "cd frontend && npm run dev"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }

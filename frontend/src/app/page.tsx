@@ -110,7 +110,7 @@ function Navbar() {
             Log in
           </a>
           <a
-            href="#"
+            href="/demo"
             className="text-sm px-4 py-2 rounded-lg bg-vektor-accent hover:bg-vektor-accent-hover text-white font-medium transition-colors"
           >
             Request Demo
@@ -144,7 +144,7 @@ function Navbar() {
             </a>
           ))}
           <a
-            href="#"
+            href="/demo"
             className="block text-sm px-4 py-2 rounded-lg bg-vektor-accent text-white text-center font-medium"
           >
             Request Demo
@@ -214,7 +214,7 @@ function Hero() {
           style={{ animationDelay: "0.3s" }}
         >
           <a
-            href="#"
+            href="/demo"
             className="group flex items-center gap-2 px-6 py-3 rounded-lg bg-vektor-accent hover:bg-vektor-accent-hover text-white font-semibold transition-all hover:shadow-lg hover:shadow-vektor-accent/25"
           >
             Request Demo
@@ -728,7 +728,7 @@ function CTA() {
           No commitment.
         </p>
         <a
-          href="#"
+          href="/demo"
           className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-vektor-accent hover:bg-vektor-accent-hover text-white font-semibold transition-all hover:shadow-lg hover:shadow-vektor-accent/25"
         >
           Request Demo
