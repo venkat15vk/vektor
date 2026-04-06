@@ -81,12 +81,10 @@ function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-vektor-accent to-blue-400 flex items-center justify-center">
-            <Shield className="w-4.5 h-4.5 text-white" />
-          </div>
+        <a href="#" className="flex items-center gap-2 group">
+          <img src="/vektor-logo.png" alt="Vektor" className="h-8 w-auto" />
           <span className="text-lg font-bold tracking-tight">
-            Vektor<span className="text-vektor-accent">.ai</span>
+            vektor
           </span>
         </a>
 
@@ -174,20 +172,30 @@ function Hero() {
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-vektor-green/5 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: "1.5s" }} />
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
-        {/* Badge */}
+        {/* Logo */}
+        <img
+          src="/vektor-logo.png"
+          alt="Vektor"
+          className="w-32 sm:w-40 mx-auto mb-6 animate-fade-in"
+        />
+
+        {/* Brand tagline */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-vektor-accent/10 border border-vektor-accent/20 mb-8 animate-fade-in">
           <Bot className="w-3.5 h-3.5 text-vektor-accent" />
           <span className="text-xs font-medium text-vektor-accent tracking-wide uppercase">
-            Agent vs. Agent Governance
+            Agent Intelligence. Precisely Directed.
           </span>
         </div>
 
-        {/* Headline */}
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] mb-6 animate-slide-up">
-          Identity intelligence
+        {/* Hero line */}
+        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15] mb-6 animate-slide-up">
+          Identity risk doesn&apos;t stay
           <br />
+          in one system.{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-vektor-accent via-blue-400 to-vektor-green">
-            for the agentic enterprise
+            Neither does
+            <br />
+            our intelligence.
           </span>
         </h1>
 
@@ -196,9 +204,8 @@ function Hero() {
           className="text-lg sm:text-xl text-vektor-text-secondary max-w-2xl mx-auto mb-10 animate-slide-up"
           style={{ animationDelay: "0.15s" }}
         >
-          Map, score, govern, and remediate identity risk across cloud IAM and
-          ERP systems. ML-native. 22 supervised models. Agentic execution with
-          instant rollback.
+          The missing intelligence layer between enterprise data and AI agents.
+          ML-native. Cross-boundary. Agentic execution with instant rollback.
         </p>
 
         {/* CTAs */}
@@ -741,12 +748,8 @@ function Footer() {
     <footer className="border-t border-vektor-border py-12">
       <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded bg-gradient-to-br from-vektor-accent to-blue-400 flex items-center justify-center">
-            <Shield className="w-3.5 h-3.5 text-white" />
-          </div>
-          <span className="text-sm font-semibold">
-            Vektor<span className="text-vektor-accent">.ai</span>
-          </span>
+          <img src="/vektor-logo.png" alt="Vektor" className="h-6 w-auto" />
+          <span className="text-sm font-semibold">vektor</span>
         </div>
         <p className="text-xs text-vektor-text-muted">
           &copy; {new Date().getFullYear()} Vektor AI, Inc. All rights reserved.
