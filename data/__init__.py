@@ -1,0 +1,1 @@
+"""Vektor AI — Data utilities."""

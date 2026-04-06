@@ -1,0 +1,1 @@
+"""Vektor AI — Backend Core"""

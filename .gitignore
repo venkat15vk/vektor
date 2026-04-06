@@ -1,8 +1,11 @@
+node_modules/
+.next/
 __pycache__/
 *.pyc
 .DS_Store
-backend/vektor.db
-node_modules/
-frontend-app/dist/
 .env
-.vercel
+.env.local
+*.egg-info/
+dist/
+build/
+.vercel/
