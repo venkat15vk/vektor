@@ -2,24 +2,28 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Vektor AI — Identity Intelligence for the Agentic Enterprise",
+  title: "Vektor — The Relational Entity Intelligence Platform",
   description:
-    "Map, score, govern, and remediate identity risk across cloud IAM and ERP systems. AI-native. ML-scored. Agent-executed.",
+    "AI-native intelligence for every entity, every relationship, every agent. Across ERP, Financial Services, Healthcare, and Cloud IAM.",
   keywords: [
-    "identity intelligence",
-    "IAM",
-    "identity governance",
+    "relational entity intelligence",
     "AI agent governance",
+    "entity intelligence platform",
     "SOX compliance",
+    "SEC FINRA compliance",
+    "HIPAA compliance",
     "zero trust",
     "ERP security",
+    "financial services security",
+    "healthcare access governance",
+    "NHI governance",
   ],
   openGraph: {
-    title: "Vektor AI — Identity Intelligence for the Agentic Enterprise",
+    title: "Vektor — The Relational Entity Intelligence Platform",
     description:
-      "Map, score, govern, and remediate identity risk across cloud IAM and ERP systems.",
+      "AI-native intelligence for every entity, every relationship, every agent. Across ERP, Financial Services, Healthcare, and Cloud IAM.",
     url: "https://getvektor.ai",
-    siteName: "Vektor AI",
+    siteName: "Vektor",
     type: "website",
   },
 };
