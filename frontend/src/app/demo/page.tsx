@@ -39,34 +39,43 @@ import {
 const PIPELINE_STATS = {
   policiesLoaded: 1537,
   policiesPrivileged: 587,
-  subjectsAnalyzed: 34,
-  assignments: 112,
-  graphNodes: 1638,
-  graphEdges: 112,
-  featureVectors: 34,
-  escalationPaths: 7,
+  subjectsAnalyzed: 118,
+  assignments: 160,
+  graphNodes: 269,
+  graphEdges: 163,
+  featureVectors: 118,
+  escalationPaths: 94,
   cloudTrailEvents: 2900,
-  violationsDetected: 187,
-  runtimeSeconds: 2.41,
-  systems: 3,
+  violationsDetected: 236,
+  runtimeSeconds: 0.30,
+  systems: 5,
 };
 
 const SEVERITY_COUNTS = {
-  critical: 4,
-  high: 28,
-  medium: 78,
-  low: 77,
+  critical: 67,
+  high: 53,
+  medium: 44,
+  low: 72,
 };
 
 const VIOLATION_BREAKDOWN = [
-  { name: "Shadow Admin", count: 105 },
-  { name: "SoD Violation (ERP)", count: 24 },
-  { name: "Agent Scope Drift", count: 17 },
-  { name: "Orphan Account", count: 12 },
-  { name: "Excessive Privilege (IdP)", count: 11 },
-  { name: "Missing MFA", count: 8 },
-  { name: "Stale / Dormant Account", count: 4 },
-  { name: "Cross-Boundary Overreach", count: 6 },
+  { name: "Access Without Justification", count: 95, sector: "cross" },
+  { name: "SoD Violation (ERP)", count: 61, sector: "erp" },
+  { name: "Privilege Escalation", count: 22, sector: "cross" },
+  { name: "Missing MFA", count: 12, sector: "cross" },
+  { name: "Break-Glass Abuse", count: 10, sector: "healthcare" },
+  { name: "Chinese Wall Breach (SEC/FINRA)", count: 2, sector: "trading" },
+  { name: "AI Agent Scope Drift", count: 4, sector: "cross" },
+  { name: "Block Trade Front-Running (SEC)", count: 1, sector: "trading" },
+  { name: "Dormant Contractor (HIPAA)", count: 3, sector: "healthcare" },
+  { name: "Dormant Trader / Vendor (FINRA)", count: 2, sector: "trading" },
+  { name: "VIP Record Snooping (HIPAA)", count: 1, sector: "healthcare" },
+  { name: "Cross-Desk Access (FINRA)", count: 2, sector: "trading" },
+  { name: "MNPI Disclosure (SEC)", count: 1, sector: "trading" },
+  { name: "Excessive PHI Export (HIPAA)", count: 1, sector: "healthcare" },
+  { name: "Excessive Privilege", count: 5, sector: "cross" },
+  { name: "Weak MFA (IdP)", count: 4, sector: "iam" },
+  { name: "Stale / Dormant Account", count: 1, sector: "cross" },
 ];
 
 type Signal = {
@@ -78,7 +87,7 @@ type Signal = {
   department: string;
   violation: string;
   rule: string;
-  source: "aws_iam" | "netsuite" | "okta";
+  source: "aws_iam" | "netsuite" | "okta" | "healthcare" | "trading";
   evidence: Record<string, string>;
 };
 
@@ -333,6 +342,184 @@ const TOP_SIGNALS: Signal[] = [
       risk: "Compromise of this account grants both infrastructure control and financial system access",
     },
   },
+  // ── Healthcare / HIPAA ──
+  {
+    id: 16,
+    severity: "critical",
+    confidence: 0.96,
+    subject: "Karen Mitchell",
+    subjectType: "human",
+    department: "Revenue Cycle",
+    violation: "Unauthorized PHI Access (HIPAA)",
+    rule: "HIPAA-R1-UNAUTH-ACCESS",
+    source: "healthcare",
+    evidence: {
+      finding: "Billing clerk accessed psychiatric notes (42 CFR Part 2 protected) — substance abuse records",
+      business_need: "None — billing role does not require access to psychiatric clinical notes",
+      hipaa_section: "§164.502(a) — Minimum Necessary",
+      risk: "Unauthorized access to specially protected mental health records — HIPAA + 42 CFR Part 2 violation",
+    },
+  },
+  {
+    id: 17,
+    severity: "critical",
+    confidence: 0.95,
+    subject: "Samantha Black",
+    subjectType: "human",
+    department: "Information Technology",
+    violation: "Break-Glass Abuse (HIPAA)",
+    rule: "HIPAA-R3-BREAKGLASS-ABUSE",
+    source: "healthcare",
+    evidence: {
+      break_glass_uses_30d: "7 (peer avg: 0.3)",
+      justifications_provided: "0 — none documented",
+      patients_accessed: "Celebrity patient, coworker record, VIP records",
+      hipaa_section: "§164.312(a)(1) — Access Control",
+      risk: "Emergency access override used to snoop VIP/celebrity records without clinical need",
+    },
+  },
+  {
+    id: 18,
+    severity: "critical",
+    confidence: 0.94,
+    subject: "ClinicalScribe-GPT",
+    subjectType: "ai_agent",
+    department: "Multi-Department",
+    violation: "AI Agent Scope Drift (HIPAA)",
+    rule: "HIPAA-R5-AGENT-SCOPE-DRIFT",
+    source: "healthcare",
+    evidence: {
+      departments_accessed: "Psychiatry, Oncology, Pediatrics, Cardiology, Surgery",
+      expected_scope: "Active encounter only — single patient, single department",
+      historical_vs_active: "891 historical records read vs 352 active encounter records",
+      risk: "AI scribe accessing 42 CFR Part 2 psychiatric records it has no encounter-based need to access",
+    },
+  },
+  {
+    id: 19,
+    severity: "critical",
+    confidence: 0.99,
+    subject: "Vendor-EHRMigration-Acme",
+    subjectType: "human",
+    department: "Information Technology",
+    violation: "Dormant Contractor (HIPAA)",
+    rule: "HIPAA-R4-DORMANT-CONTRACTOR",
+    source: "healthcare",
+    evidence: {
+      contract_end: "2025-06-01 — 310 days ago",
+      permissions: "FHIR Data Contributor — read/write/delete across organization",
+      mfa_enabled: "false",
+      risk: "Vendor account with broad write + delete access to FHIR data — 10 months post-project completion",
+    },
+  },
+  {
+    id: 20,
+    severity: "high",
+    confidence: 0.93,
+    subject: "Tyler Brooks, RN",
+    subjectType: "human",
+    department: "Emergency",
+    violation: "Peer Deviation — Record Access (HIPAA)",
+    rule: "HIPAA-R2-PEER-DEVIATION",
+    source: "healthcare",
+    evidence: {
+      records_accessed_30d: "847 (peer median: 82) — 10.3x ratio",
+      departments_accessed: "Emergency, Cardiology, Pediatrics, Oncology",
+      access_pattern: "Bulk sequential access across departments — not consistent with patient care",
+      risk: "Access volume indicates snooping or data harvesting, not clinical care",
+    },
+  },
+  // ── Financial Services / Trading ──
+  {
+    id: 21,
+    severity: "critical",
+    confidence: 0.97,
+    subject: "Sarah Kimura",
+    subjectType: "human",
+    department: "Equities Trading",
+    violation: "Block Trade Front-Running (SEC)",
+    rule: "SEC-R2-FRONT-RUNNING",
+    source: "trading",
+    evidence: {
+      information_barrier: "IB-002: Block Trading ↔ Flow Trading Wall",
+      access: "Viewed pending block order for 500K shares of AAPL",
+      timing: "Accessed block order book at 09:42, placed personal order at 09:47, block executed at 10:15",
+      profit: "$47,200 from front-running position",
+      precedent: "Identical pattern to Morgan Stanley block trade enforcement ($249M fine)",
+    },
+  },
+  {
+    id: 22,
+    severity: "critical",
+    confidence: 0.96,
+    subject: "James Morrison",
+    subjectType: "human",
+    department: "Equities Trading",
+    violation: "Chinese Wall Breach (SEC/FINRA)",
+    rule: "FINRA-R1-CHINESE-WALL",
+    source: "trading",
+    evidence: {
+      information_barrier: "IB-001: Research ↔ Trading Wall",
+      access_type: "Viewed unpublished equity research report with price target change",
+      timing: "Research published 2 days after trader's access — pre-publication",
+      trading_activity: "Increased position 40% in covered stock within 4 hours of access",
+      regulation: "FINRA Rule 2241 — Research Analyst Conflicts of Interest",
+    },
+  },
+  {
+    id: 23,
+    severity: "critical",
+    confidence: 0.95,
+    subject: "Robert Flanagan",
+    subjectType: "human",
+    department: "Compliance",
+    violation: "Compliance Trading Violation (FINRA)",
+    rule: "FINRA-R4-COMP-TRADING",
+    source: "trading",
+    evidence: {
+      sod_conflict: "Manages restricted securities list AND executed personal trades",
+      restricted_securities_traded: "NVDA, TSLA",
+      personal_trades_30d: "12 (peer avg: 0 — compliance officers should not trade restricted)",
+      regulation: "FINRA Rule 3110 / Rule 3210 — Supervision / Outside Activities",
+      risk: "Compliance officer with access to investigations trading restricted securities without pre-clearance",
+    },
+  },
+  {
+    id: 24,
+    severity: "critical",
+    confidence: 0.95,
+    subject: "AlphaSignal-v4",
+    subjectType: "ai_agent",
+    department: "Equities Trading",
+    violation: "AI Agent MNPI Scope Drift (SEC)",
+    rule: "SEC-R7-AGENT-SCOPE",
+    source: "trading",
+    evidence: {
+      assigned_scope: "Equities desk market data and positions only",
+      unauthorized_access: "DESK-BLOCK order book, Institutional client flow data, Pending block allocations",
+      barrier_crossed: "IB-002: Block Trading ↔ Flow Trading Wall",
+      orders_suggested: "23 orders suggested after accessing MNPI",
+      risk: "AI agent with pre-trade analytics + block order MNPI = automated front-running at machine speed",
+    },
+  },
+  {
+    id: 25,
+    severity: "critical",
+    confidence: 0.98,
+    subject: "Steven Grasso",
+    subjectType: "human",
+    department: "Equities Trading",
+    violation: "Dormant Trader / Vendor (FINRA)",
+    rule: "FINRA-R6-DORMANT",
+    source: "trading",
+    evidence: {
+      termination_date: "2026-01-15 — 82 days ago",
+      active_permissions: "Trader — Equities: execute_order, view_book, view_positions",
+      mfa_enabled: "false",
+      form_u5: "Not filed — still registered with firm",
+      risk: "Terminated trader retaining order execution capability — unauthorized trading risk",
+    },
+  },
 ];
 
 const CLOUDTRAIL_STATS = {
@@ -353,6 +540,13 @@ const DATA_SOURCES = [
   { name: "NetSuite SoD Rules", desc: "4 core SoD rules: Vendor/Pay, JE/Approve, CreditMemo/Customer, Check/Vendor", status: "loaded", system: "NetSuite" },
   { name: "Okta Tenant Config", desc: "Admin roles, MFA policies, session settings, ThreatInsight status", status: "loaded", system: "Okta" },
   { name: "Okta System Log", desc: "Auth events, admin actions, privilege changes — 90-day window", status: "loaded", system: "Okta" },
+  { name: "Synthea FHIR (MITRE)", desc: "Synthetic patient/provider records in FHIR R4 format", status: "loaded", system: "Healthcare" },
+  { name: "Azure FHIR RBAC", desc: "18 FHIR roles — Data Reader, Writer, Exporter, SMART Admin, Break-Glass", status: "loaded", system: "Healthcare" },
+  { name: "HHS OCR Breach Portal", desc: "7,400+ HIPAA breach records informing violation taxonomy", status: "indexed", system: "Healthcare" },
+  { name: "OpenMRS RBAC Model", desc: "Open source EHR — documented roles, permissions, and API structure", status: "indexed", system: "Healthcare" },
+  { name: "SEC EDGAR Forms 3/4/5", desc: "Insider trading filings — entity-resource graph structure", status: "indexed", system: "Trading" },
+  { name: "FINRA Regulatory Reports", desc: "Examination findings, violation categories, SoD requirements (2024-2026)", status: "indexed", system: "Trading" },
+  { name: "Synthetic Trading Firm", desc: "10 desks, 3 information barriers, 18 RBAC roles — front/middle/back office", status: "loaded", system: "Trading" },
 ];
 
 /* ────────────────────────────────────────────
@@ -437,7 +631,7 @@ type RecommendedPolicy = {
   description: string;
   category: string;
   severity: "critical" | "high" | "medium";
-  sources: ("aws_iam" | "netsuite" | "okta")[];
+  sources: ("aws_iam" | "netsuite" | "okta" | "healthcare" | "trading")[];
   triggeringSignalIds: number[];
   triggeringSummary: string;
   violationCount: number;
@@ -540,6 +734,112 @@ const RECOMMENDED_POLICIES: RecommendedPolicy[] = [
     featureKeys: ["holder_count", "privileged_permissions", "degree_centrality", "betweenness_centrality", "total_actions", "is_privileged"],
     lifecycle: "Suggested → Approved → Active → Graduated",
   },
+  // ── Healthcare / HIPAA ──
+  {
+    id: "POL-T2-008",
+    name: "Enforce Minimum Necessary PHI Access",
+    description: "Billing clerks must not access clinical notes, especially 42 CFR Part 2 protected records (substance abuse, psychiatry). Access scoped to demographics and diagnosis codes only.",
+    category: "HIPAA Compliance",
+    severity: "critical",
+    sources: ["healthcare"],
+    triggeringSignalIds: [16],
+    triggeringSummary: "Billing clerk accessed psychiatric notes without clinical justification",
+    violationCount: 1,
+    featureKeys: ["total_permissions", "unique_resources_reachable", "peer_group_cosine_similarity", "usage_ratio", "cross_system_consistency_score"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  {
+    id: "POL-T2-009",
+    name: "Require Break-Glass Justification Within 24h",
+    description: "Emergency access overrides must include a documented justification within 24 hours. Accounts with >2 unjustified break-glass uses per quarter trigger investigation.",
+    category: "HIPAA Compliance",
+    severity: "critical",
+    sources: ["healthcare"],
+    triggeringSignalIds: [17],
+    triggeringSummary: "IT admin used break-glass 7 times in 30 days with 0 justifications — VIP snooping pattern",
+    violationCount: 1,
+    featureKeys: ["privileged_permissions", "usage_ratio", "peer_group_deviation_score", "days_since_last_activity", "escalation_paths_through_identity"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  {
+    id: "POL-T2-010",
+    name: "Scope AI Clinical Agents to Active Encounter",
+    description: "AI scribe and triage agents must be restricted to the active encounter context. Cross-department and historical record access must trigger real-time alerts.",
+    category: "HIPAA + Agent Governance",
+    severity: "critical",
+    sources: ["healthcare"],
+    triggeringSignalIds: [18],
+    triggeringSummary: "AI scribe accessed records across 5 departments and 891 historical records beyond active encounter",
+    violationCount: 2,
+    featureKeys: ["unique_resources_reachable", "source_system_count", "peer_group_deviation_score", "cross_system_consistency_score", "total_permissions"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  {
+    id: "POL-T2-011",
+    name: "Auto-Revoke Contractor Access at Contract End",
+    description: "Contractor and vendor credentials must be auto-deactivated on contract end date. No manual deprovisioning dependency.",
+    category: "HIPAA Compliance",
+    severity: "high",
+    sources: ["healthcare"],
+    triggeringSignalIds: [19],
+    triggeringSummary: "3 contractors with expired contracts still have active PHI access (up to 310 days post-contract)",
+    violationCount: 3,
+    featureKeys: ["days_since_last_activity", "account_age_days", "assignment_age_days", "has_business_justification", "mfa_usage_rate"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  // ── Financial Services / Trading ──
+  {
+    id: "POL-T2-012",
+    name: "Enforce Information Barrier Access Controls",
+    description: "Trading desk personnel must not access research systems or block desk order books. Cross-barrier access triggers real-time block and compliance alert.",
+    category: "SEC/FINRA Compliance",
+    severity: "critical",
+    sources: ["trading"],
+    triggeringSignalIds: [21, 22],
+    triggeringSummary: "2 traders crossed information barriers — 1 front-running ($47K profit), 1 accessed unpublished research",
+    violationCount: 3,
+    featureKeys: ["unique_resources_reachable", "cross_system_consistency_score", "peer_group_deviation_score", "betweenness_centrality", "escalation_paths_through_identity"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  {
+    id: "POL-T2-013",
+    name: "Block Compliance Officer Personal Trading",
+    description: "Compliance personnel with access to restricted lists, investigations, or personal trading reports must not execute trades in any restricted security. Pre-clearance required for all personal trades.",
+    category: "SEC/FINRA Compliance",
+    severity: "critical",
+    sources: ["trading"],
+    triggeringSignalIds: [23],
+    triggeringSummary: "Compliance officer traded NVDA, TSLA while managing the restricted list — 12 trades, 0 pre-cleared",
+    violationCount: 1,
+    featureKeys: ["is_sod_pair_member", "sod_pair_membership_count", "privileged_permissions", "total_permissions", "unique_actions"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  {
+    id: "POL-T2-014",
+    name: "Scope AI Trading Agents to Assigned Desk",
+    description: "AI pre-trade analytics and order routing agents must be confined to their assigned desk's data. Cross-desk or cross-barrier data access triggers kill switch.",
+    category: "SEC/FINRA + Agent Governance",
+    severity: "critical",
+    sources: ["trading"],
+    triggeringSignalIds: [24],
+    triggeringSummary: "AI pre-trade agent accessed block desk MNPI and suggested 23 orders — automated front-running risk",
+    violationCount: 2,
+    featureKeys: ["unique_resources_reachable", "source_system_count", "peer_group_deviation_score", "cross_system_consistency_score", "escalation_chain_participation_count"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
+  {
+    id: "POL-T2-015",
+    name: "Auto-Revoke Terminated Trader Credentials",
+    description: "Trading credentials must be revoked same-day on termination. Form U5 filing must be completed within 30 days. No execution access post-departure.",
+    category: "FINRA Compliance",
+    severity: "critical",
+    sources: ["trading"],
+    triggeringSignalIds: [25],
+    triggeringSummary: "Terminated trader retains execute_order permission 82 days after departure — Form U5 not filed",
+    violationCount: 2,
+    featureKeys: ["days_since_last_activity", "account_age_days", "assignment_age_days", "mfa_usage_rate", "has_business_justification"],
+    lifecycle: "Suggested → Approved → Active → Graduated",
+  },
 ];
 
 /* ────────────────────────────────────────────
@@ -579,7 +879,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
             </span>
           </div>
           <p className="text-[#94A3B8] text-sm">
-            Live Pipeline Demo — Investor Preview
+            Live Pipeline Demo — 4 Sectors · Investor Preview
           </p>
         </div>
 
@@ -619,7 +919,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
         </form>
 
         <p className="mt-6 text-center text-xs text-[#64748B]">
-          This demo runs on real, open-source IAM data.
+          This demo runs on real open-source data across 4 regulated sectors.
           <br />
           No customer data is used.
         </p>
@@ -666,6 +966,8 @@ function SourceBadge({ source }: { source: string }) {
     aws_iam: { label: "AWS IAM", color: "bg-amber-500/10 text-amber-400 border-amber-500/20", icon: Shield },
     netsuite: { label: "NetSuite", color: "bg-purple-500/10 text-purple-400 border-purple-500/20", icon: BookOpen },
     okta: { label: "Okta", color: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20", icon: KeyRound },
+    healthcare: { label: "Healthcare", color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20", icon: Activity },
+    trading: { label: "Trading", color: "bg-rose-500/10 text-rose-400 border-rose-500/20", icon: TrendingUp },
   };
   const c = config[source] || config.aws_iam;
   const Icon = c.icon;
@@ -719,7 +1021,7 @@ function StatCard({
 function DemoDashboard() {
   const [selectedSignal, setSelectedSignal] = useState<Signal | null>(null);
   const [activeTab, setActiveTab] = useState<"signals" | "policies" | "cloudtrail" | "data">("signals");
-  const [sourceFilter, setSourceFilter] = useState<"all" | "aws_iam" | "netsuite" | "okta">("all");
+  const [sourceFilter, setSourceFilter] = useState<"all" | "aws_iam" | "netsuite" | "okta" | "healthcare" | "trading">("all");
   const [policyStates, setPolicyStates] = useState<Record<string, PolicyStatus>>({});
   const [expandedPolicy, setExpandedPolicy] = useState<string | null>(null);
   const [trainingPolicy, setTrainingPolicy] = useState<string | null>(null);
@@ -785,16 +1087,18 @@ function DemoDashboard() {
             Pipeline Results
           </h1>
           <p className="text-sm text-[#94A3B8]">
-            AWS IAM + NetSuite ERP + Okta IdP → Unified Identity Graph → Features → ML Signals
+            AWS IAM + NetSuite ERP + Okta IdP + Healthcare EHR + Trading OMS → Unified Graph → Signals
           </p>
         </div>
 
         {/* ── Connected Systems ── */}
-        <div className="grid grid-cols-3 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
           {[
-            { name: "AWS IAM", desc: "1,537 policies · CloudTrail events", color: "border-amber-500/30", dot: "bg-amber-400" },
-            { name: "NetSuite", desc: "636 permissions · SoD conflict matrix", color: "border-purple-500/30", dot: "bg-purple-400" },
-            { name: "Okta", desc: "Admin roles · MFA policies · System Log", color: "border-cyan-500/30", dot: "bg-cyan-400" },
+            { name: "AWS IAM", desc: "1,537 policies · CloudTrail", color: "border-amber-500/30", dot: "bg-amber-400" },
+            { name: "NetSuite", desc: "636 permissions · SoD matrix", color: "border-purple-500/30", dot: "bg-purple-400" },
+            { name: "Okta", desc: "Admin roles · MFA policies", color: "border-cyan-500/30", dot: "bg-cyan-400" },
+            { name: "Healthcare", desc: "FHIR RBAC · HIPAA controls", color: "border-emerald-500/30", dot: "bg-emerald-400" },
+            { name: "Trading", desc: "SEC/FINRA · Chinese walls", color: "border-rose-500/30", dot: "bg-rose-400" },
           ].map((sys) => (
             <div key={sys.name} className={`bg-[#151D2E] border ${sys.color} rounded-xl p-4 flex items-center gap-3`}>
               <div className={`w-2.5 h-2.5 rounded-full ${sys.dot} animate-pulse`} />
@@ -978,13 +1282,15 @@ function DemoDashboard() {
         {activeTab === "signals" && (
           <div className="space-y-3">
             {/* Source filter */}
-            <div className="flex gap-2 mb-4">
+            <div className="flex gap-2 mb-4 flex-wrap">
               {(
                 [
                   { key: "all", label: "All Systems" },
                   { key: "aws_iam", label: "AWS IAM" },
                   { key: "netsuite", label: "NetSuite" },
                   { key: "okta", label: "Okta" },
+                  { key: "healthcare", label: "Healthcare" },
+                  { key: "trading", label: "Trading" },
                 ] as const
               ).map(({ key, label }) => (
                 <button

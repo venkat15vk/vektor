@@ -1,0 +1,421 @@
+{
+  "metadata": {
+    "description": "Synthetic trading firm modeled on SEC EDGAR Form 3/4/5 insider structure + FINRA rule taxonomy + well-documented information barrier requirements",
+    "data_sources": [
+      "SEC EDGAR — Form 3/4/5 insider filings (entity-resource graph structure)",
+      "FINRA Regulatory Oversight Reports (2024-2026) — examination findings and violation categories",
+      "FINRA Rule 5280 (Trading Ahead), Rule 2241 (Research Analyst Conflicts), Rule 3110 (Supervision)",
+      "SEC Rule 10b-5 (Insider Trading), Regulation SHO, Regulation FD",
+      "Morgan Stanley Block Trade Enforcement ($249M fine, 2025) — cross-boundary access pattern",
+      "SEC/FINRA published SoD requirements and Chinese wall guidance"
+    ],
+    "firm": "Apex Capital Partners",
+    "firm_type": "broker-dealer / investment bank",
+    "generated": "2026-04-07"
+  },
+
+  "firm": {
+    "name": "Apex Capital Partners",
+    "crd_number": "999001",
+    "sec_file_number": "8-99901",
+    "firm_type": "broker-dealer",
+    "desks": [
+      {"id": "DESK-EQ", "name": "Equities Trading", "division": "front-office", "asset_class": "equities"},
+      {"id": "DESK-FI", "name": "Fixed Income Trading", "division": "front-office", "asset_class": "fixed_income"},
+      {"id": "DESK-BLOCK", "name": "Block Trading", "division": "front-office", "asset_class": "equities", "is_restricted": true, "restriction_note": "Block trade desk handles large institutional orders — MNPI boundary required"},
+      {"id": "DESK-DERIV", "name": "Derivatives", "division": "front-office", "asset_class": "derivatives"},
+      {"id": "DESK-SALES", "name": "Institutional Sales", "division": "front-office", "asset_class": "multi"},
+      {"id": "DESK-RES", "name": "Equity Research", "division": "research", "asset_class": "equities", "is_restricted": true, "restriction_note": "Research analysts separated from trading by Chinese wall — FINRA Rule 2241"},
+      {"id": "DESK-RISK", "name": "Risk Management", "division": "middle-office", "asset_class": "multi"},
+      {"id": "DESK-COMP", "name": "Compliance", "division": "middle-office", "asset_class": "multi"},
+      {"id": "DESK-OPS", "name": "Operations / Settlement", "division": "back-office", "asset_class": "multi"},
+      {"id": "DESK-IT", "name": "Technology", "division": "back-office", "asset_class": "multi"}
+    ],
+    "information_barriers": [
+      {
+        "id": "IB-001",
+        "name": "Research ↔ Trading Wall",
+        "side_a": ["DESK-RES"],
+        "side_b": ["DESK-EQ", "DESK-FI", "DESK-BLOCK", "DESK-DERIV"],
+        "regulation": "FINRA Rule 2241 — Research Analyst Conflicts of Interest",
+        "description": "Research analysts must not share unpublished research with trading desks or receive trading information that could bias research"
+      },
+      {
+        "id": "IB-002",
+        "name": "Block Trading ↔ Flow Trading Wall",
+        "side_a": ["DESK-BLOCK"],
+        "side_b": ["DESK-EQ", "DESK-SALES"],
+        "regulation": "SEC Rule 10b-5 / Morgan Stanley enforcement precedent",
+        "description": "Block trade desk personnel must not share pending block order information with flow traders or sales — front-running risk"
+      },
+      {
+        "id": "IB-003",
+        "name": "Compliance ↔ Trading Restricted",
+        "side_a": ["DESK-COMP"],
+        "side_b": ["DESK-EQ", "DESK-FI", "DESK-BLOCK", "DESK-DERIV"],
+        "regulation": "FINRA Rule 3110 — Supervision / Personal Trading",
+        "description": "Compliance officers with access to restricted lists and investigation data must not actively trade or share restricted information"
+      }
+    ]
+  },
+
+  "finserv_rbac_roles": [
+    {"role": "Trader — Equities", "actions": ["execute_order", "view_book", "view_positions", "view_market_data"], "scope": "equities_desk", "is_privileged": false, "desk_access": ["DESK-EQ"]},
+    {"role": "Trader — Fixed Income", "actions": ["execute_order", "view_book", "view_positions", "view_market_data"], "scope": "fi_desk", "is_privileged": false, "desk_access": ["DESK-FI"]},
+    {"role": "Trader — Block Desk", "actions": ["execute_block_order", "view_block_book", "view_institutional_flow", "view_positions"], "scope": "block_desk_only", "is_privileged": true, "desk_access": ["DESK-BLOCK"], "mnpi_access": true},
+    {"role": "Trader — Derivatives", "actions": ["execute_order", "view_book", "view_greeks", "view_positions"], "scope": "derivatives_desk", "is_privileged": false, "desk_access": ["DESK-DERIV"]},
+    {"role": "Sales — Institutional", "actions": ["view_client_orders", "view_market_data", "submit_indication", "view_research_published"], "scope": "sales_desk", "is_privileged": false, "desk_access": ["DESK-SALES"]},
+    {"role": "Research Analyst", "actions": ["view_market_data", "write_research", "publish_research", "view_company_filings"], "scope": "research_only", "is_privileged": false, "desk_access": ["DESK-RES"], "chinese_wall": true},
+    {"role": "Senior Research Analyst", "actions": ["view_market_data", "write_research", "publish_research", "view_company_filings", "set_rating", "set_price_target"], "scope": "research_only", "is_privileged": true, "desk_access": ["DESK-RES"], "chinese_wall": true},
+    {"role": "Risk Manager", "actions": ["view_all_positions", "view_pnl", "set_risk_limits", "view_var", "view_stress_tests"], "scope": "firm_wide_read", "is_privileged": true, "desk_access": ["DESK-RISK"]},
+    {"role": "Compliance Officer", "actions": ["view_trade_blotter", "view_communications", "manage_restricted_list", "view_personal_trading", "investigate", "view_audit_trail"], "scope": "firm_wide_read", "is_privileged": true, "desk_access": ["DESK-COMP"], "restricted_trading": true},
+    {"role": "Compliance Analyst", "actions": ["view_trade_blotter", "view_communications", "view_restricted_list", "flag_suspicious"], "scope": "firm_wide_read", "is_privileged": false, "desk_access": ["DESK-COMP"]},
+    {"role": "Operations — Settlement", "actions": ["confirm_trade", "settle_trade", "view_trade_details", "reconcile"], "scope": "operations", "is_privileged": false, "desk_access": ["DESK-OPS"]},
+    {"role": "Operations — Manager", "actions": ["confirm_trade", "settle_trade", "view_trade_details", "reconcile", "approve_exception", "amend_trade"], "scope": "operations", "is_privileged": true, "desk_access": ["DESK-OPS"]},
+    {"role": "IT Administrator", "actions": ["admin", "user_management", "system_config", "view_audit_log", "deploy", "manage_access"], "scope": "firm_wide_admin", "is_privileged": true, "desk_access": ["DESK-IT"]},
+    {"role": "IT Developer", "actions": ["deploy", "view_code", "view_system_logs", "debug"], "scope": "technology", "is_privileged": false, "desk_access": ["DESK-IT"]},
+    {"role": "AI Pre-Trade Analytics", "actions": ["view_market_data", "view_positions", "suggest_order", "view_historical_trades"], "scope": "assigned_desk", "is_privileged": false, "desk_access": ["DESK-EQ"], "is_agent": true},
+    {"role": "AI Order Router", "actions": ["execute_order", "view_market_data", "select_venue", "view_book"], "scope": "assigned_desk", "is_privileged": false, "desk_access": ["DESK-EQ"], "is_agent": true},
+    {"role": "AI Research Assistant", "actions": ["view_market_data", "view_company_filings", "draft_research", "summarize_earnings"], "scope": "research_only", "is_privileged": false, "desk_access": ["DESK-RES"], "is_agent": true, "chinese_wall": true},
+    {"role": "AI Surveillance Agent", "actions": ["view_trade_blotter", "view_communications", "flag_suspicious", "view_market_data", "pattern_detect"], "scope": "firm_wide_read", "is_privileged": true, "desk_access": ["DESK-COMP"], "is_agent": true}
+  ],
+
+  "personnel": [
+    {"id": "TRAD-001", "name": "James Morrison", "role": "Trader — Equities", "desk": "DESK-EQ", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 63"], "years_experience": 8},
+    {"id": "TRAD-002", "name": "Sarah Kimura", "role": "Trader — Equities", "desk": "DESK-EQ", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 63"], "years_experience": 5},
+    {"id": "TRAD-003", "name": "Derek Zhang", "role": "Trader — Fixed Income", "desk": "DESK-FI", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 52"], "years_experience": 12},
+    {"id": "TRAD-004", "name": "Victoria Santos", "role": "Trader — Block Desk", "desk": "DESK-BLOCK", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 63", "Series 24"], "years_experience": 15, "mnpi_access": true},
+    {"id": "TRAD-005", "name": "Ryan O'Connell", "role": "Trader — Block Desk", "desk": "DESK-BLOCK", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true, "series_licenses": ["Series 7", "Series 63"], "years_experience": 10, "mnpi_access": true},
+    {"id": "TRAD-006", "name": "Natasha Volkov", "role": "Trader — Derivatives", "desk": "DESK-DERIV", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 3"], "years_experience": 7},
+
+    {"id": "SALES-001", "name": "Michael Chen", "role": "Sales — Institutional", "desk": "DESK-SALES", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 63"], "years_experience": 9},
+    {"id": "SALES-002", "name": "Laura Brennan", "role": "Sales — Institutional", "desk": "DESK-SALES", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true, "series_licenses": ["Series 7", "Series 66"], "years_experience": 6},
+
+    {"id": "RES-001", "name": "Dr. Ananya Gupta", "role": "Senior Research Analyst", "desk": "DESK-RES", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 86", "Series 87"], "years_experience": 14, "coverage": ["Technology", "AI/ML"]},
+    {"id": "RES-002", "name": "Marcus Webb", "role": "Research Analyst", "desk": "DESK-RES", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true, "series_licenses": ["Series 86", "Series 87"], "years_experience": 4, "coverage": ["Healthcare", "Biotech"]},
+    {"id": "RES-003", "name": "Elena Rothschild", "role": "Research Analyst", "desk": "DESK-RES", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 86", "Series 87"], "years_experience": 6, "coverage": ["Energy", "Industrials"]},
+
+    {"id": "RISK-001", "name": "Thomas Nakamura", "role": "Risk Manager", "desk": "DESK-RISK", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7"], "years_experience": 18},
+    {"id": "RISK-002", "name": "Priya Mehta", "role": "Risk Manager", "desk": "DESK-RISK", "type": "human", "status": "active", "last_login_days_ago": 2, "mfa": true, "series_licenses": ["Series 7", "FRM"], "years_experience": 11},
+
+    {"id": "COMP-001", "name": "Robert Flanagan", "role": "Compliance Officer", "desk": "DESK-COMP", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 7", "Series 14", "Series 24"], "years_experience": 20},
+    {"id": "COMP-002", "name": "Jennifer Okoro", "role": "Compliance Analyst", "desk": "DESK-COMP", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true, "series_licenses": ["Series 7"], "years_experience": 3},
+
+    {"id": "OPS-001", "name": "David Patel", "role": "Operations — Manager", "desk": "DESK-OPS", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 99"], "years_experience": 13},
+    {"id": "OPS-002", "name": "Karen Liu", "role": "Operations — Settlement", "desk": "DESK-OPS", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": ["Series 99"], "years_experience": 5},
+    {"id": "OPS-003", "name": "Brian Hoffman", "role": "Operations — Settlement", "desk": "DESK-OPS", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true, "series_licenses": ["Series 99"], "years_experience": 4},
+
+    {"id": "IT-001", "name": "Alex Kowalski", "role": "IT Administrator", "desk": "DESK-IT", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true, "series_licenses": [], "years_experience": 10},
+    {"id": "IT-002", "name": "Mei-Ling Tan", "role": "IT Developer", "desk": "DESK-IT", "type": "human", "status": "active", "last_login_days_ago": 2, "mfa": true, "series_licenses": [], "years_experience": 6}
+  ],
+
+  "terminated_personnel": [
+    {"id": "TERM-001", "name": "Steven Grasso", "role": "Trader — Equities", "desk": "DESK-EQ", "type": "human", "status": "active", "last_login_days_ago": 75, "mfa": false, "termination_date": "2026-01-15", "notes": "Terminated trader — credentials still active with order execution access. Series 7 license still registered."},
+    {"id": "TERM-002", "name": "TempAccess-AuditFirm-Deloitte", "role": "Compliance Analyst", "desk": "DESK-COMP", "type": "human", "status": "active", "last_login_days_ago": 130, "mfa": false, "termination_date": "2025-10-31", "notes": "External audit firm temporary access — engagement ended 5+ months ago, still has trade blotter and communications view"}
+  ],
+
+  "ai_agents": [
+    {
+      "id": "AI-PRETRADE-001",
+      "name": "AlphaSignal-v4",
+      "role": "AI Pre-Trade Analytics",
+      "desk": "DESK-EQ",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI pre-trade analytics agent — should only access equities desk market data and positions",
+      "violation_injected": "scope_drift",
+      "violation_detail": "Accessing block desk order book and institutional client flow data — crosses information barrier into MNPI territory"
+    },
+    {
+      "id": "AI-ROUTER-001",
+      "name": "SmartRoute-v2",
+      "role": "AI Order Router",
+      "desk": "DESK-EQ",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI smart order router — executes orders and selects venues for equities desk"
+    },
+    {
+      "id": "AI-RESEARCH-001",
+      "name": "ResearchGPT-Analyst",
+      "role": "AI Research Assistant",
+      "desk": "DESK-RES",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI research assistant — should only access public filings and market data within research silo",
+      "violation_injected": "chinese_wall_breach",
+      "violation_detail": "Accessing equities trading desk positions and P&L data — research agent reading proprietary trading information violates Chinese wall"
+    },
+    {
+      "id": "AI-SURV-001",
+      "name": "WatchDog-Surveillance",
+      "role": "AI Surveillance Agent",
+      "desk": "DESK-COMP",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI trade surveillance agent — monitors for wash trades, spoofing, front-running patterns"
+    }
+  ],
+
+  "injected_violations": [
+    {
+      "id": "FINRA-V-001",
+      "type": "chinese_wall_breach",
+      "subject_id": "TRAD-001",
+      "description": "Equities trader James Morrison accessed unpublished research report from Research desk — Chinese wall breach (FINRA Rule 2241)",
+      "regulation": "FINRA Rule 2241 — Research Analyst Conflicts of Interest",
+      "severity": "critical",
+      "confidence": 0.96,
+      "evidence": {
+        "information_barrier": "IB-001: Research ↔ Trading Wall",
+        "access_type": "Viewed unpublished equity research report on covered company",
+        "trader_desk": "DESK-EQ (Equities Trading)",
+        "restricted_resource": "DESK-RES (Equity Research) — draft report with price target change",
+        "timing": "Research report published 2 days after trader's access — pre-publication access",
+        "trading_activity_post_access": "Increased position 40% in covered stock within 4 hours of access"
+      }
+    },
+    {
+      "id": "FINRA-V-002",
+      "type": "block_trade_front_running",
+      "subject_id": "TRAD-002",
+      "description": "Equities trader Sarah Kimura accessed block desk order book and traded ahead of pending institutional block order — front-running (SEC Rule 10b-5 / Morgan Stanley precedent)",
+      "regulation": "SEC Rule 10b-5 / FINRA Rule 5270 — Front Running",
+      "severity": "critical",
+      "confidence": 0.97,
+      "evidence": {
+        "information_barrier": "IB-002: Block Trading ↔ Flow Trading Wall",
+        "access_type": "Viewed pending block order for 500K shares of AAPL",
+        "trader_desk": "DESK-EQ (Equities — flow trading)",
+        "restricted_resource": "DESK-BLOCK (Block Trading) — pending institutional order",
+        "timing": "Accessed block order book at 09:42, placed personal order at 09:47, block executed at 10:15",
+        "profit_estimate": "$47,200 from front-running position",
+        "morgan_stanley_parallel": "Identical pattern to Morgan Stanley block trade enforcement ($249M fine) — trader accessing block trade info outside authorized scope"
+      }
+    },
+    {
+      "id": "FINRA-V-003",
+      "type": "mnpi_access",
+      "subject_id": "SALES-001",
+      "description": "Institutional sales rep Michael Chen accessed block desk pending orders and shared with client ahead of execution — MNPI disclosure",
+      "regulation": "SEC Regulation FD / Rule 10b-5 / FINRA Rule 2010",
+      "severity": "critical",
+      "confidence": 0.94,
+      "evidence": {
+        "information_barrier": "IB-002: Block Trading ↔ Flow Trading Wall",
+        "access_type": "Viewed pending block orders and client allocation details",
+        "sales_desk": "DESK-SALES (Institutional Sales)",
+        "restricted_resource": "DESK-BLOCK (Block Trading) — pending orders and allocations",
+        "communication_flagged": "Bloomberg chat with client referencing 'large block coming' 30 minutes before execution",
+        "clients_notified": 3
+      }
+    },
+    {
+      "id": "FINRA-V-004",
+      "type": "compliance_trading_violation",
+      "subject_id": "COMP-001",
+      "description": "Compliance officer Robert Flanagan executed personal trades in securities on the restricted list he manages — personal trading violation",
+      "regulation": "FINRA Rule 3110 — Supervision / FINRA Rule 3210 — Outside Activities",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": {
+        "information_barrier": "IB-003: Compliance ↔ Trading Restricted",
+        "access_type": "Manages restricted securities list AND executed personal trades",
+        "compliance_role": "Has view of all investigations, restricted list, and personal trading reports",
+        "restricted_securities_traded": ["NVDA", "TSLA"],
+        "personal_trades_30d": 12,
+        "peer_personal_trades_avg": 0,
+        "trading_account": "Personal brokerage account — not pre-cleared"
+      }
+    },
+    {
+      "id": "FINRA-V-005",
+      "type": "cross_desk_access",
+      "subject_id": "TRAD-006",
+      "description": "Derivatives trader Natasha Volkov granted cross-desk access to equities and fixed income positions — toxic permission combination enabling basis trade front-running",
+      "regulation": "FINRA Rule 3110 — Supervision / Internal SoD Policy",
+      "severity": "high",
+      "confidence": 0.91,
+      "evidence": {
+        "primary_desk": "DESK-DERIV (Derivatives)",
+        "additional_access": ["DESK-EQ (Equities positions)", "DESK-FI (Fixed Income positions)"],
+        "risk": "Can see cash positions across equities and fixed income while trading derivatives on same underlyings — basis trade arbitrage risk",
+        "justification_on_file": false,
+        "peer_cross_desk_access": 0
+      }
+    },
+    {
+      "id": "FINRA-V-006",
+      "type": "dormant_terminated",
+      "subject_id": "TERM-001",
+      "description": "Terminated trader Steven Grasso — departed 2026-01-15, credentials still active with order execution access",
+      "regulation": "FINRA Rule 4511 — Books and Records / Rule 3110 — Supervision",
+      "severity": "critical",
+      "confidence": 0.98,
+      "evidence": {
+        "termination_date": "2026-01-15",
+        "days_since_termination": 82,
+        "last_activity": "75 days ago",
+        "active_permissions": ["Trader — Equities: execute_order, view_book, view_positions"],
+        "mfa_enabled": false,
+        "series_licenses_status": "Still registered with firm — Form U5 not filed",
+        "risk": "Terminated trader retaining order execution capability — unauthorized trading risk"
+      }
+    },
+    {
+      "id": "FINRA-V-007",
+      "type": "dormant_terminated",
+      "subject_id": "TERM-002",
+      "description": "External audit firm temporary access — engagement ended 2025-10-31, still has trade blotter and communications surveillance access",
+      "regulation": "FINRA Rule 3110 — Supervision / SEC Rule 17a-4 — Records Preservation",
+      "severity": "high",
+      "confidence": 0.97,
+      "evidence": {
+        "termination_date": "2025-10-31",
+        "days_since_termination": 158,
+        "last_activity": "130 days ago",
+        "active_permissions": ["Compliance Analyst: view_trade_blotter, view_communications, view_restricted_list"],
+        "mfa_enabled": false,
+        "risk": "External party retaining access to trade surveillance data, communications, and restricted securities list — data exfiltration risk"
+      }
+    },
+    {
+      "id": "FINRA-V-008",
+      "type": "ai_agent_scope_drift",
+      "subject_id": "AI-PRETRADE-001",
+      "description": "AI pre-trade analytics agent AlphaSignal-v4 accessing block desk order book and institutional client flow — crosses MNPI information barrier",
+      "regulation": "SEC Rule 10b-5 / FINRA Rule 5270 — Front Running (agent analogue)",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": {
+        "assigned_desk": "DESK-EQ (Equities Trading)",
+        "unauthorized_access": ["DESK-BLOCK order book", "Institutional client flow data", "Pending block allocations"],
+        "information_barrier_crossed": "IB-002: Block Trading ↔ Flow Trading Wall",
+        "expected_scope": "Equities desk market data and positions only",
+        "orders_suggested_after_access": 23,
+        "risk": "AI agent with pre-trade analytics + block order MNPI = automated front-running at machine speed. Identical pattern to Morgan Stanley but executed by AI agent"
+      }
+    },
+    {
+      "id": "FINRA-V-009",
+      "type": "ai_chinese_wall_breach",
+      "subject_id": "AI-RESEARCH-001",
+      "description": "AI research assistant ResearchGPT-Analyst accessing equities trading desk positions and P&L — Chinese wall breach by AI agent",
+      "regulation": "FINRA Rule 2241 — Research Analyst Conflicts of Interest (agent analogue)",
+      "severity": "high",
+      "confidence": 0.93,
+      "evidence": {
+        "assigned_desk": "DESK-RES (Equity Research)",
+        "unauthorized_access": ["DESK-EQ positions", "DESK-EQ P&L data", "Trading desk order history"],
+        "information_barrier_crossed": "IB-001: Research ↔ Trading Wall",
+        "expected_scope": "Public filings and market data within research silo only",
+        "research_reports_drafted_after_access": 5,
+        "risk": "AI research agent with trading position data could bias research output — ratings and price targets influenced by proprietary trading positions"
+      }
+    },
+    {
+      "id": "FINRA-V-010",
+      "type": "excessive_trading_access",
+      "subject_id": "OPS-001",
+      "description": "Operations manager David Patel has trade amendment and exception approval capabilities across all desks — SoD violation with settlement role",
+      "regulation": "FINRA Rule 3110 — Supervision / SOX ITGC",
+      "severity": "high",
+      "confidence": 0.90,
+      "evidence": {
+        "role": "Operations — Manager",
+        "toxic_combination": ["amend_trade", "approve_exception", "settle_trade", "confirm_trade"],
+        "risk": "Can amend trade details AND approve the exception AND settle — no independent verification",
+        "amendments_30d": 14,
+        "exceptions_approved_30d": 8,
+        "peer_amendments_avg": 3
+      }
+    },
+    {
+      "id": "FINRA-V-011",
+      "type": "missing_mfa_trading",
+      "subject_id": "TERM-001",
+      "description": "Trading account for Steven Grasso has no MFA — terminated trader with order execution access and no MFA",
+      "regulation": "SEC Regulation S-P / FINRA cybersecurity guidance",
+      "severity": "high",
+      "confidence": 0.92,
+      "evidence": {
+        "role": "Trader — Equities",
+        "access_level": "Order execution, book view, positions view",
+        "mfa_enabled": false,
+        "account_status": "Terminated but credentials active",
+        "risk": "Compromised credentials for terminated trader with execution access — rogue trading risk"
+      }
+    }
+  ],
+
+  "sec_finra_violation_taxonomy": {
+    "chinese_wall_breach": {
+      "regulations": ["FINRA Rule 2241", "SEC Section 15(g)", "IOSCO Principles"],
+      "description": "Information barrier violation — research/trading separation breached",
+      "enforcement_precedent": "Deutsche Bank $75M (2023), Goldman Sachs research conflicts (2003)",
+      "avg_fine_range": "$25,000,000 — $200,000,000"
+    },
+    "block_trade_front_running": {
+      "regulations": ["SEC Rule 10b-5", "FINRA Rule 5270", "FINRA Rule 5280"],
+      "description": "Trading ahead of pending block order using material non-public information",
+      "enforcement_precedent": "Morgan Stanley $249M (2025) — trader accessing block trade info outside authorized scope",
+      "avg_fine_range": "$50,000,000 — $250,000,000"
+    },
+    "mnpi_access": {
+      "regulations": ["SEC Rule 10b-5", "Regulation FD", "FINRA Rule 2010"],
+      "description": "Unauthorized access to or disclosure of material non-public information",
+      "enforcement_precedent": "SAC Capital $1.8B (2014), Galleon Group $92M (2011)",
+      "avg_fine_range": "$10,000,000 — $1,800,000,000"
+    },
+    "compliance_trading_violation": {
+      "regulations": ["FINRA Rule 3110", "FINRA Rule 3210", "SEC Rule 17j-1"],
+      "description": "Compliance personnel trading in restricted securities or without pre-clearance",
+      "enforcement_precedent": "Multiple FINRA enforcement actions annually",
+      "avg_fine_range": "$100,000 — $5,000,000"
+    },
+    "cross_desk_access": {
+      "regulations": ["FINRA Rule 3110", "Internal SoD policies"],
+      "description": "Unauthorized cross-desk position visibility enabling information arbitrage",
+      "enforcement_precedent": "Part of broader supervision failures in multiple enforcement actions",
+      "avg_fine_range": "$1,000,000 — $25,000,000"
+    },
+    "dormant_terminated": {
+      "regulations": ["FINRA Rule 4511", "FINRA Rule 3110", "SEC Rule 17a-4"],
+      "description": "Terminated personnel or expired vendor access retaining active trading or surveillance credentials",
+      "enforcement_precedent": "Common finding in FINRA routine examinations",
+      "avg_fine_range": "$500,000 — $10,000,000"
+    },
+    "ai_agent_scope_drift": {
+      "regulations": ["SEC Rule 10b-5 (agent analogue)", "FINRA Rule 5270", "FINRA Rule 3110"],
+      "description": "AI trading agent accessing data beyond its designated scope — crosses information barriers",
+      "enforcement_precedent": "Emerging — no direct precedent, but SEC has signaled AI trading oversight is priority",
+      "avg_fine_range": "Emerging — estimated $25,000,000+"
+    },
+    "ai_chinese_wall_breach": {
+      "regulations": ["FINRA Rule 2241 (agent analogue)"],
+      "description": "AI research agent accessing proprietary trading data — biases research output",
+      "enforcement_precedent": "Emerging — extension of existing Chinese wall requirements to AI systems",
+      "avg_fine_range": "Emerging"
+    },
+    "excessive_trading_access": {
+      "regulations": ["FINRA Rule 3110", "SOX ITGC"],
+      "description": "Toxic permission combination in operations — can amend, approve, and settle without independent check",
+      "enforcement_precedent": "Common finding in FINRA routine examinations",
+      "avg_fine_range": "$500,000 — $5,000,000"
+    },
+    "missing_mfa_trading": {
+      "regulations": ["SEC Regulation S-P", "FINRA cybersecurity guidance"],
+      "description": "Trading account without multi-factor authentication",
+      "enforcement_precedent": "SEC Regulation S-P amendments (2024) requiring enhanced access controls",
+      "avg_fine_range": "$250,000 — $2,000,000"
+    }
+  }
+}

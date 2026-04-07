@@ -61,6 +61,8 @@ from demo.local_adapter import LocalFileAdapter
 from demo.local_cloudtrail_ingester import load_cloudtrail_directory
 from demo.local_netsuite_adapter import LocalNetSuiteAdapter
 from demo.local_okta_adapter import LocalOktaAdapter
+from demo.local_healthcare_adapter import LocalHealthcareAdapter
+from demo.local_trading_adapter import LocalTradingAdapter
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -71,6 +73,8 @@ CLOUDTRAIL_DIR = DEMO_DIR / "data" / "cloudtrail"
 ATTACKS_DIR = DEMO_DIR / "data" / "attack_events"
 NETSUITE_DATA = DEMO_DIR / "data_netsuite_sod.json"
 OKTA_DATA = DEMO_DIR / "data_okta_detections.json"
+HEALTHCARE_DATA = DEMO_DIR / "data_healthcare_fhir.json"
+TRADING_DATA = DEMO_DIR / "data_trading_finserv.json"
 
 
 # ---------------------------------------------------------------------------
@@ -136,7 +140,7 @@ async def run_pipeline(
     print(f"""
 {BOLD}╔══════════════════════════════════════════════════════════════╗
 ║              VEKTOR AI — Pipeline Demo Runner                ║
-║   AWS IAM + NetSuite + Okta → Graph → Features → Signals     ║
+║  AWS + NetSuite + Okta + Healthcare + Trading → Signals      ║
 ╚══════════════════════════════════════════════════════════════╝{RESET}
 """)
 
@@ -222,6 +226,60 @@ async def run_pipeline(
     print(f"     Assignments:      {len(okta_snapshot.assignments):>6}")
     print(f"     Findings:         {len(okta_snapshot.escalation_paths):>6}  (misconfigurations)")
     print(f"     Detection rules:  31  (from okta/customer-detections)")
+
+    # ================================================================
+    # STEP 1d: Load Healthcare Tenant Data
+    # ================================================================
+    print(f"\n{BOLD}━━━ Step 1d: Load Healthcare Tenant Data (FHIR RBAC) ━━━{RESET}")
+    hc_snapshot = None
+
+    if HEALTHCARE_DATA.exists():
+        hc_adapter = LocalHealthcareAdapter(data_path=HEALTHCARE_DATA)
+        await hc_adapter.connect()
+
+        t0 = time.time()
+        hc_snapshot = await hc_adapter.extract()
+        t1 = time.time()
+        all_snapshots.append(hc_snapshot)
+
+        n_humans = len([s for s in hc_snapshot.subjects if s.type.value == "human"])
+        n_agents = len([s for s in hc_snapshot.subjects if s.type.value == "ai_agent"])
+        print(f"  ✅ Extracted in {t1-t0:.2f}s")
+        print(f"     Subjects:         {len(hc_snapshot.subjects):>6}  ({n_humans} clinicians/staff, {n_agents} AI agents)")
+        print(f"     Permissions:      {len(hc_snapshot.permissions):>6}  (FHIR RBAC roles)")
+        print(f"     Resources:        {len(hc_snapshot.resources):>6}  (facilities, depts, systems)")
+        print(f"     Assignments:      {len(hc_snapshot.assignments):>6}")
+        print(f"     HIPAA Violations: {len(hc_snapshot.escalation_paths):>6}  (injected findings)")
+        print(f"     Data sources:     Synthea FHIR + Azure FHIR RBAC + OpenMRS + HHS OCR")
+    else:
+        print("  ⚠  No healthcare data found. Ensure data_healthcare_fhir.json is in demo/.")
+
+    # ================================================================
+    # STEP 1e: Load Financial Services / Trading Data
+    # ================================================================
+    print(f"\n{BOLD}━━━ Step 1e: Load Trading Firm Data (SEC/FINRA) ━━━{RESET}")
+    trading_snapshot = None
+
+    if TRADING_DATA.exists():
+        trading_adapter = LocalTradingAdapter(data_path=TRADING_DATA)
+        await trading_adapter.connect()
+
+        t0 = time.time()
+        trading_snapshot = await trading_adapter.extract()
+        t1 = time.time()
+        all_snapshots.append(trading_snapshot)
+
+        n_humans = len([s for s in trading_snapshot.subjects if s.type.value == "human"])
+        n_agents = len([s for s in trading_snapshot.subjects if s.type.value == "ai_agent"])
+        print(f"  ✅ Extracted in {t1-t0:.2f}s")
+        print(f"     Subjects:         {len(trading_snapshot.subjects):>6}  ({n_humans} personnel, {n_agents} AI agents)")
+        print(f"     Permissions:      {len(trading_snapshot.permissions):>6}  (trading RBAC roles)")
+        print(f"     Resources:        {len(trading_snapshot.resources):>6}  (desks, barriers, systems)")
+        print(f"     Assignments:      {len(trading_snapshot.assignments):>6}")
+        print(f"     SEC/FINRA Violations: {len(trading_snapshot.escalation_paths):>4}  (injected findings)")
+        print(f"     Data sources:     SEC EDGAR + FINRA Rules + Synthetic Firm RBAC")
+    else:
+        print("  ⚠  No trading data found. Ensure data_trading_finserv.json is in demo/.")
 
     # ================================================================
     # STEP 2: Ingest into Unified Identity Graph
@@ -376,15 +434,16 @@ async def run_pipeline(
             })
 
     # --- 6b: Adapter-detected signals from escalation paths ---
-    # NetSuite SoD violations and Okta misconfigurations are detected during
-    # extraction (not by the bootstrap labeler). Surface them as first-class
-    # signals, deduplicating against what the labeler already found.
+    # NetSuite SoD violations, Okta misconfigurations, and Healthcare HIPAA
+    # violations are detected during extraction (not by the bootstrap labeler).
+    # Surface them as first-class signals, deduplicating against what the
+    # labeler already found.
     seen_subject_rules: set[tuple[str, str]] = set()
     for sig in signals:
         seen_subject_rules.add((sig["subject"], sig["rule"]))
 
     for snap in all_snapshots:
-        if snap.source not in ("netsuite", "okta"):
+        if snap.source not in ("netsuite", "okta", "healthcare", "trading"):
             continue
 
         for ep in snap.escalation_paths:
@@ -407,6 +466,94 @@ async def run_pipeline(
                 violation_name = "SoD Violation (ERP)"
                 violation_class = 1
                 # Severity from the SoD rule confidence
+                if ep.confidence >= 0.95:
+                    severity = "critical"
+                elif ep.confidence >= 0.90:
+                    severity = "high"
+                else:
+                    severity = "medium"
+            elif snap.source == "healthcare":
+                # Classify Healthcare / HIPAA findings
+                action = ep.steps[0].action if ep.steps else ""
+                action_lower = action.lower()
+                if "break-glass" in action_lower or "break_glass" in action_lower:
+                    violation_name = "Break-Glass Abuse (HIPAA)"
+                    violation_class = 14
+                elif "dormant" in action_lower:
+                    violation_name = "Dormant Contractor (HIPAA)"
+                    violation_class = 4
+                elif "ai agent" in action_lower or "scope" in action_lower:
+                    violation_name = "AI Agent Scope Drift (HIPAA)"
+                    violation_class = 10
+                elif "cross-system" in action_lower or "cross_system" in action_lower or "aggregation" in action_lower:
+                    violation_name = "Cross-System PHI Access (HIPAA)"
+                    violation_class = 9
+                elif "mfa" in action_lower:
+                    violation_name = "Missing MFA — PHI Access (HIPAA)"
+                    violation_class = 8
+                elif "export" in action_lower or "exfiltration" in action_lower:
+                    violation_name = "Excessive PHI Export (HIPAA)"
+                    violation_class = 11
+                elif "vip" in action_lower or "celebrity" in action_lower:
+                    violation_name = "VIP Record Snooping (HIPAA)"
+                    violation_class = 15
+                elif "peer" in action_lower or "excessive record" in action_lower:
+                    violation_name = "Peer Deviation — Record Access (HIPAA)"
+                    violation_class = 6
+                elif "unauthorized" in action_lower or "minimum necessary" in action_lower:
+                    violation_name = "Unauthorized PHI Access (HIPAA)"
+                    violation_class = 15
+                else:
+                    violation_name = "HIPAA Violation (Healthcare)"
+                    violation_class = 15
+
+                if ep.confidence >= 0.95:
+                    severity = "critical"
+                elif ep.confidence >= 0.90:
+                    severity = "high"
+                else:
+                    severity = "medium"
+            elif snap.source == "trading":
+                # Classify Financial Services / SEC / FINRA findings
+                action = ep.steps[0].action if ep.steps else ""
+                action_lower = action.lower()
+                if "chinese wall" in action_lower:
+                    violation_name = "Chinese Wall Breach (SEC/FINRA)"
+                    violation_class = 15
+                elif "block order" in action_lower or "front-running" in action_lower:
+                    violation_name = "Block Trade Front-Running (SEC)"
+                    violation_class = 15
+                elif "mnpi" in action_lower:
+                    violation_name = "MNPI Access / Disclosure (SEC)"
+                    violation_class = 15
+                elif "compliance officer" in action_lower or "sod violation" in action_lower:
+                    violation_name = "Compliance Trading Violation (FINRA)"
+                    violation_class = 1
+                elif "cross-desk" in action_lower or "toxic permission" in action_lower:
+                    violation_name = "Cross-Desk Access (FINRA)"
+                    violation_class = 13
+                elif "dormant" in action_lower:
+                    violation_name = "Dormant Trader / Vendor (FINRA)"
+                    violation_class = 4
+                elif "ai agent" in action_lower and "barrier" in action_lower:
+                    violation_name = "AI Agent MNPI Scope Drift (SEC)"
+                    violation_class = 10
+                elif "ai agent" in action_lower and "wall" in action_lower:
+                    violation_name = "AI Agent Chinese Wall Breach (FINRA)"
+                    violation_class = 10
+                elif "mfa" in action_lower or "trading access without" in action_lower:
+                    violation_name = "Missing MFA — Trading (SEC)"
+                    violation_class = 8
+                elif "information arbitrage" in action_lower:
+                    violation_name = "Cross-Desk Access (FINRA)"
+                    violation_class = 13
+                elif "research bias" in action_lower:
+                    violation_name = "AI Agent Chinese Wall Breach (FINRA)"
+                    violation_class = 10
+                else:
+                    violation_name = "SEC/FINRA Violation (Trading)"
+                    violation_class = 15
+
                 if ep.confidence >= 0.95:
                     severity = "critical"
                 elif ep.confidence >= 0.90:

@@ -1,0 +1,373 @@
+{
+  "metadata": {
+    "description": "Synthetic healthcare tenant modeled on Synthea FHIR output + FHIR RBAC roles + OpenMRS RBAC model",
+    "data_sources": [
+      "Synthea by MITRE — synthetic patient/encounter generator (FHIR R4)",
+      "Azure Health Data Services FHIR RBAC — documented role definitions",
+      "OpenMRS — open source EHR with documented RBAC model and API",
+      "HHS OCR Breach Portal — 7,400+ HIPAA breach records informing violation taxonomy"
+    ],
+    "organization": "Apex Health System",
+    "facility_count": 3,
+    "generated": "2026-04-07"
+  },
+
+  "organization": {
+    "name": "Apex Health System",
+    "npi": "1234567890",
+    "facilities": [
+      {"id": "FAC-001", "name": "Apex General Hospital", "type": "hospital", "departments": ["Emergency", "Cardiology", "Oncology", "Psychiatry", "Surgery", "Pediatrics", "ICU", "Radiology"]},
+      {"id": "FAC-002", "name": "Apex Behavioral Health Center", "type": "behavioral_health", "departments": ["Psychiatry", "Substance Abuse", "Adolescent Psych"]},
+      {"id": "FAC-003", "name": "Apex Outpatient Clinic", "type": "clinic", "departments": ["Primary Care", "Dermatology", "Pharmacy"]}
+    ]
+  },
+
+  "fhir_rbac_roles": [
+    {"role": "FHIR Data Reader", "actions": ["read"], "scope": "assigned_patients", "is_privileged": false, "description": "Read-only access to FHIR resources for assigned patients"},
+    {"role": "FHIR Data Writer", "actions": ["read", "write"], "scope": "assigned_patients", "is_privileged": false, "description": "Read/write access to FHIR resources for assigned patients"},
+    {"role": "FHIR Data Contributor", "actions": ["read", "write", "delete"], "scope": "assigned_department", "is_privileged": false, "description": "Full CRUD on FHIR resources within department"},
+    {"role": "FHIR Data Exporter", "actions": ["read", "export", "bulk_export"], "scope": "organization_wide", "is_privileged": true, "description": "Can export FHIR data in bulk — high PHI exposure risk"},
+    {"role": "FHIR SMART Admin", "actions": ["read", "write", "delete", "admin", "export", "manage_apps"], "scope": "organization_wide", "is_privileged": true, "description": "Full administrative access to FHIR server and SMART apps"},
+    {"role": "Clinical Staff", "actions": ["read", "write"], "scope": "assigned_patients", "is_privileged": false, "description": "Standard clinical access for nurses and allied health"},
+    {"role": "Attending Physician", "actions": ["read", "write", "prescribe", "order", "sign"], "scope": "assigned_patients", "is_privileged": false, "description": "Full clinical privileges for attending physicians"},
+    {"role": "Specialist Consultant", "actions": ["read", "write", "consult_note"], "scope": "referred_patients", "is_privileged": false, "description": "Access to referred patients for specialist consultation"},
+    {"role": "Psychiatry Restricted", "actions": ["read", "write"], "scope": "psychiatry_patients_only", "is_privileged": false, "description": "Access restricted to 42 CFR Part 2 protected records"},
+    {"role": "Pharmacy Admin", "actions": ["read", "write", "dispense", "formulary_manage"], "scope": "pharmacy_system", "is_privileged": true, "description": "Full pharmacy system access including controlled substances"},
+    {"role": "Billing Clerk", "actions": ["read_demographics", "read_diagnosis_codes", "billing"], "scope": "organization_wide", "is_privileged": false, "description": "Access to billing-relevant PHI only"},
+    {"role": "HIM Analyst", "actions": ["read", "audit_log", "release_of_info"], "scope": "organization_wide", "is_privileged": true, "description": "Health Information Management — record access and release"},
+    {"role": "Break-Glass Emergency", "actions": ["read", "write", "override_restriction"], "scope": "any_patient", "is_privileged": true, "description": "Emergency override — requires post-hoc justification"},
+    {"role": "IT System Admin", "actions": ["read", "write", "delete", "admin", "audit_log", "user_management"], "scope": "organization_wide", "is_privileged": true, "description": "Full EHR system administration"},
+    {"role": "Research Data Analyst", "actions": ["read_deidentified", "export_deidentified"], "scope": "research_datasets", "is_privileged": false, "description": "Access to de-identified research datasets only"},
+    {"role": "AI Clinical Scribe", "actions": ["read", "write_draft_notes"], "scope": "active_encounter", "is_privileged": false, "description": "AI agent — reads encounter context, writes draft clinical notes"},
+    {"role": "AI Triage Agent", "actions": ["read_vitals", "read_chief_complaint", "suggest_priority"], "scope": "ed_patients", "is_privileged": false, "description": "AI agent — reads vitals/complaints, suggests triage priority"},
+    {"role": "AI Coding Assistant", "actions": ["read_notes", "suggest_codes", "read_diagnosis"], "scope": "discharged_patients", "is_privileged": false, "description": "AI agent — reads clinical notes, suggests ICD/CPT codes"}
+  ],
+
+  "providers": [
+    {"id": "PROV-001", "name": "Dr. Sarah Chen", "role": "Attending Physician", "department": "Cardiology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "PROV-002", "name": "Dr. Michael Torres", "role": "Attending Physician", "department": "Emergency", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true},
+    {"id": "PROV-003", "name": "Dr. Priya Sharma", "role": "Attending Physician", "department": "Psychiatry", "facility": "FAC-002", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "PROV-004", "name": "Dr. James Wilson", "role": "Attending Physician", "department": "Oncology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 2, "mfa": true},
+    {"id": "PROV-005", "name": "Dr. Lisa Park", "role": "Attending Physician", "department": "Surgery", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "PROV-006", "name": "Dr. Robert Kim", "role": "Specialist Consultant", "department": "Radiology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 3, "mfa": true},
+    {"id": "PROV-007", "name": "Dr. Angela Martinez", "role": "Attending Physician", "department": "Pediatrics", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true},
+    {"id": "PROV-008", "name": "Dr. David Okafor", "role": "Attending Physician", "department": "Primary Care", "facility": "FAC-003", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "PROV-009", "name": "Dr. Emily Foster", "role": "Specialist Consultant", "department": "Dermatology", "facility": "FAC-003", "type": "human", "status": "active", "last_login_days_ago": 5, "mfa": true},
+    {"id": "PROV-010", "name": "Dr. Kevin O'Brien", "role": "Attending Physician", "department": "ICU", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+
+    {"id": "NURSE-001", "name": "Maria Gonzalez, RN", "role": "Clinical Staff", "department": "Cardiology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "NURSE-002", "name": "Tyler Brooks, RN", "role": "Clinical Staff", "department": "Emergency", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "NURSE-003", "name": "Aisha Patel, RN", "role": "Clinical Staff", "department": "Oncology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true},
+    {"id": "NURSE-004", "name": "Rachel Kim, RN", "role": "Clinical Staff", "department": "Psychiatry", "facility": "FAC-002", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "NURSE-005", "name": "Brandon Lee, RN", "role": "Clinical Staff", "department": "ICU", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "NURSE-006", "name": "Jessica Huang, RN", "role": "Clinical Staff", "department": "Surgery", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 2, "mfa": true},
+    {"id": "NURSE-007", "name": "Daniel Wright, RN", "role": "Clinical Staff", "department": "Pediatrics", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true},
+    {"id": "NURSE-008", "name": "Sophia Rivera, RN", "role": "Clinical Staff", "department": "Primary Care", "facility": "FAC-003", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+
+    {"id": "PHARM-001", "name": "Dr. Nancy Liu, PharmD", "role": "Pharmacy Admin", "department": "Pharmacy", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "PHARM-002", "name": "Greg Tanaka, PharmD", "role": "Clinical Staff", "department": "Pharmacy", "facility": "FAC-003", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": true},
+
+    {"id": "BILL-001", "name": "Karen Mitchell", "role": "Billing Clerk", "department": "Revenue Cycle", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "BILL-002", "name": "Tony Russo", "role": "Billing Clerk", "department": "Revenue Cycle", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 1, "mfa": false},
+
+    {"id": "HIM-001", "name": "Patricia Adams", "role": "HIM Analyst", "department": "Health Information Management", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 2, "mfa": true},
+
+    {"id": "IT-001", "name": "Marcus Johnson", "role": "IT System Admin", "department": "Information Technology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 0, "mfa": true},
+    {"id": "IT-002", "name": "Samantha Black", "role": "IT System Admin", "department": "Information Technology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 4, "mfa": true},
+
+    {"id": "RES-001", "name": "Dr. Alan Grant", "role": "Research Data Analyst", "department": "Clinical Research", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 3, "mfa": true}
+  ],
+
+  "contractors": [
+    {"id": "CONT-001", "name": "TempStaff-RN-Jenkins", "role": "Clinical Staff", "department": "Emergency", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 120, "mfa": false, "contract_end": "2025-09-30", "notes": "Contract ended 6+ months ago — credentials still active"},
+    {"id": "CONT-002", "name": "TempStaff-Coder-Wallace", "role": "Billing Clerk", "department": "Revenue Cycle", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 95, "mfa": false, "contract_end": "2025-11-15", "notes": "Coding contractor — contract ended, still has billing access"},
+    {"id": "CONT-003", "name": "Vendor-EHRMigration-Acme", "role": "FHIR Data Contributor", "department": "Information Technology", "facility": "FAC-001", "type": "human", "status": "active", "last_login_days_ago": 200, "mfa": false, "contract_end": "2025-06-01", "notes": "EHR migration vendor — project completed 10 months ago"}
+  ],
+
+  "ai_agents": [
+    {
+      "id": "AI-SCRIBE-001",
+      "name": "ClinicalScribe-GPT",
+      "role": "AI Clinical Scribe",
+      "department": "Multi-Department",
+      "facility": "FAC-001",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI scribe agent — should only access active encounter context",
+      "violation_injected": "scope_drift",
+      "violation_detail": "Accessing records across Psychiatry, Oncology, Pediatrics — well beyond active encounter scope. Reading historical records not tied to current encounter."
+    },
+    {
+      "id": "AI-TRIAGE-001",
+      "name": "TriageBot-v3",
+      "role": "AI Triage Agent",
+      "department": "Emergency",
+      "facility": "FAC-001",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI triage agent — should only read vitals and chief complaint in ED"
+    },
+    {
+      "id": "AI-CODER-001",
+      "name": "AutoCoder-ICD",
+      "role": "AI Coding Assistant",
+      "department": "Revenue Cycle",
+      "facility": "FAC-001",
+      "type": "ai_agent",
+      "status": "active",
+      "last_login_days_ago": 0,
+      "mfa": null,
+      "notes": "AI coding assistant — reads clinical notes for discharged patients",
+      "violation_injected": "cross_system",
+      "violation_detail": "Has read access to clinical notes AND billing system AND pharmacy records — cross-system PHI aggregation risk"
+    }
+  ],
+
+  "injected_violations": [
+    {
+      "id": "HIPAA-V-001",
+      "type": "unauthorized_record_access",
+      "subject_id": "BILL-001",
+      "description": "Billing clerk Karen Mitchell accessed psychiatric notes (42 CFR Part 2 protected) for patient outside billing workflow",
+      "hipaa_control": "§164.502(a) — Minimum Necessary",
+      "severity": "critical",
+      "confidence": 0.96,
+      "evidence": {
+        "records_accessed": "Psychiatry encounter notes — substance abuse treatment records",
+        "business_need": "None — billing role does not require access to psychiatric clinical notes",
+        "patient_relationship": "No billing record exists for this patient under this clerk",
+        "access_pattern": "Single record viewed for 4 minutes outside normal billing workflow"
+      }
+    },
+    {
+      "id": "HIPAA-V-002",
+      "type": "peer_deviation",
+      "subject_id": "NURSE-002",
+      "description": "ER nurse Tyler Brooks accessed 10x more patient records than peer nurses in same department and shift",
+      "hipaa_control": "§164.312(b) — Audit Controls",
+      "severity": "high",
+      "confidence": 0.93,
+      "evidence": {
+        "records_accessed_30d": 847,
+        "peer_median_30d": 82,
+        "ratio_to_peer": 10.3,
+        "departments_accessed": ["Emergency", "Cardiology", "Pediatrics", "Oncology"],
+        "access_pattern": "Bulk sequential access across departments — not consistent with patient care workflow"
+      }
+    },
+    {
+      "id": "HIPAA-V-003",
+      "type": "break_glass_abuse",
+      "subject_id": "IT-002",
+      "description": "IT admin Samantha Black used break-glass emergency access 7 times in 30 days with no documented justification",
+      "hipaa_control": "§164.312(a)(1) — Access Control",
+      "severity": "critical",
+      "confidence": 0.95,
+      "evidence": {
+        "break_glass_uses_30d": 7,
+        "peer_break_glass_avg": 0.3,
+        "justifications_provided": 0,
+        "patients_accessed": ["celebrity patient", "coworker record", "VIP records"],
+        "access_pattern": "Break-glass used to access high-profile patient records without clinical need"
+      }
+    },
+    {
+      "id": "HIPAA-V-004",
+      "type": "dormant_contractor",
+      "subject_id": "CONT-001",
+      "description": "Travel nurse contractor TempStaff-RN-Jenkins — contract ended 2025-09-30, credentials still active with clinical access",
+      "hipaa_control": "§164.312(a)(2)(iii) — Automatic Logoff / §164.308(a)(3)(ii)(A) — Workforce Clearance",
+      "severity": "high",
+      "confidence": 0.98,
+      "evidence": {
+        "contract_end_date": "2025-09-30",
+        "days_since_contract_end": 189,
+        "last_activity": "120 days ago",
+        "active_permissions": ["Clinical Staff — read/write patient records in Emergency"],
+        "mfa_enabled": false
+      }
+    },
+    {
+      "id": "HIPAA-V-005",
+      "type": "dormant_contractor",
+      "subject_id": "CONT-002",
+      "description": "Coding contractor TempStaff-Coder-Wallace — contract ended 2025-11-15, still has billing system access",
+      "hipaa_control": "§164.308(a)(3)(ii)(A) — Workforce Clearance",
+      "severity": "high",
+      "confidence": 0.97,
+      "evidence": {
+        "contract_end_date": "2025-11-15",
+        "days_since_contract_end": 143,
+        "last_activity": "95 days ago",
+        "active_permissions": ["Billing Clerk — read demographics, diagnosis codes, billing"],
+        "mfa_enabled": false
+      }
+    },
+    {
+      "id": "HIPAA-V-006",
+      "type": "dormant_contractor",
+      "subject_id": "CONT-003",
+      "description": "EHR migration vendor Vendor-EHRMigration-Acme — project completed 2025-06-01, still has FHIR Data Contributor access",
+      "hipaa_control": "§164.308(a)(4)(ii)(B) — Access Authorization / §164.314 — Business Associate",
+      "severity": "critical",
+      "confidence": 0.99,
+      "evidence": {
+        "contract_end_date": "2025-06-01",
+        "days_since_contract_end": 310,
+        "last_activity": "200 days ago",
+        "active_permissions": ["FHIR Data Contributor — read/write/delete across organization"],
+        "mfa_enabled": false,
+        "risk_note": "Vendor account with broad write + delete access to FHIR data — 10 months post-project"
+      }
+    },
+    {
+      "id": "HIPAA-V-007",
+      "type": "ai_agent_scope_drift",
+      "subject_id": "AI-SCRIBE-001",
+      "description": "AI Clinical Scribe accessing patient records across Psychiatry, Oncology, Pediatrics — far beyond active encounter scope",
+      "hipaa_control": "§164.502(b) — Minimum Necessary / §164.312(a)(1) — Access Control",
+      "severity": "critical",
+      "confidence": 0.94,
+      "evidence": {
+        "departments_accessed": ["Psychiatry", "Oncology", "Pediatrics", "Cardiology", "Surgery"],
+        "expected_scope": "Active encounter only — single patient, single department",
+        "records_read_30d": 1243,
+        "historical_records_read": 891,
+        "active_encounter_records": 352,
+        "ratio_historical_to_active": 2.53,
+        "risk_note": "AI agent reading 42 CFR Part 2 psychiatric records it has no encounter-based need to access"
+      }
+    },
+    {
+      "id": "HIPAA-V-008",
+      "type": "cross_system_aggregation",
+      "subject_id": "AI-CODER-001",
+      "description": "AI Coding Assistant has access across clinical notes + billing + pharmacy — PHI aggregation risk",
+      "hipaa_control": "§164.502(b) — Minimum Necessary",
+      "severity": "high",
+      "confidence": 0.91,
+      "evidence": {
+        "systems_accessed": ["EHR Clinical Notes", "Billing System", "Pharmacy Dispensing"],
+        "expected_scope": "Discharged patient clinical notes only",
+        "cross_system_risk": "Can correlate clinical diagnoses with prescriptions and billing — full patient profile reconstruction",
+        "unique_patients_accessed_30d": 312
+      }
+    },
+    {
+      "id": "HIPAA-V-009",
+      "type": "missing_mfa",
+      "subject_id": "BILL-002",
+      "description": "Billing clerk Tony Russo has PHI access without MFA enabled",
+      "hipaa_control": "§164.312(d) — Person or Entity Authentication",
+      "severity": "medium",
+      "confidence": 0.88,
+      "evidence": {
+        "role": "Billing Clerk",
+        "phi_access_level": "Demographics, diagnosis codes, billing records",
+        "mfa_enabled": false,
+        "peer_mfa_rate": 0.92
+      }
+    },
+    {
+      "id": "HIPAA-V-010",
+      "type": "excessive_export",
+      "subject_id": "HIM-001",
+      "description": "HIM Analyst Patricia Adams performed 23 bulk data exports in 30 days — 5x peer average",
+      "hipaa_control": "§164.312(b) — Audit Controls / §164.528 — Accounting of Disclosures",
+      "severity": "high",
+      "confidence": 0.90,
+      "evidence": {
+        "bulk_exports_30d": 23,
+        "peer_avg_exports_30d": 4.5,
+        "ratio_to_peer": 5.1,
+        "records_exported": 8450,
+        "export_destinations": ["internal_report", "release_of_info", "unknown_destination"]
+      }
+    },
+    {
+      "id": "HIPAA-V-011",
+      "type": "celebrity_snooping",
+      "subject_id": "NURSE-003",
+      "description": "Nurse Aisha Patel accessed records of high-profile patient outside assigned care team",
+      "hipaa_control": "§164.502(a) — Minimum Necessary / §164.530(e) — Sanctions",
+      "severity": "high",
+      "confidence": 0.92,
+      "evidence": {
+        "patient_type": "VIP / public figure",
+        "department_match": false,
+        "care_team_member": false,
+        "access_duration": "2 minutes — browsing pattern",
+        "access_time": "Outside shift hours"
+      }
+    }
+  ],
+
+  "hipaa_violation_taxonomy": {
+    "unauthorized_record_access": {
+      "hipaa_rules": ["§164.502(a)", "§164.514(d)"],
+      "description": "Access to PHI without treatment, payment, or operations justification",
+      "ocr_breach_category": "Unauthorized Access/Disclosure",
+      "avg_penalty_range": "$50,000 — $1,500,000"
+    },
+    "peer_deviation": {
+      "hipaa_rules": ["§164.312(b)", "§164.308(a)(1)(ii)(D)"],
+      "description": "Access volume significantly exceeding peer norms — indicates snooping or data harvesting",
+      "ocr_breach_category": "Unauthorized Access/Disclosure",
+      "avg_penalty_range": "$100,000 — $250,000"
+    },
+    "break_glass_abuse": {
+      "hipaa_rules": ["§164.312(a)(1)", "§164.312(a)(2)(i)"],
+      "description": "Emergency access override used without genuine emergency — circumvents access controls",
+      "ocr_breach_category": "Unauthorized Access/Disclosure",
+      "avg_penalty_range": "$250,000 — $1,500,000"
+    },
+    "dormant_contractor": {
+      "hipaa_rules": ["§164.308(a)(3)(ii)(A)", "§164.312(a)(2)(iii)", "§164.314"],
+      "description": "Terminated contractor or vendor with active PHI access credentials",
+      "ocr_breach_category": "Loss / Unauthorized Access",
+      "avg_penalty_range": "$100,000 — $500,000"
+    },
+    "ai_agent_scope_drift": {
+      "hipaa_rules": ["§164.502(b)", "§164.312(a)(1)", "§164.308(a)(3)"],
+      "description": "AI agent accessing PHI beyond its designated scope — minimum necessary violation",
+      "ocr_breach_category": "Unauthorized Access/Disclosure",
+      "avg_penalty_range": "Emerging — no precedent yet"
+    },
+    "cross_system_aggregation": {
+      "hipaa_rules": ["§164.502(b)", "§164.514(d)"],
+      "description": "Entity with access across clinical, billing, and pharmacy systems enabling full patient profile reconstruction",
+      "ocr_breach_category": "Unauthorized Access/Disclosure",
+      "avg_penalty_range": "$100,000 — $500,000"
+    },
+    "missing_mfa": {
+      "hipaa_rules": ["§164.312(d)"],
+      "description": "PHI access without multi-factor authentication",
+      "ocr_breach_category": "Hacking/IT Incident",
+      "avg_penalty_range": "$50,000 — $250,000"
+    },
+    "excessive_export": {
+      "hipaa_rules": ["§164.312(b)", "§164.528"],
+      "description": "Bulk data export volume exceeding peer norms — potential data exfiltration",
+      "ocr_breach_category": "Theft / Unauthorized Access",
+      "avg_penalty_range": "$250,000 — $1,000,000"
+    },
+    "celebrity_snooping": {
+      "hipaa_rules": ["§164.502(a)", "§164.530(e)"],
+      "description": "Accessing records of VIP/celebrity patients without clinical justification",
+      "ocr_breach_category": "Unauthorized Access/Disclosure",
+      "avg_penalty_range": "$50,000 — $500,000"
+    }
+  },
+
+  "patients_summary": {
+    "total_patients": 200,
+    "departments_with_patients": ["Emergency", "Cardiology", "Oncology", "Psychiatry", "Surgery", "Pediatrics", "ICU", "Primary Care", "Dermatology", "Substance Abuse"],
+    "vip_patients": 3,
+    "42cfr_part2_patients": 12,
+    "note": "Patient-level FHIR resources (Patient, Encounter, Condition, Observation) are generated synthetically inspired by Synthea output. Individual patient records are not materialized in this file — they are referenced by provider access patterns."
+  }
+}
