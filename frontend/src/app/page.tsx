@@ -146,9 +146,9 @@ function Hero() {
         </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.15] mb-6 animate-slide-up">
-          See everything.{" "}
+          See every identity risk — human and machine.{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-vektor-accent via-blue-400 to-vektor-green">
-            Write nothing.
+            Fix it without writing a single rule.
           </span>
           <br />
           Govern autonomously.
@@ -629,7 +629,7 @@ function CTA() {
       <div className="absolute inset-0 radial-glow" />
       <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-          See everything. Write nothing.
+          See every identity risk — human and machine. Fix it without writing a single rule.
           <br /><span className="text-vektor-accent">Govern autonomously.</span>
         </h2>
         <p className="text-vektor-text-secondary mb-8">See Vektor in action on real identity data. Read-only. 15 minutes. No commitment.</p>
