@@ -255,7 +255,7 @@ const CORE_STEPS = [
   },
   {
     icon: Sparkles, label: "Govern", title: "Policies write themselves",
-    description: "ML model insights feed an AI agent that generates policy recommendations automatically. You approve or reject. On approval, a scoped ML model trains and starts detecting immediately. No YAML. No rule files. Ever.",
+    description: "Our system surfaces intelligent policy suggestions directly to your dashboard. With a single click to approve, the platform instantly activates new detection capabilities across your environment. No manual configuration, no YAML, and zero rule-writing required—ever.Ever.",
     color: "text-amber-400", bg: "bg-amber-400/10",
   },
   {
