@@ -846,7 +846,7 @@ const RECOMMENDED_POLICIES: RecommendedPolicy[] = [
    PASSWORD GATE
    ──────────────────────────────────────────── */
 
-const DEMO_PASSWORD = "VEKTOR-2026-DEMO";
+const DEMO_PASSWORD = "VEKTOR-DEMO-2020";
 
 function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
   const [pw, setPw] = useState("");
