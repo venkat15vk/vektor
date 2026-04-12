@@ -442,7 +442,7 @@ function CTA() {
           AI-native intelligence for every entity, every relationship, every agent.
           <br /><span className="text-vektor-accent">Across every regulated sector.</span>
         </h2>
-        <p className="text-vektor-text-secondary mb-8">See Vektor in action (Open Source + Synthetic data — ERP, trading, healthcare, and IAM. Read-only. 15 minutes.</p>
+        <p className="text-vektor-text-secondary mb-8">See Vektor in action — live demo on public and synthetic data. 15 minutes.</p>
         <a href="/demo" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-lg bg-vektor-accent hover:bg-vektor-accent-hover text-white font-semibold transition-all hover:shadow-lg hover:shadow-vektor-accent/25">
           Request Demo <ArrowRight className="w-4 h-4" />
         </a>
